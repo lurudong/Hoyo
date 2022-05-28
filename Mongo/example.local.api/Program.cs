@@ -72,7 +72,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) _ = app.UseDeveloperExceptionPage();
 
-app.UseMiracleResponseTime();
+app.UseHoyoResponseTime();
 app.UseCors("AllowedHosts");
 
 app.UseAuthorization();

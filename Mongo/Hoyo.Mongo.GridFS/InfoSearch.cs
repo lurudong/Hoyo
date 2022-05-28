@@ -1,4 +1,4 @@
-﻿using Hoyo.Common;
+﻿using Hoyo.Universal;
 
 namespace Hoyo.Mongo.GridFS;
 public class InfoSearch : KeywordPageInfo
