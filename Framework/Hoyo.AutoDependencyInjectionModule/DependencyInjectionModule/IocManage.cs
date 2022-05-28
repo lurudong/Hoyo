@@ -61,5 +61,5 @@ public class IocManage
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public ILogger? GetLogger<T>() => _provider!.GetService<ILoggerFactory>().CreateLogger<T>();
+    public ILogger? GetLogger<T>() => _provider?.GetService<ILoggerFactory>()?.CreateLogger<T>();
 }

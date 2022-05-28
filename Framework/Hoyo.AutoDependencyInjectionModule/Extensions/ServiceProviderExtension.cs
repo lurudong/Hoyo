@@ -11,7 +11,7 @@ public static class ServiceProviderExtension
     /// </summary>
     /// <typeparam name="T">非静态强类型</typeparam>
     /// <returns>日志对象</returns>
-    public static ILogger<T> GetLogger<T>(this IServiceProvider provider) => provider.GetService<ILoggerFactory>().CreateLogger<T>();
+    public static ILogger<T> GetLogger<T>(this IServiceProvider provider) => provider.GetService<ILoggerFactory>()!.CreateLogger<T>();
 
     /// <summary>
     ///
@@ -19,7 +19,7 @@ public static class ServiceProviderExtension
     /// <param name="provider"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static ILogger? GetLogger(this IServiceProvider provider, Type type) => provider.GetService<ILoggerFactory>().CreateLogger(type);
+    public static ILogger? GetLogger(this IServiceProvider provider, Type type) => provider.GetService<ILoggerFactory>()!.CreateLogger(type);
 
     public static object? GetInstance(this IServiceProvider provider, ServiceDescriptor descriptor) =>
         descriptor.ImplementationInstance is not null
