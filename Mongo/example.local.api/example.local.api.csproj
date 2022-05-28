@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Miracle.WebCore" Version="1.1.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Miracle.MongoDB.GridFS.Extension\Miracle.MongoDB.GridFS.Extension.csproj" />
+	  <ProjectReference Include="..\Miracle.MongoDB\Miracle.MongoDB.csproj" />
+	</ItemGroup>
+
+</Project>
