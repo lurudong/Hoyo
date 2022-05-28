@@ -4,11 +4,11 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
-		<Version>2.0.3</Version>
+		<Version>1.0.1</Version>
 		<Nullable>enable</Nullable>
 		<Authors>joesdu</Authors>
-		<RepositoryUrl>https://github.com/joesdu/Miracle.MongoDB</RepositoryUrl>
-		<PackageProjectUrl>https://www.nuget.org/packages/Miracle.MongoDB.GridFS</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
+		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.Mongo.GridFS</PackageProjectUrl>
 		<Description>几行代码创建一个MongoDB GridFS服务</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>

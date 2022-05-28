@@ -1,8 +1,8 @@
 using example.local.api;
-using Miracle.MongoDB;
-using Miracle.MongoDB.GridFS;
-using Miracle.MongoDB.GridFS.Extension;
-using Miracle.WebCore;
+using Hoyo.Mongo;
+using Hoyo.Mongo.GridFS;
+using Hoyo.Mongo.GridFS.Extension;
+using Hoyo.WebCore;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 using System.Text.Json.Serialization;
@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "example.local.api", Version = "v1" }));
 builder.Services.AddCors(c => c.AddPolicy("AllowedHosts", s => s.WithOrigins(builder.Configuration["AllowedHosts"].Split(",")).AllowAnyMethod().AllowAnyHeader()));
 
-var dboptions = new MiracleMongoOptions();
+var dboptions = new HoyoMongoOptions();
 dboptions.AppendConventionRegistry("IdentityServer Mongo Conventions", new()
 {
     Conventions = new()
@@ -37,12 +37,12 @@ var db = await builder.Services.AddMongoDbContext<DbContext>(clientSettings: new
     Password = "&oneblogs.cn",
 }, dboptions: dboptions);
 
-var fsop = new MiracleGridFSOptions()
+var fsop = new HoyoGridFSOptions()
 {
-    BusinessApp = "MiracleFS",
+    BusinessApp = "HoyoFS",
     Options = new()
     {
-        BucketName = "miracle",
+        BucketName = "hoyo",
         ChunkSizeBytes = 1024,
         DisableMD5 = true,
         ReadConcern = new() { },
@@ -77,7 +77,7 @@ app.UseCors("AllowedHosts");
 
 app.UseAuthorization();
 
-app.UseMiracleGridFSVirtualPath(builder.Configuration);
+app.UseHoyoGridFSVirtualPath(builder.Configuration);
 
 app.MapControllers();
 app.UseSwagger().UseSwaggerUI();

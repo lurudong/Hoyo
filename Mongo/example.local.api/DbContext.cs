@@ -1,4 +1,4 @@
-﻿using Miracle.MongoDB;
+﻿using Hoyo.Mongo;
 using MongoDB.Driver;
 
 namespace example.local.api;

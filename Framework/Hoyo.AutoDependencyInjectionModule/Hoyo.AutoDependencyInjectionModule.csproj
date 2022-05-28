@@ -7,7 +7,7 @@
 		<LangVersion>latest</LangVersion>
 		<Version>1.0.2</Version>
 		<Authors>joesdu</Authors>
-		<PackageProjectUrl>https://www.nuget.org/packages/Miracle.Common</PackageProjectUrl>
+		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.AutoDependencyInjectionModule</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
 		<Description>类似于ABP框架的自动模块注入,独立出来单独维护.</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
