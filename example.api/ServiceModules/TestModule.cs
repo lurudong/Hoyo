@@ -9,12 +9,12 @@ public class TestModule : AppModule
 
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var test = context.Services.GetService<Test>();
+        var test = context.Services.GetService<MyTestModule>();
         test?.Show();
     }
 }
 
-public class Test : ITest
+public class MyTestModule : ITest
 {
     public void Show()
     {

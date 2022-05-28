@@ -1,7 +1,7 @@
-using example.local.api;
+using example.api;
+using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
 using Hoyo.Mongo.GridFS;
-using Hoyo.Mongo.GridFS.Extension;
 using Hoyo.WebCore;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -10,10 +10,25 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddControllers(c =>
+{
+    _ = c.Filters.Add<ActionExecuteFilter>();
+    _ = c.Filters.Add<ExceptionFilter>();
+}).AddJsonOptions(c =>
+{
+    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyJsonConverter());
+    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyJsonConverter());
+    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyNullJsonConverter());
+    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyNullJsonConverter());
+    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateTimeConverter());
+    c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c => c.SwaggerDoc("v1", new() { Title = "example.local.api", Version = "v1" }));
-builder.Services.AddCors(c => c.AddPolicy("AllowedHosts", s => s.WithOrigins(builder.Configuration["AllowedHosts"].Split(",")).AllowAnyMethod().AllowAnyHeader()));
+
+// 自动注入服务模块
+builder.Services.AddApplication<AppWebModule>();
 
 var dboptions = new HoyoMongoOptions();
 dboptions.AppendConventionRegistry("IdentityServer Mongo Conventions", new()
@@ -53,19 +68,7 @@ var fsop = new HoyoGridFSOptions()
     ItemInfo = "item.info"
 };
 
-builder.Services.AddMiracleGridFS(db._database!, fsop);
-
-builder.Services.AddControllers(c =>
-{
-    c.Filters.Add<ActionExecuteFilter>();
-    c.Filters.Add<ExceptionFilter>();
-}).AddJsonOptions(c =>
-{
-    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateTimeConverter());
-    c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyJsonConverter());
-    c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyJsonConverter());
-});
+builder.Services.AddHoyoGridFS(db._database!, fsop);
 
 var app = builder.Build();
 
@@ -73,13 +76,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment()) _ = app.UseDeveloperExceptionPage();
 
 app.UseHoyoResponseTime();
-app.UseCors("AllowedHosts");
-
 app.UseAuthorization();
 
-app.UseHoyoGridFSVirtualPath(builder.Configuration);
-
 app.MapControllers();
-app.UseSwagger().UseSwaggerUI();
+
+// 添加自动化注入的一些中间件.
+app.InitializeApplication();
 
 app.Run();

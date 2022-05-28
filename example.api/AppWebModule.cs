@@ -10,7 +10,7 @@ namespace example.api;
     typeof(DependencyAppModule),
     typeof(CorsModule),
     typeof(SwaggerModule),
-    typeof(TestModule)
+    typeof(MyTestModule)
 )]
 public class AppWebModule : AppModule
 {

@@ -8,7 +8,7 @@ namespace Hoyo.Mongo.GridFS;
 public static class GridFSExtensions
 {
     public static string BusinessApp { get; set; } = string.Empty;
-    public static IServiceCollection AddMiracleGridFS(this IServiceCollection services, IMongoDatabase db, HoyoGridFSOptions? fsoptions = null)
+    public static IServiceCollection AddHoyoGridFS(this IServiceCollection services, IMongoDatabase db, HoyoGridFSOptions? fsoptions = null)
     {
         if (db is null) throw new("db can't be null");
         fsoptions ??= new();

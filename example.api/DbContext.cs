@@ -1,16 +1,16 @@
 ﻿using Hoyo.Mongo;
 using MongoDB.Driver;
 
-namespace example.local.api;
+namespace example.api;
 public class DbContext : BaseDbContext
 {
     /// <summary>
     /// 作息时间管理
     /// </summary>
-    public IMongoCollection<Test> Test => _database!.GetCollection<Test>("test");
+    public IMongoCollection<MongoTest> Test => _database!.GetCollection<MongoTest>("mongo.test");
     
 }
-public class Test
+public class MongoTest
 {
     public DateTime DateTime { get; set; }
     public TimeSpan TimeSpan { get; set; }
