@@ -1,7 +1,5 @@
 #### Hoyo.Mongo
 
-## [![LICENSE](https://img.shields.io/github/license/joesdu/Hoyo)](https://img.shields.io/github/license/joesdu/Hoyo)
-
 ##### 如何使用?
 
 - 在系统环境变量或者 Docker 容器中设置环境变量名称为: CONNECTIONSTRINGS_MONGO = mongodb 链接字符串 或者在 appsetting.json 中添加,

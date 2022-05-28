@@ -1,9 +1,5 @@
 #### Hoyo.Mongo
 
-## [![LICENSE](https://img.shields.io/github/license/joesdu/Hoyo)](https://img.shields.io/github/license/joesdu/Hoyo)
-
----
-
 - 一个 MongoDB 驱动的服务包,方便使用 MongoDB 数据库.
 - 数据库中字段名驼峰命名,ID,Id 自动转化成 ObjectId.
 - 可配置部分类的 Id 字段不存为 ObjectId,而存为 string 类型.

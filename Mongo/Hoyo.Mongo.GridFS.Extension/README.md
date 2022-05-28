@@ -1,6 +1,5 @@
 #### Hoyo.Mongo
 
-## [![LICENSE](https://img.shields.io/github/license/joesdu/Hoyo)](https://img.shields.io/github/license/joesdu/Hoyo)
 
 ```json
 {
