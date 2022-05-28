@@ -1,6 +1,6 @@
 #### Hoyo.Mongo
 
-## [![LICENSE](https://img.shields.io/github/license/joesdu/Hoyo.Mongo)](https://img.shields.io/github/license/joesdu/Hoyo.Mongo)
+## [![LICENSE](https://github.com/joesdu/Hoyo/blob/main/Mongo/Hoyo.Mongo/LICENSE)](https://github.com/joesdu/Hoyo/blob/main/Mongo/Hoyo.Mongo/LICENSE)
 
 ---
 
