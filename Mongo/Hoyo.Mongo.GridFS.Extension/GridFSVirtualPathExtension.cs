@@ -2,20 +2,20 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 
-namespace Miracle.MongoDB.GridFS.Extension;
+namespace Hoyo.Mongo.GridFS.Extension;
 public static class GridFSVirtualPathExtension
 {
-    public static IApplicationBuilder UseMiracleGridFSVirtualPath(this IApplicationBuilder app, IConfiguration config)
+    public static IApplicationBuilder UseHoyoGridFSVirtualPath(this IApplicationBuilder app, IConfiguration config)
     {
-        var miraclefile = config.GetSection(MiracleStaticFileSettings.Postion).Get<MiracleStaticFileSettings>();
-        if (!Directory.Exists(miraclefile.PhysicalPath))
+        var hoyofile = config.GetSection(HoyoStaticFileSettings.Postion).Get<HoyoStaticFileSettings>();
+        if (!Directory.Exists(hoyofile.PhysicalPath))
         {
-            _ = Directory.CreateDirectory(miraclefile.PhysicalPath);
+            _ = Directory.CreateDirectory(hoyofile.PhysicalPath);
         }
         _ = app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(miraclefile.PhysicalPath),
-            RequestPath = miraclefile.VirtualPath
+            FileProvider = new PhysicalFileProvider(hoyofile.PhysicalPath),
+            RequestPath = hoyofile.VirtualPath
         });
         return app;
     }

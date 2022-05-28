@@ -1,6 +1,6 @@
 ﻿using Miracle.Common;
 
-namespace Miracle.MongoDB.GridFS;
+namespace Hoyo.Mongo.GridFS;
 public class InfoSearch : KeywordPageInfo
 {
     public string FileName { get; set; } = string.Empty;

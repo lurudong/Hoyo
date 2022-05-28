@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver.GridFS;
 
-namespace Miracle.MongoDB.GridFS;
-public class MiracleGridFSOptions
+namespace Hoyo.Mongo.GridFS;
+public class HoyoGridFSOptions
 {
     public GridFSBucketOptions? Options { get; set; } = null;
     public string BusinessApp { get; set; } = string.Empty;

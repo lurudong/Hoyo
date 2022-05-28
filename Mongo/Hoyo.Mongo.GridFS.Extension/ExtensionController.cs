@@ -4,15 +4,15 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 
-namespace Miracle.MongoDB.GridFS.Extension;
+namespace Hoyo.Mongo.GridFS.Extension;
 [ApiController]
 [Route("[controller]")]
 public class ExtensionController : GridFSController
 {
-    private readonly MiracleStaticFileSettings FileSetting;
+    private readonly HoyoStaticFileSettings FileSetting;
     public ExtensionController(GridFSBucket bucket, IMongoCollection<GridFSItemInfo> collection, IConfiguration config) : base(bucket, collection)
     {
-        FileSetting = config.GetSection(MiracleStaticFileSettings.Postion).Get<MiracleStaticFileSettings>();
+        FileSetting = config.GetSection(HoyoStaticFileSettings.Postion).Get<HoyoStaticFileSettings>();
     }
 
     /// <summary>

@@ -5,7 +5,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 using System.Text;
 
-namespace Miracle.MongoDB.GridFS;
+namespace Hoyo.Mongo.GridFS;
 [ApiController]
 [Route("[controller]")]
 public class GridFSController : ControllerBase

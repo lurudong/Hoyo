@@ -1,4 +1,4 @@
-﻿namespace Miracle.MongoDB.GridFS;
+﻿namespace Hoyo.Mongo.GridFS;
 public class GridFSItem
 {
     public string FileId { get; set; } = string.Empty;

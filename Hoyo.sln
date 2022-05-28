@@ -7,6 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mongo", "Mongo", "{44B212AF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo", "Mongo\Hoyo.Mongo\Hoyo.Mongo.csproj", "{B336533C-83CD-4A7E-9A6F-3633F203F181}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo.GridFS", "Mongo\Hoyo.Mongo.GridFS\Hoyo.Mongo.GridFS.csproj", "{767B3168-F960-4C66-B078-8EE456DC1AB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{4430E604-6498-4A24-9328-5B053519F964}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo.GridFS.Extension", "Mongo\Hoyo.Mongo.GridFS.Extension\Hoyo.Mongo.GridFS.Extension.csproj", "{D661CFFF-3C0E-4A15-820D-154666588119}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,12 +23,21 @@ Global
 		{B336533C-83CD-4A7E-9A6F-3633F203F181}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B336533C-83CD-4A7E-9A6F-3633F203F181}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B336533C-83CD-4A7E-9A6F-3633F203F181}.Release|Any CPU.Build.0 = Release|Any CPU
+		{767B3168-F960-4C66-B078-8EE456DC1AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{767B3168-F960-4C66-B078-8EE456DC1AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{767B3168-F960-4C66-B078-8EE456DC1AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{767B3168-F960-4C66-B078-8EE456DC1AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D661CFFF-3C0E-4A15-820D-154666588119}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D661CFFF-3C0E-4A15-820D-154666588119}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D661CFFF-3C0E-4A15-820D-154666588119}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D661CFFF-3C0E-4A15-820D-154666588119}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B336533C-83CD-4A7E-9A6F-3633F203F181} = {44B212AF-424A-443D-A83E-6740672EC4D6}
+		{767B3168-F960-4C66-B078-8EE456DC1AB6} = {44B212AF-424A-443D-A83E-6740672EC4D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4651E82-3B77-4793-A9AA-BADAF35F55DF}

@@ -2,16 +2,6 @@
 
 ## [![LICENSE](https://img.shields.io/github/license/joesdu/Hoyo)](https://img.shields.io/github/license/joesdu/Hoyo)
 
----
-
-- 一个 MongoDB 驱动的服务包,方便使用 MongoDB 数据库.
-- 数据库中字段名驼峰命名,ID,Id 自动转化成 ObjectId.
-- 可配置部分类的 Id 字段不存为 ObjectId,而存为 string 类型.
-- 自动本地化 MOngoDB 时间类型
-- 添加.Net6 Date/Time Only类型支持(TimeOnly理论上应该是兼容原TimeSpan数据类型).
-- Date/Time Only类型可结合[Hoyo.WebCore](https://github.com/joesdu/Hoyo.WebCore)使用,前端可直接传字符串类型的Date/Time Only的值.
----
-
 ##### 如何使用?
 
 - 在系统环境变量或者 Docker 容器中设置环境变量名称为: CONNECTIONSTRINGS_MONGO = mongodb 链接字符串 或者在 appsetting.json 中添加,
@@ -27,9 +17,9 @@
 }
 ```
 
-##### 使用 Hoyo.Mongo ?
+##### 使用 Hoyo.Mongo.GridFS
 
-- 使用 Nuget 安装 Hoyo.Mongo
+- 使用 Nuget 安装 Hoyo.Mongo.GridFS
 - .Net 6 +
 
 ```csharp
@@ -40,6 +30,7 @@ using Miracle.WebApi.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 // 添加Mongodb数据库服务
 var dboptions = new HoyoMongoOptions();
 dboptions.AppendConventionRegistry("IdentityServer Mongo Conventions", new()
@@ -62,7 +53,26 @@ var db = await builder.Services.AddMongoDbContext<DbContext>(clientSettings: new
     UserName = "oneblogs",
     Password = "&oneblogs.cn",
 }, dboptions: dboptions);
+// 添加GridFS服务
+builder.Services.AddMiracleGridFS(db._database!, new()
+{
+    BusinessApp = "HoyoFS",
+    Options = new()
+    {
+        BucketName = "hoyofs",
+        ChunkSizeBytes = 1024,
+        DisableMD5 = true,
+        ReadConcern = new() { },
+        ReadPreference = ReadPreference.Primary,
+        WriteConcern = WriteConcern.Unacknowledged
+    },
+    DefalutDB = true,
+    ItemInfo = "item.info"
+
+});
 
 ...
+
 var app = builder.Build();
 ```
+- 详细内容参见 example.api 项目

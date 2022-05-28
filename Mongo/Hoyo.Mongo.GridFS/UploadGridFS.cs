@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Miracle.MongoDB.GridFS;
+namespace Hoyo.Mongo.GridFS;
 public class UploadGridFSInfo
 {
     /// <summary>
