@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Tools\Hoyo.Tools\Hoyo.Tools.csproj" />
+	  <ProjectReference Include="..\..\WebCore\Hoyo.WebCore\Hoyo.WebCore.csproj" />
+	  <ProjectReference Include="..\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj" />
+	  <ProjectReference Include="..\Hoyo.Enums\Hoyo.Enums.csproj" />
+	  <ProjectReference Include="..\Hoyo.Extension\Hoyo.Extension.csproj" />
+	  <ProjectReference Include="..\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj" />
+	  <ProjectReference Include="..\Hoyo.Universal\Hoyo.Universal.csproj" />
+	</ItemGroup>
+
+</Project>

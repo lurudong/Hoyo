@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.local.api", "WebCor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.IdentityServer.Storage.MongoDB", "Mongo\Hoyo.IdentityServer.Storage.MongoDB\Hoyo.IdentityServer.Storage.MongoDB.csproj", "{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.api", "Framework\example.api\example.api.csproj", "{70811138-FDE0-422D-AA25-82666E462FBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70811138-FDE0-422D-AA25-82666E462FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70811138-FDE0-422D-AA25-82666E462FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70811138-FDE0-422D-AA25-82666E462FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70811138-FDE0-422D-AA25-82666E462FBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -113,6 +119,7 @@ Global
 		{9630FEC9-506D-4809-9ABB-78ABA0246DF5} = {0CF60598-E229-4F1E-AFBB-09E2FF70C717}
 		{BABD411A-EE69-4708-9E38-BDB1151C6B7D} = {0CF60598-E229-4F1E-AFBB-09E2FF70C717}
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD} = {44B212AF-424A-443D-A83E-6740672EC4D6}
+		{70811138-FDE0-422D-AA25-82666E462FBD} = {4430E604-6498-4A24-9328-5B053519F964}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4651E82-3B77-4793-A9AA-BADAF35F55DF}
