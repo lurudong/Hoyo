@@ -15,17 +15,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo.GridFS.Extension
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{09C70852-4850-4351-9DA1-6521AA0A04F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Tools", "Tools\Hoyo.Tools\Hoyo.Tools.csproj", "{3014D8B1-51F5-4C0B-B475-1C6F8FC38355}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Tools", "Tools\Hoyo.Tools\Hoyo.Tools.csproj", "{3014D8B1-51F5-4C0B-B475-1C6F8FC38355}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.AutoDependencyInjectionModule", "Framework\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj", "{EA6706DB-D385-448B-9BC4-164F9D329496}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.AutoDependencyInjectionModule", "Framework\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj", "{EA6706DB-D385-448B-9BC4-164F9D329496}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Extension", "Framework\Hoyo.Extension\Hoyo.Extension.csproj", "{16468F1C-C6A4-4568-B9E0-34EF4EF09366}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Enums", "Framework\Hoyo.Enums\Hoyo.Enums.csproj", "{D3EE52F9-731D-492A-9038-B2396C456810}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Enums", "Framework\Hoyo.Enums\Hoyo.Enums.csproj", "{D3EE52F9-731D-492A-9038-B2396C456810}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Universal", "Framework\Hoyo.Universal\Hoyo.Universal.csproj", "{2D57812F-5C81-4B7C-8249-D87F8887DABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Universal", "Framework\Hoyo.Universal\Hoyo.Universal.csproj", "{2D57812F-5C81-4B7C-8249-D87F8887DABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Framework.NativeAssets", "Framework\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj", "{7C8964A5-053A-438B-AC23-D2428567BFBD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Framework.NativeAssets", "Framework\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj", "{7C8964A5-053A-438B-AC23-D2428567BFBD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.local.api", "Mongo\example.local.api\example.local.api.csproj", "{B7CD6441-E1D0-4933-B82C-71FDA48006A6}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.WebCore", "WebCore\Hoyo.WebCore\Hoyo.WebCore.csproj", "{9630FEC9-506D-4809-9ABB-78ABA0246DF5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.local.api", "WebCore\example.local.api\example.local.api.csproj", "{BABD411A-EE69-4708-9E38-BDB1151C6B7D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.IdentityServer.Storage.MongoDB", "Mongo\Hoyo.IdentityServer.Storage.MongoDB\Hoyo.IdentityServer.Storage.MongoDB.csproj", "{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -89,6 +91,10 @@ Global
 		{BABD411A-EE69-4708-9E38-BDB1151C6B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BABD411A-EE69-4708-9E38-BDB1151C6B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BABD411A-EE69-4708-9E38-BDB1151C6B7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,6 +112,7 @@ Global
 		{B7CD6441-E1D0-4933-B82C-71FDA48006A6} = {44B212AF-424A-443D-A83E-6740672EC4D6}
 		{9630FEC9-506D-4809-9ABB-78ABA0246DF5} = {0CF60598-E229-4F1E-AFBB-09E2FF70C717}
 		{BABD411A-EE69-4708-9E38-BDB1151C6B7D} = {0CF60598-E229-4F1E-AFBB-09E2FF70C717}
+		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD} = {44B212AF-424A-443D-A83E-6740672EC4D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4651E82-3B77-4793-A9AA-BADAF35F55DF}

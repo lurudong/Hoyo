@@ -4,23 +4,28 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-	    <LangVersion>latest</LangVersion>
+		<LangVersion>latest</LangVersion>
 		<Version>1.0.1</Version>
 		<Authors>joesdu</Authors>
-		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.Framework.NativeAssets</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
-		<Description>一个通用的工具包,从Miracle.Common包中拆分,包含QRCode工具,解除和Miracle.Common的强依赖</Description>
+		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.IdentityServer.Storage.MongoDB</PackageProjectUrl>
+		<Description>support identityserver 5.x-6.x data persistence to mongodb</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
+
 	<ItemGroup>
 		<None Include=".\README.md" Pack="true" PackagePath="" />
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
 	</ItemGroup>
+
 	<ItemGroup>
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.0" />
-		<PackageReference Include="ZXing.Net" Version="0.16.8" />
+		<PackageReference Include="Duende.IdentityServer" Version="6.1.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Hoyo.Mongo\Hoyo.Mongo.csproj" />
 	</ItemGroup>
 
 </Project>
