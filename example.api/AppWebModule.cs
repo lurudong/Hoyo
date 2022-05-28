@@ -9,6 +9,7 @@ namespace example.api;
 [DependsOn(
     typeof(DependencyAppModule),
     typeof(CorsModule),
+    typeof(HoyoMongoModule),
     typeof(SwaggerModule),
     typeof(MyTestModule)
 )]

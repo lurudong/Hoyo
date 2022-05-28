@@ -18,7 +18,7 @@ public class CorsModule : AppModule
         var allow = config["AllowedHosts"] ?? "*";
         _ = context.Services.AddCors(c => c.AddPolicy("AllowedHosts", s => s.WithOrigins(allow.Split(",")).AllowAnyMethod().AllowAnyHeader()));
     }
-    
+
     public override void ApplicationInitialization(ApplicationContext context)
     {
         var app = context.GetApplicationBuilder();

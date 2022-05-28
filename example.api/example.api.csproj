@@ -14,10 +14,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Framework\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj" />
-	  <ProjectReference Include="..\Framework\Hoyo.Enums\Hoyo.Enums.csproj" />
-	  <ProjectReference Include="..\Framework\Hoyo.Extension\Hoyo.Extension.csproj" />
 	  <ProjectReference Include="..\Framework\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj" />
-	  <ProjectReference Include="..\Framework\Hoyo.Universal\Hoyo.Universal.csproj" />
 	  <ProjectReference Include="..\Mongo\Hoyo.Mongo.GridFS.Extension\Hoyo.Mongo.GridFS.Extension.csproj" />
 	  <ProjectReference Include="..\Mongo\Hoyo.Mongo\Hoyo.Mongo.csproj" />
 	  <ProjectReference Include="..\Tools\Hoyo.Tools\Hoyo.Tools.csproj" />
