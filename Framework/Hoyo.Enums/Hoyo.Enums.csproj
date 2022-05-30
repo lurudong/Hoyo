@@ -8,7 +8,7 @@
 		<Version>1.0.0</Version>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
-		<Description>Hoyo枚举库,应该不会单独打包发布</Description>
+		<Description>Hoyo枚举库</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
