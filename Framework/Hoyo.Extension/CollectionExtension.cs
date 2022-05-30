@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
-namespace Hoyo.AutoDependencyInjectionModule.Extensions;
+namespace Hoyo.Extensions;
 
 public static partial class CollectionExtension
 {

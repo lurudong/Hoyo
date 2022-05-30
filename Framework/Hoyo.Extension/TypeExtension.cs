@@ -1,9 +1,9 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Attributes;
+﻿using Hoyo.Extensions.Attributes;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Hoyo.AutoDependencyInjectionModule.Extensions;
+namespace Hoyo.Extensions;
 
 public static class TypeExtension
 {

@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>joesdu</Authors>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.AutoDependencyInjectionModule</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -25,6 +25,9 @@
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Hoyo.Extension\Hoyo.Extension.csproj" />
 	</ItemGroup>
 
 </Project>

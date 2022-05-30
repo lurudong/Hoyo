@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Hoyo.AutoDependencyInjectionModule.Extensions;
+namespace Hoyo.Extensions;
 
 public static class ObjectExtension
 {

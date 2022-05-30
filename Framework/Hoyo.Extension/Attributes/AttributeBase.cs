@@ -1,4 +1,4 @@
-﻿namespace Hoyo.AutoDependencyInjectionModule.Attributes;
+﻿namespace Hoyo.Extensions.Attributes;
 
 public abstract class AttributeBase : Attribute
 {

@@ -1,4 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
+﻿using Hoyo.Extensions;
 
 namespace Hoyo.AutoDependencyInjectionModule.Modules;
 

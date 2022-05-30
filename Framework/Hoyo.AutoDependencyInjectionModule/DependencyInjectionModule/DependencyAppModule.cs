@@ -1,4 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
+﻿using Hoyo.Extensions;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.AutoDependencyInjectionModule.Reflections;
 using Microsoft.Extensions.DependencyInjection;
