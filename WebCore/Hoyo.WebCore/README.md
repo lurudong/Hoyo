@@ -110,5 +110,5 @@ app.UseHoyoResponseTime();
 ```
 * Response headers
 ```
-miracle-response-time: 5 ms 
+hoyo-response-time: 5 ms 
 ```

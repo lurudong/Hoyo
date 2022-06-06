@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
 namespace Hoyo.WebCore;
+/// <summary>
+/// Action过滤器,主要用于统一格式化返回数据结构.
+/// </summary>
 public class ActionExecuteFilter : ActionFilterAttribute
 {
     public override void OnActionExecuted(ActionExecutedContext context)

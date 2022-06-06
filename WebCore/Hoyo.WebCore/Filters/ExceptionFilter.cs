@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
 
 namespace Hoyo.WebCore;
+/// <summary>
+/// 全局异常过滤器
+/// </summary>
 public class ExceptionFilter : ExceptionFilterAttribute
 {
     public override Task OnExceptionAsync(ExceptionContext context)
