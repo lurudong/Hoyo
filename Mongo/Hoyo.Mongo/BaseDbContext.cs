@@ -18,7 +18,7 @@ public class BaseDbContext : IDbSet
     public static T CreateInstance<T>(string connectionString, string db = "") where T : BaseDbContext
     {
         var t = Activator.CreateInstance<T>();
-        if (string.IsNullOrWhiteSpace(connectionString)) throw new("ConnectionString is Empty");
+        if (string.IsNullOrWhiteSpace(connectionString)) throw new("连接字符串为空");
         var mongoUrl = new MongoUrl(connectionString);
         t._client = new MongoClient(mongoUrl);
         var dbname = string.IsNullOrWhiteSpace(db) ? mongoUrl.DatabaseName : db;
@@ -29,9 +29,9 @@ public class BaseDbContext : IDbSet
     public static T CreateInstance<T>(HoyoMongoClientSettings clientSettings) where T : BaseDbContext
     {
         var t = Activator.CreateInstance<T>();
-        if (clientSettings.Validate) throw new("ServerAddresses or databasename is Empty");
+        if (clientSettings.Validate) throw new("服务器地址或者数据库名为空");
         t._client = new MongoClient(clientSettings.ClientSettings);
-        var dbname = !string.IsNullOrWhiteSpace(clientSettings.DatabaseName) ? clientSettings.DatabaseName : "miracle";
+        var dbname = !string.IsNullOrWhiteSpace(clientSettings.DatabaseName) ? clientSettings.DatabaseName : "hoyo";
         t._database = t._client.GetDatabase(dbname);
         return t;
     }
@@ -54,7 +54,7 @@ public class BaseDbContext : IDbSet
             }
             catch (Exception ex)
             {
-                throw new($"you have already regist commonpack,please change param [first] to false from since second RegistConventionPack Method(or Miracle.MongoDB.Gen.AddMongoDbContext etc..):{ex.Message}");
+                throw new($"已注册commonpack,请在第一次调用RegistConventionPack方法后修改 [first] 参数等于 false:{ex.Message}");
             }
         }
         var idpack = new ConventionPack
@@ -68,13 +68,13 @@ public class BaseDbContext : IDbSet
 
     public async Task BuildTransactCollections()
     {
-        if (_database is null) throw new("_database not prepared,please use this method after DbContext instantiation");
+        if (_database is null) throw new("_database 还未准备好,请在使用该函数前初始化DbContext");
         var transcolls = GetTransactColletions();
         if (transcolls.Length <= 0) return;
         var count = 1;
         while (await CreateCollections(transcolls) == false && count < 10)
         {
-            Console.WriteLine($"[🤪]BuildTransactCollections:{count} times error,will retry at next second.[{DateTime.Now.ToLongTimeString()}]");
+            Console.WriteLine($"[🤪]BuildTransactCollections:{count} 次错误,将在下一秒重试.[{DateTime.Now.ToLongTimeString()}]");
             count++;
             Thread.Sleep(1000);
         }
@@ -82,13 +82,13 @@ public class BaseDbContext : IDbSet
 
     private async Task<bool> CreateCollections(IEnumerable<string> collections)
     {
-        if (_database is null) throw new("_database not prepared,please use this method after DbContext instantiation");
+        if (_database is null) throw new("_database 还未准备好,请在使用该函数前初始化DbContext");
         try
         {
             var exists = (await _database?.ListCollectionNamesAsync()!).ToList();
             var unexists = collections.Where(x => exists?.Exists(c => c == x) == false);
             foreach (var collection in unexists) _ = _database?.CreateCollectionAsync(collection)!;
-            Console.WriteLine("[🎉]CreateCollections:create collections success");
+            Console.WriteLine("[🎉]CreateCollections:创建集合成功");
             return true;
         }
         catch

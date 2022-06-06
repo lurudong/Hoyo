@@ -1,7 +1,16 @@
 ﻿namespace Hoyo.Mongo.GridFS.Extension;
 public class HoyoStaticFileSettings
 {
-    public const string Postion = "HoyoStaticFile";
-    public string VirtualPath { get; set; } = string.Empty;
+    /// <summary>
+    /// 配置节点名称
+    /// </summary>
+    public const string Position = "HoyoStaticFile";
+    /// <summary>
+    /// 虚拟路径,默认: /hoyofs
+    /// </summary>
+    public string VirtualPath { get; set; } = "/hoyofs";
+    /// <summary>
+    /// 物理路径,实际存储文件的位置
+    /// </summary>
     public string PhysicalPath { get; set; } = string.Empty;
 }

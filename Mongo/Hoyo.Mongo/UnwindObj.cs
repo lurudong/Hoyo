@@ -9,7 +9,6 @@ public class UnwindObj<T>
     /// </summary>
     [BsonElement("Obj")]
     public T? Obj { get; set; }
-
     /// <summary>
     /// when T as List,record Count
     /// </summary>

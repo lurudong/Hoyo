@@ -12,22 +12,21 @@ public static class MongoServiceExtensions
     /// 获取连接字符串,并提供一些信息输出
     /// </summary>
     /// <param name="configuration">IConfiguration</param>
-    /// <param name="connKey">Connection Keyword</param>
-    /// <param name="showconnectionstring">Show Connection String,Recommendation: The development environment is turned on and closed in the formal environment</param>
+    /// <param name="connKey">链接字符串的环境变量或者配置名</param>
     /// <returns></returns>
     private static string ConnectionString(IConfiguration configuration, string connKey = "CONNECTIONSTRINGS_MONGO")
     {
         var connectionString = configuration[connKey];
         if (string.IsNullOrWhiteSpace(connectionString)) connectionString = configuration.GetConnectionString("Mongo");
         return string.IsNullOrWhiteSpace(connectionString)
-            ? throw new("💔:No [CONNECTIONSTRINGS_MONGO] setting in env and ConnectionStrings.Mongo in appsettings.json")
+            ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsetting.json中不存在ConnectionStrings:Mongo配置")
             : connectionString;
     }
 
     /// <summary>
-    /// Add DbContext Service Use Connection String
+    /// 通过连接字符串添加DbContext
     /// </summary>
-    /// <typeparam name="T">Miracle.MongoDB.DbContext</typeparam>
+    /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
     /// <param name="services">IServiceCollection</param>
     /// <param name="configuration">IConfiguration</param>
     /// <param name="dboptions">DbContextOptions</param>
@@ -44,11 +43,11 @@ public static class MongoServiceExtensions
     }
 
     /// <summary>
-    /// Add DbContext Service Use Connection String
+    /// 使用HoyoMongoClientSettings配置添加DbContext
     /// </summary>
-    /// <typeparam name="T">Miracle.MongoDB.DbContext</typeparam>
+    /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
     /// <param name="services">IServiceCollection</param>
-    /// <param name="configuration">IConfiguration</param>
+    /// <param name="clientSettings">HoyoMongoClientSettings</param>
     /// <param name="dboptions">DbContextOptions</param>
     /// <returns></returns>
     public static async Task<T> AddMongoDbContext<T>(this IServiceCollection services, HoyoMongoClientSettings clientSettings, HoyoMongoOptions? dboptions = null) where T : BaseDbContext
@@ -62,9 +61,9 @@ public static class MongoServiceExtensions
     }
 
     /// <summary>
-    /// Add IDbSet Service Use Connection string
+    /// 通过连接字符串添加DbContext
     /// </summary>
-    /// <typeparam name="T">Miracle.MongoDB.IDbSet</typeparam>
+    /// <typeparam name="T">Hoyo.Mongo.IDbSet</typeparam>
     /// <param name="services">IServiceCollection</param>
     /// <param name="configuration">IConfiguration</param>
     /// <param name="dboptions">DbContextOptions</param>

@@ -18,7 +18,6 @@ public class MyTestModule : ITest
 {
     public void Show()
     {
-
         Console.WriteLine("测试自动注入Test");
     }
 }

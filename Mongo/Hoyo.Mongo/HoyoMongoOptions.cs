@@ -20,16 +20,20 @@ public class HoyoMongoOptions
             {
                 Conventions = new()
                 {
-                    new CamelCaseElementNameConvention(), //property to camel
-                    new IgnoreExtraElementsConvention(true),//
-                    new NamedIdMemberConvention("Id","ID"), //_id mapping Id or ID
-                    new EnumRepresentationConvention(BsonType.String) //save enum value as string
+                    new CamelCaseElementNameConvention(), // 驼峰名称格式
+                    new IgnoreExtraElementsConvention(true), //
+                    new NamedIdMemberConvention("Id","ID"), // _id映射为实体中的ID或者Id
+                    new EnumRepresentationConvention(BsonType.String) // 将枚举类型存储为字符串格式
                 },
                 Filter = _ => true
             }
         }
     };
-
+    /// <summary>
+    /// 添加自己的一些Convention配置,用于设置mongodb序列化反序列化的一些表现.
+    /// </summary>
+    /// <param name="name">名称</param>
+    /// <param name="config">ConventionRegistryConfig</param>
     public void AppendConventionRegistry(string name, ConventionRegistryConfig config) => ConventionRegistry.Add(name, config);
 }
 

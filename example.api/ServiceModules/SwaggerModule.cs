@@ -17,7 +17,7 @@ public class SwaggerModule : AppModule
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var config = context.Services.GetConfiguration();
-        Title = config["Swagger:Title"] ?? "Miracle.SwaggerModule";
+        Title = config["Swagger:Title"] ?? "Hoyo.Swagger";
         Version = config["Swagger:Version"] ?? "v1.0";
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         _ = context.Services.AddSwaggerGen(c =>

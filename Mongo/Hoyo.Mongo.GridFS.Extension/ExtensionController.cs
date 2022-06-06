@@ -12,7 +12,7 @@ public class ExtensionController : GridFSController
     private readonly HoyoStaticFileSettings FileSetting;
     public ExtensionController(GridFSBucket bucket, IMongoCollection<GridFSItemInfo> collection, IConfiguration config) : base(bucket, collection)
     {
-        FileSetting = config.GetSection(HoyoStaticFileSettings.Postion).Get<HoyoStaticFileSettings>();
+        FileSetting = config.GetSection(HoyoStaticFileSettings.Position).Get<HoyoStaticFileSettings>();
     }
 
     /// <summary>

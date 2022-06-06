@@ -7,7 +7,7 @@ public static class GridFSVirtualPathExtension
 {
     public static IApplicationBuilder UseHoyoGridFSVirtualPath(this IApplicationBuilder app, IConfiguration config)
     {
-        var hoyofile = config.GetSection(HoyoStaticFileSettings.Postion).Get<HoyoStaticFileSettings>();
+        var hoyofile = config.GetSection(HoyoStaticFileSettings.Position).Get<HoyoStaticFileSettings>();
         if (!Directory.Exists(hoyofile.PhysicalPath))
         {
             _ = Directory.CreateDirectory(hoyofile.PhysicalPath);
