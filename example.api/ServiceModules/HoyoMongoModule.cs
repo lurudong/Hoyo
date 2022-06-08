@@ -17,7 +17,7 @@ public class HoyoMongoModule : AppModule
         {
             Conventions = new()
             {
-                new IgnoreExtraElementsConvention(true)
+                new IgnoreIfDefaultConvention(true)
             },
             Filter = _ => true
         });

@@ -5,11 +5,11 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	    <LangVersion>latest</LangVersion>
-		<Version>1.0.1</Version>
+		<Version>1.0.2</Version>
 		<Authors>joesdu</Authors>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.Framework.NativeAssets</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
-		<Description>一个通用的工具包,从Miracle.Common包中拆分,包含QRCode工具,解除和Miracle.Common的强依赖</Description>
+		<Description>含QRCode工具</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
