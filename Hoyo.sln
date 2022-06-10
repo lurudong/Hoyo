@@ -33,7 +33,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.WebCore", "WebCore\Hoy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.IdentityServer.Storage.MongoDB", "Mongo\Hoyo.IdentityServer.Storage.MongoDB\Hoyo.IdentityServer.Storage.MongoDB.csproj", "{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.api", "example.api\example.api.csproj", "{70811138-FDE0-422D-AA25-82666E462FBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "example.net6.api", "example.net6.api\example.net6.api.csproj", "{320DDBF7-49DA-4CAD-BDFF-9CF3834837A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "example.net7.api", "example.net7.api\example.net7.api.csproj", "{6F5CF88D-97C6-4421-B990-9731BE7979F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,10 +87,14 @@ Global
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70811138-FDE0-422D-AA25-82666E462FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70811138-FDE0-422D-AA25-82666E462FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70811138-FDE0-422D-AA25-82666E462FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70811138-FDE0-422D-AA25-82666E462FBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{320DDBF7-49DA-4CAD-BDFF-9CF3834837A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{320DDBF7-49DA-4CAD-BDFF-9CF3834837A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{320DDBF7-49DA-4CAD-BDFF-9CF3834837A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{320DDBF7-49DA-4CAD-BDFF-9CF3834837A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F5CF88D-97C6-4421-B990-9731BE7979F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5CF88D-97C6-4421-B990-9731BE7979F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5CF88D-97C6-4421-B990-9731BE7979F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5CF88D-97C6-4421-B990-9731BE7979F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

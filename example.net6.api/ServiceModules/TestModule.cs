@@ -2,7 +2,7 @@
 using Hoyo.AutoDependencyInjectionModule.Extensions;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 
-namespace example.api;
+namespace example.net6.api;
 
 public class TestModule : AppModule
 {

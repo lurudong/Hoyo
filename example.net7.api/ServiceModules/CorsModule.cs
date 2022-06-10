@@ -1,7 +1,7 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 
-namespace example.api;
+namespace example.net7.api;
 
 public class CorsModule : AppModule
 {

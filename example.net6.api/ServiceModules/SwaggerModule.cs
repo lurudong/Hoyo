@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace example.api;
+namespace example.net6.api;
 
 public class SwaggerModule : AppModule
 {

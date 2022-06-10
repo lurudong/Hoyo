@@ -1,7 +1,7 @@
 ﻿using Hoyo.Mongo;
 using MongoDB.Driver;
 
-namespace example.api;
+namespace example.net6.api;
 public class DbContext : BaseDbContext
 {
     /// <summary>

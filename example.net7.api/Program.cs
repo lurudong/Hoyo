@@ -1,4 +1,4 @@
-using example.api;
+using example.net7.api;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.WebCore;
 using System.Text.Json.Serialization;

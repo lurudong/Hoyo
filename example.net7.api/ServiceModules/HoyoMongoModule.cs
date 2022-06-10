@@ -6,7 +6,7 @@ using Hoyo.Mongo.GridFS.Extension;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
-namespace example.api;
+namespace example.net7.api;
 
 public class HoyoMongoModule : AppModule
 {

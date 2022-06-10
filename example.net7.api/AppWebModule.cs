@@ -1,7 +1,7 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 
-namespace example.api;
+namespace example.net7.api;
 
 /**
  * 要实现自动注入,一定要在这个地方添加

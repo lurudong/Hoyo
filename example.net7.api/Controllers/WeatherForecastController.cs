@@ -3,7 +3,7 @@ using Hoyo.Tools;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
-namespace example.api.Controllers;
+namespace example.net7.api.Controllers;
 
 [ApiController, Route("[controller]")]
 public class WeatherForecastController : ControllerBase
