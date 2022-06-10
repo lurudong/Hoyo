@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.4</Version>
+		<Version>1.0.5-preview.7.0.100</Version>
 		<Nullable>enable</Nullable>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -20,16 +20,21 @@
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
+		<PackageReference Include="Hoyo.Universal" Version="1.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Core" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="MongoDB.Driver.GridFS" Version="2.16.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Framework\Hoyo.Universal\Hoyo.Universal.csproj" />
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Hoyo.Universal" Version="1.0.1-preview.7.0.100" />
+		<PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Core" Version="2.2.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.4.22229.4" />
+		<PackageReference Include="MongoDB.Driver.GridFS" Version="2.16.0" />
 	</ItemGroup>
 
 </Project>

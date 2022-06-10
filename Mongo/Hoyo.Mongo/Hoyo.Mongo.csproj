@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.3</Version>
+		<Version>1.0.4-preview.7.0.100</Version>
 		<Nullable>enable</Nullable>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -20,9 +20,15 @@
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+		<PackageReference Include="MongoDB.Bson" Version="2.16.0" />
+		<PackageReference Include="MongoDB.Driver" Version="2.16.0" />
+	</ItemGroup>
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0-preview.4.22229.4" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0-preview.4.22229.4" />
 		<PackageReference Include="MongoDB.Bson" Version="2.16.0" />
 		<PackageReference Include="MongoDB.Driver" Version="2.16.0" />
 	</ItemGroup>
