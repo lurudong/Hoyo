@@ -13,12 +13,13 @@ public static class GridFSExtensions
         if (db is null) throw new("db can't be null");
         fsoptions ??= new();
         BusinessApp = fsoptions.BusinessApp;
+        var hoyodb = fsoptions.DefalutDB ? db.Client.GetDatabase("hoyo") : db;
         _ = services.Configure<FormOptions>(c =>
         {
             c.MultipartBodyLengthLimit = long.MaxValue;
             c.ValueLengthLimit = int.MaxValue;
-        }).Configure<KestrelServerOptions>(c => c.Limits.MaxRequestBodySize = int.MaxValue).AddSingleton(new GridFSBucket(fsoptions.DefalutDB ? db.Client.GetDatabase("hoyo") : db, fsoptions.Options));
-        _ = services.AddSingleton(db.Client.GetDatabase("hoyo").GetCollection<GridFSItemInfo>(fsoptions.ItemInfo));
+        }).Configure<KestrelServerOptions>(c => c.Limits.MaxRequestBodySize = int.MaxValue).AddSingleton(new GridFSBucket(hoyodb, fsoptions.Options));
+        _ = services.AddSingleton(hoyodb.GetCollection<GridFSItemInfo>(fsoptions.ItemInfo));
         return services;
     }
 }

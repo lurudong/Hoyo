@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hoyo.AutoDependencyInjectionModule" Version="1.0.3" />
-    <PackageReference Include="Hoyo.Framework.NativeAssets" Version="1.0.2" />
-    <PackageReference Include="Hoyo.Mongo" Version="1.0.3" />
-    <PackageReference Include="Hoyo.Mongo.GridFS.Extension" Version="1.0.4" />
-    <PackageReference Include="Hoyo.Tools" Version="1.0.2" />
-    <PackageReference Include="Hoyo.WebCore" Version="1.0.2" />
+    <PackageReference Include="Hoyo.AutoDependencyInjectionModule" Version="1.0.4" />
+    <PackageReference Include="Hoyo.Framework.NativeAssets" Version="1.0.3" />
+    <PackageReference Include="Hoyo.Mongo" Version="1.0.5" />
+    <PackageReference Include="Hoyo.Mongo.GridFS.Extension" Version="1.0.5" />
+    <PackageReference Include="Hoyo.Tools" Version="1.0.4" />
+    <PackageReference Include="Hoyo.WebCore" Version="1.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
   </ItemGroup>
 
