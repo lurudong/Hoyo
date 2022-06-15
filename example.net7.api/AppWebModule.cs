@@ -13,7 +13,6 @@ namespace example.net7.api;
     typeof(ControllersModule),
     typeof(HoyoMongoModule),
     typeof(SwaggerModule),
-    typeof(CapModule),
     typeof(MyTestModule)
 )]
 public class AppWebModule : AppModule
