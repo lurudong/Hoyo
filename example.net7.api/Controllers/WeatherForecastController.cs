@@ -1,5 +1,4 @@
 using Hoyo.Framework.NativeAssets;
-using Hoyo.Tools;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
@@ -11,8 +10,11 @@ public class WeatherForecastController : ControllerBase
     private readonly DbContext db;
     private readonly FilterDefinitionBuilder<MongoTest> bf = Builders<MongoTest>.Filter;
 
-    public WeatherForecastController(DbContext dbContext) => db = dbContext;    
-    
+    public WeatherForecastController(DbContext dbContext)
+    {
+        db = dbContext;
+    }
+
     [HttpPost("MongoPost")]
     public Task MongoPost()
     {
@@ -34,8 +36,6 @@ public class WeatherForecastController : ControllerBase
 
     [HttpGet("QRDecoder")]
     public object QRDecoder(string base64) => QRCode.QRDecoder(base64);
-    [HttpGet("SnowFlake")]
-    public object SnowFlake() => SnowflakeId.GenerateNewId();
 
     [HttpGet("NewType")]
     public object GetNewType() => new
