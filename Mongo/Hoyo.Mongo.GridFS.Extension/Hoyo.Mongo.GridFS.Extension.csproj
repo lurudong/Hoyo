@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Nullable>enable</Nullable>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -26,7 +26,7 @@
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
 		<PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0-preview.4.22229.4" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0-preview.5.22301.12" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Hoyo.Mongo.GridFS\Hoyo.Mongo.GridFS.csproj" />
