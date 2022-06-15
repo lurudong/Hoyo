@@ -1,7 +1,5 @@
-using example.net7.api;
+using example.net7.capconsumer;
 using Hoyo.AutoDependencyInjectionModule.Modules;
-using Hoyo.WebCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

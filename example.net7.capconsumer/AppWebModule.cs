@@ -2,7 +2,7 @@
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.WebCore;
 
-namespace example.net7.api;
+namespace example.net7.capconsumer;
 
 /**
  * 要实现自动注入,一定要在这个地方添加
@@ -11,10 +11,7 @@ namespace example.net7.api;
     typeof(DependencyAppModule),
     typeof(CorsModule),
     typeof(ControllersModule),
-    typeof(HoyoMongoModule),
-    typeof(SwaggerModule),
-    typeof(CapModule),
-    typeof(MyTestModule)
+    typeof(CapModule)
 )]
 public class AppWebModule : AppModule
 {
