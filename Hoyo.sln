@@ -35,18 +35,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.IdentityServer.Storage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "example.net7.api", "example.net7.api\example.net7.api.csproj", "{6F5CF88D-97C6-4421-B990-9731BE7979F5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventBus", "EventBus", "{1AD8A24D-E847-467F-BDE5-D509461A7815}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus", "EventBus\Hoyo.EventBus\Hoyo.EventBus.csproj", "{8CE82CBD-9EF7-4957-9C59-19301671A82D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus.RabbitMQ", "EventBus\Hoyo.EventBus.RabbitMQ\Hoyo.EventBus.RabbitMQ.csproj", "{88A1A39E-56FF-454F-AC80-E5B7FAED7E7A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eventbus.publish.api", "eventbus.publish.api\eventbus.publish.api.csproj", "{A0B800A3-3DC7-4179-A6B4-80C7DC5FBFB1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eventbus.subscribe", "eventbus.subscribe\eventbus.subscribe.csproj", "{A4730DB3-EE9E-4CB8-9429-72AD7E72BEE6}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eventbus.events", "eventbus.events\eventbus.events.csproj", "{E9CD3D2C-0719-4D50-A72C-34034CD85091}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
