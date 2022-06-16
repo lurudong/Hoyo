@@ -11,7 +11,7 @@ public interface IEventBus
     /// 发布
     /// </summary>
     /// <param name="event"></param>
-    void Publish(IntegrationEvent @event);
+    void Publish(string eventname, IntegrationEvent @event);
 
     /// <summary>
     /// 订阅

@@ -2,6 +2,11 @@
 
 public static class GenericTypeExtensions
 {
+    /// <summary>
+    /// 获取通用类型名称
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public static string GetGenericTypeName(this Type type)
     {
         var typeName = string.Empty;
@@ -10,10 +15,7 @@ public static class GenericTypeExtensions
             var genericTypes = string.Join(",", type.GetGenericArguments().Select(t => t.Name).ToArray());
             typeName = $"{type.Name.Remove(type.Name.IndexOf('`'))}<{genericTypes}>";
         }
-        else
-        {
-            typeName = type.Name;
-        }
+        else typeName = type.Name;
         return typeName;
     }
 

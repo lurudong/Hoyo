@@ -87,7 +87,7 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
             {
                 _ = _handlers.Remove(eventName);
                 var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
-                if (eventType != null)
+                if (eventType is not null)
                 {
                     _ = _eventTypes.Remove(eventType);
                 }
