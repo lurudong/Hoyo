@@ -1,8 +1,10 @@
 ﻿using eventbus.events;
+using Hoyo.EventBus;
 using Hoyo.EventBus.Abstractions;
 
 namespace eventbus.subscribe.IntegrationEvents.EventHandling;
 
+[HoyoSubscribe("order.publish.test")]
 public class OrderStartedIntegrationEventHandler : IIntegrationEventHandler<OrderStartedIntegrationEvent>
 {
     private readonly ILogger<OrderStartedIntegrationEventHandler> _logger;

@@ -1,8 +1,10 @@
 ﻿using eventbus.events;
+using Hoyo.EventBus;
 using Hoyo.EventBus.Abstractions;
 
 namespace eventbus.subscribe.IntegrationEvents.EventHandling;
 
+[HoyoSubscribe("second.publish.test")]
 public class TestSecondEventHandler : IIntegrationEventHandler<TestSecondEvent>
 {
     private readonly ILogger<TestSecondEventHandler> _logger;

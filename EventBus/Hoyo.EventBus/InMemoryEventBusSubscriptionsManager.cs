@@ -1,5 +1,6 @@
 ﻿using Hoyo.EventBus.Abstractions;
 using Hoyo.EventBus.Events;
+using System.Reflection;
 
 namespace Hoyo.EventBus;
 
@@ -87,7 +88,7 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
             {
                 _ = _handlers.Remove(eventName);
                 var eventType = _eventTypes.SingleOrDefault(e => e.Name == eventName);
-                if (eventType is not null)
+                if (eventType != null)
                 {
                     _ = _eventTypes.Remove(eventType);
                 }
@@ -139,5 +140,10 @@ public partial class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptio
 
     public Type GetEventTypeByName(string eventName) => _eventTypes.SingleOrDefault(t => t.Name == eventName)!;
 
-    public string GetEventKey<T>() => typeof(T).Name;
+    public string GetEventKey<T>()
+    {
+        // 获取类的属性描述
+        var classIfno = typeof(T).GetCustomAttribute<HoyoSubscribeAttribute>();
+        return classIfno?.Name ?? throw new("eventhandler attribute is not found");
+    }
 }
