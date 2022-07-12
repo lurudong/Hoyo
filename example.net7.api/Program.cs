@@ -1,12 +1,9 @@
 using example.net7.api;
 using Hoyo.AutoDependencyInjectionModule.Modules;
-using Hoyo.WebCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 // 自动注入服务模块
 builder.Services.AddApplication<AppWebModule>();
 
