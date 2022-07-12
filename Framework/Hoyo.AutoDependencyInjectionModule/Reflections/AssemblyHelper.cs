@@ -55,8 +55,8 @@ public static class AssemblyHelper
     }
     public static void Init()
     {
-        _allAssemblies = DependencyContext.Default.GetDefaultAssemblyNames().Where(o => o.Name != null && !Filters.Any(o.Name.StartsWith)).Select(Assembly.Load).ToArray();
-        _allTypes = _allAssemblies.SelectMany(m => m.GetTypes()).ToArray();
+        _allAssemblies = DependencyContext.Default?.GetDefaultAssemblyNames().Where(o => o.Name != null && !Filters.Any(o.Name.StartsWith)).Select(Assembly.Load).ToArray();
+        _allTypes = _allAssemblies?.SelectMany(m => m.GetTypes()).ToArray();
     }
 
     /// <summary>
