@@ -47,7 +47,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, time) => _logger.LogWarning(ex, "发布集成事件: {EventId} 超时 {Timeout}s ({ExceptionMessage})", @event.EventId, $"{time.TotalSeconds:n1}", ex.Message));
+                (ex, time) => _logger.LogWarning(ex, "无法发布事件: {EventId} 超时 {Timeout}s ({ExceptionMessage})", @event.EventId, $"{time.TotalSeconds:n1}", ex.Message));
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
         var rabbitMqAttribute = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>特性,无法发布事件");
@@ -179,7 +179,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
 
     private void StartBasicConsume(Type eventType, RabbitMQAttribute rabbitMqAttribute, IModel? consumerChannel) //where T : IntegrationEvent
     {
-        _logger.LogTrace("启动RabbitMQ基本消耗");
+        _logger.LogTrace("启动RabbitMQ基本消费");
         if (consumerChannel is not null)
         {
             var consumer = new AsyncEventingBasicConsumer(consumerChannel);
@@ -207,7 +207,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
                 Thread.Sleep(100000);
             }
         }
-        else _logger.LogError("StartBasicConsume不能调用_consumerChannel == null");
+        else _logger.LogError("当_consumerChannel为null时StartBasicConsume不能调用");
     }
 
     private async Task ProcessEvent(Type eventType, string message)

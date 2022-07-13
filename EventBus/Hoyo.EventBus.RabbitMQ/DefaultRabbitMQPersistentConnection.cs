@@ -59,7 +59,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
             var policy = RetryPolicy.Handle<SocketException>()
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, time) => _logger.LogWarning(ex, "RabbitMQ客户端无法连接 {TimeOut}s ({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message));
+                (ex, time) => _logger.LogWarning(ex, "RabbitMQ客户端在{TimeOut}s超时后无法创建链接,({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message));
 
             _ = policy.Execute(() => _connection = _connectionFactory.CreateConnection());
             if (IsConnected && _connection is not null)
@@ -67,7 +67,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
                 _connection.ConnectionShutdown += OnConnectionShutdown;
                 _connection.CallbackException += OnCallbackException;
                 _connection.ConnectionBlocked += OnConnectionBlocked;
-                _logger.LogInformation("RabbitMQ Client获得了一个持久连接 '{HostName}' 并且订阅失败了事件", _connection.Endpoint.HostName);
+                _logger.LogInformation("RabbitMQ 客户端获取了与“{HostName}”的持久连接,并订阅了故障事件", _connection.Endpoint.HostName);
                 _disposed = false;
                 return true;
             }
@@ -82,21 +82,21 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
     private void OnConnectionBlocked(object? sender, ConnectionBlockedEventArgs e)
     {
         if (_disposed) return;
-        _logger.LogWarning("RabbitMQ连接关闭。正在尝试重新连接...");
+        _logger.LogWarning("RabbitMQ连接关闭,正在尝试重新连接...");
         _ = TryConnect();
     }
 
     void OnCallbackException(object? sender, CallbackExceptionEventArgs e)
     {
         if (_disposed) return;
-        _logger.LogWarning("RabbitMQ连接抛出异常。在重试...");
+        _logger.LogWarning("RabbitMQ连接抛出异常,在重试...");
         _ = TryConnect();
     }
 
     void OnConnectionShutdown(object? sender, ShutdownEventArgs reason)
     {
         if (_disposed) return;
-        _logger.LogWarning("RabbitMQ连接处于关闭状态。正在尝试重新连接...");
+        _logger.LogWarning("RabbitMQ连接处于关闭状态,正在尝试重新连接...");
         _ = TryConnect();
     }
 }

@@ -27,7 +27,7 @@ public class RabbitMqEventBusSubscriptionsManager : IIntegrationEventBusSubscrip
         }
         if (_handlers[eventName].Any(o => o == handlerType))
         {
-            throw new ArgumentException($"处理器类型 {handlerType.Name} 已经注册 '{eventName}'", nameof(handlerType));
+            throw new ArgumentException($"类型:{handlerType.Name} 已注册 '{eventName}'", nameof(handlerType));
         }
         _handlers[eventName].Add(handlerType);
     }
