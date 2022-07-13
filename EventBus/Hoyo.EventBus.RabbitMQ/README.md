@@ -1,3 +1,4 @@
 ﻿#### Hoyo EventBus
 
-EventBus抽象
+EventBus RabbitMQ实现.
+使用方法可参考example
