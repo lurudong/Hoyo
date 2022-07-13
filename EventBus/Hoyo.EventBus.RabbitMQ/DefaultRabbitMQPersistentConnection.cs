@@ -67,7 +67,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
                 _connection.ConnectionShutdown += OnConnectionShutdown;
                 _connection.CallbackException += OnCallbackException;
                 _connection.ConnectionBlocked += OnConnectionBlocked;
-                _logger.LogInformation("RabbitMQ 客户端获取了与“{HostName}”的持久连接,并订阅了故障事件", _connection.Endpoint.HostName);
+                _logger.LogInformation("RabbitMQ客户端获取了与'{HostName}'的持久连接,并订阅了故障事件", _connection.Endpoint.HostName);
                 _disposed = false;
                 return true;
             }
