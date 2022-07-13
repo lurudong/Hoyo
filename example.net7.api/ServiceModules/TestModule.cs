@@ -28,7 +28,7 @@ public interface ITest : IScopedDependency
     void Show();
 }
 
-[DependencyInjection(ServiceLifetime.Scoped)]
+[DependencyInjection(ServiceLifetime.Singleton)]
 public class Test2
 {
     public void Show()

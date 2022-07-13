@@ -26,7 +26,7 @@ public class AppModule : IAppModule
     /// <returns></returns>
     public Type[] GetDependedTypes(Type? moduleType = null)
     {
-        if (moduleType is null) moduleType = GetType();
+        moduleType ??= GetType();
         var dependedTypes = moduleType.GetCustomAttributes().OfType<IDependedTypesProvider>().ToArray();
         if (dependedTypes.Length == 0) return Array.Empty<Type>();
         List<Type> dependList = new();
