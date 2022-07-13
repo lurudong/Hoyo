@@ -12,6 +12,7 @@ namespace example.net7.api;
     typeof(CorsModule),
     typeof(ControllersModule),
     typeof(HoyoMongoModule),
+    typeof(HoyoMongoGridFSModule),
     typeof(SwaggerModule),
     typeof(HoyoEventBusRabbitMQModule),
     typeof(MyTestModule)
