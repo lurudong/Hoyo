@@ -4,7 +4,7 @@
 		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.7</Version>
+		<Version>1.0.8</Version>
 		<Nullable>enable</Nullable>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -27,7 +27,7 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0-preview.5.22301.12" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0-preview.6.22324.4" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Hoyo.Mongo.GridFS\Hoyo.Mongo.GridFS.csproj" />

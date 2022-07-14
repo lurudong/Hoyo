@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 namespace example.net7.api.Controllers;
 
 [ApiController, Route("[controller]")]
-public class TestIntegrationEventController : ControllerBase
+public class TestEventBusController : ControllerBase
 {
     private readonly IIntegrationEventBus _integrationEventBus;
 
-    public TestIntegrationEventController(IIntegrationEventBus integrationEventBus)
+    public TestEventBusController(IIntegrationEventBus integrationEventBus)
     {
         _integrationEventBus = integrationEventBus;
     }
@@ -25,7 +25,7 @@ public class TestIntegrationEventController : ControllerBase
     [HttpGet]
     public void CreateTestIntegrationEvent()
     {
-        var test = new TestIntegrationEvent() { Name="大黄瓜18CM，真的猛" };
+        var test = new TestIntegrationEvent() { Name="大黄瓜1CM，真的猛" };
         _integrationEventBus.Publish<TestIntegrationEvent>(test);
 
     }
