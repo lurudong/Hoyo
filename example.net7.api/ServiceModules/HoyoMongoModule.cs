@@ -22,12 +22,12 @@ public class HoyoMongoModule : AppModule
         {
             ServerAddresses = new()
             {
-                new("192.168.2.10", 27017),
+                new("101.34.26.221", 40003),
             },
             AuthDatabase = "admin",
             DatabaseName = "hoyo",
             UserName = "oneblogs",
-            Password = "&oneblogs.cn",
+            Password = "&duyu789",
         }, dboptions: dboptions);
     }
 }
