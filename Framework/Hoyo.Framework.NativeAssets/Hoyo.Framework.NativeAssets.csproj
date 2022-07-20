@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	    <LangVersion>latest</LangVersion>
-		<Version>1.0.5</Version>
+		<Version>1.0.6</Version>
 		<Authors>joesdu</Authors>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.Framework.NativeAssets</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
@@ -21,7 +21,8 @@
 	<ItemGroup>
 		<PackageReference Include="ZXing.Net" Version="0.16.8" />
 	</ItemGroup>
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0'">
+	
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="2.88.0" />
 	</ItemGroup>
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">

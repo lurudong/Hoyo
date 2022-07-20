@@ -1,4 +1,5 @@
 ﻿using Hoyo.Extensions;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -261,7 +262,18 @@ public static class ToLunar
     private static string FormatMonth(int month)
     {
         const string table = "正二三四五六七八九十冬腊";
-        return month > 12 ? string.Concat("闰", table.AsSpan(month - 13, 1)) : table.Substring(month - 1, 1);
+        if (month > 12)
+        {
+#if !NETSTANDARD
+            return string.Concat("闰", table.Substring(month - 13, 1));
+#else
+            return $"闰{table.Substring(month - 13, 1)}";
+#endif
+        }
+        else
+        {
+            return table.Substring(month - 1, 1);
+        }
     }
 
     /// <summary>
@@ -275,6 +287,20 @@ public static class ToLunar
         var day1 = day / 10;
         var day2 = day % 10;
         day1 -= day2 == 0 ? 1 : 0;
+#if NETSTANDARD
+        return day switch
+        {
+            30 => "三十",
+            20 => "二十",
+            _ => day1 switch
+            {
+                0 => string.Concat("初", "十一二三四五六七八九".Substring(day2, 1)),
+                1 => string.Concat("十", "十一二三四五六七八九".Substring(day2, 1)),
+                2 => string.Concat("廿", "十一二三四五六七八九".Substring(day2, 1)),
+                _ => throw new("不存在的农历日期"),
+            },
+        };
+#else
         return day switch
         {
             30 => "三十",
@@ -287,6 +313,7 @@ public static class ToLunar
                 _ => throw new("不存在的农历日期"),
             },
         };
+#endif
     }
 
     private static void Load(IList<string> dataInit, string data, int startYear) => dataInit[int.Parse(data[..4]) - startYear] = data;
@@ -435,14 +462,28 @@ public static class ToLunar
     /// <param name="str"></param>
     /// <param name="newStr"></param>
     /// <returns></returns>
-    private static string ReplaceLastYearMonth(string str, string newStr) => string.Concat(str.AsSpan(0, 9), newStr, str.AsSpan(11));
+    private static string ReplaceLastYearMonth(string str, string newStr)
+    {
+#if !NETSTANDARD
+        return string.Concat(str.AsSpan(0, 9), newStr, str.AsSpan(11));
+#else
+        return string.Concat(str[..9], newStr, str[11..]);
+#endif
+    }
 
     /// <summary>
     /// 去年闰十一月
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    private static string SubLeapNovember(string str) => string.Concat(str.AsSpan(23, 1), str.AsSpan(22, 1));
+    private static string SubLeapNovember(string str)
+    {
+#if !NETSTANDARD
+        return string.Concat(str.AsSpan(23, 1), str.AsSpan(22, 1));
+#else
+        return string.Concat(str.Substring(23, 1), str.Substring(22, 1));
+#endif
+    }
 
     /// <summary>
     /// 去年闰十二月

@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>1.0.3</Version>
+		<Version>1.0.4</Version>
 		<Authors>joesdu</Authors>
+		<LangVersion>latest</LangVersion>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.WebCore</PackageProjectUrl>
 		<Description>实现统一接口返回,全局异常以及接口执行消耗时间等功能</Description>
@@ -19,6 +20,10 @@
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
 	</ItemGroup>
 
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.1' OR '$(TargetFramework)' == 'netstandard2.0'">
+		<PackageReference Include="System.Text.Json" Version="6.0.5" />
+	</ItemGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 	</ItemGroup>

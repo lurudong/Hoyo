@@ -1,6 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Reflections;
-using Hoyo.Extensions;
+﻿using Hoyo.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;

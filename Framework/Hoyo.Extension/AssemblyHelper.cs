@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyModel;
 using System.Reflection;
+#if !NETSTANDARD
 using System.Runtime.Loader;
+#endif
 
-namespace Hoyo.AutoDependencyInjectionModule.Reflections;
+namespace Hoyo.Extensions;
 
 public static class AssemblyHelper
 {
-
+#if !NETSTANDARD
     /// <summary>
     /// 根据程序集名字得到程序集
     /// </summary>
@@ -18,6 +20,7 @@ public static class AssemblyHelper
         var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath; //获取项目路径
         return assemblyNames.Select(o => AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(basePath, $"{o}.dll")));
     }
+#endif
 
     private static readonly string[] Filters = { "dotnet-", "Microsoft.", "mscorlib", "netstandard", "System", "Windows" };
 

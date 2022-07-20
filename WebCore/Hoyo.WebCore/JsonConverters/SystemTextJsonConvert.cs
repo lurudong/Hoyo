@@ -26,6 +26,7 @@ public class SystemTextJsonConvert
 
         public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(TimeFormat));
     }
+#if !NETSTANDARD
     public class TimeOnlyJsonConverter : JsonConverter<TimeOnly>
     {
         public override TimeOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => TimeOnly.Parse(reader.GetString()!);
@@ -50,4 +51,5 @@ public class SystemTextJsonConvert
 
         public override void Write(Utf8JsonWriter writer, DateOnly? value, JsonSerializerOptions options) => writer.WriteStringValue(value?.ToString(DateFormat));
     }
+#endif
 }

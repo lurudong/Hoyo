@@ -1,6 +1,5 @@
-﻿using Hoyo.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Modules;
-using Hoyo.AutoDependencyInjectionModule.Reflections;
+﻿using Hoyo.AutoDependencyInjectionModule.Modules;
+using Hoyo.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 

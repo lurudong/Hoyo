@@ -68,7 +68,7 @@ public class GridFSController : ControllerBase
             if (string.IsNullOrWhiteSpace(bapp)) throw new("BusinessApp can't be null");
             var metadata = new Dictionary<string, object> { { "contentType", item.ContentType }, { "app", bapp }, { "creator", new { fs.UserId, fs.UserName }.ToBsonDocument() } };
             if (!string.IsNullOrWhiteSpace(fs.BusinessType)) metadata.Add("business", fs.BusinessType);
-            if (!string.IsNullOrWhiteSpace(fs.CategoryId)) metadata.Add("category", fs.CategoryId);
+            if (!string.IsNullOrWhiteSpace(fs.CategoryId)) metadata.Add("category", fs.CategoryId!);
             var upo = new GridFSUploadOptions
             {
                 BatchSize = fs.File.Count,
@@ -107,13 +107,13 @@ public class GridFSController : ControllerBase
     public virtual async Task<GridFSItem> PostSingle([FromForm] UploadGridFSSingle fs)
     {
         if (fs.File is null) throw new("no files find");
-        if (!string.IsNullOrWhiteSpace(fs.DeleteId)) _ = await Delete(fs.DeleteId);
+        if (!string.IsNullOrWhiteSpace(fs.DeleteId)) _ = await Delete(fs.DeleteId!);
         if (fs.File.ContentType is null) throw new("ContentType in File is null");
         var bapp = !string.IsNullOrWhiteSpace(fs.App) ? fs.App : GridFSExtensions.BusinessApp;
         if (string.IsNullOrWhiteSpace(bapp)) throw new("BusinessApp can't be null");
         var metadata = new Dictionary<string, object> { { "contentType", fs.File.ContentType }, { "app", bapp }, { "creator", new { fs.UserId, fs.UserName }.ToBsonDocument() } };
         if (!string.IsNullOrWhiteSpace(fs.BusinessType)) metadata.Add("business", fs.BusinessType);
-        if (!string.IsNullOrWhiteSpace(fs.CategoryId)) metadata.Add("category", fs.CategoryId);
+        if (!string.IsNullOrWhiteSpace(fs.CategoryId)) metadata.Add("category", fs.CategoryId!);
         var upo = new GridFSUploadOptions
         {
             BatchSize = 1,

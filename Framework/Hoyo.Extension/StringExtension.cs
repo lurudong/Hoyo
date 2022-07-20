@@ -73,6 +73,7 @@ public static class StringExtension
             ? value
             : force ? throw new("string format is not correct,must like:2020/10/01,2020-10-01,20201001,2020.10.01") : string.Empty;
     }
+#if !NETSTANDARD
     /// <summary>
     /// 获取某个日期串的DateOnly
     /// </summary>
@@ -85,6 +86,7 @@ public static class StringExtension
     /// <param name="value">格式如: 23:20:10</param>
     /// <returns></returns>
     public static TimeOnly ToTimeOnly(this string value) => TimeOnly.FromDateTime($"{DateTime.Now:yyyy-MM-dd} {value}".ToDateTime());
+#endif
     #endregion
 
     #region 以特定字符串间隔的字符串转化为字符串集合
@@ -128,7 +130,7 @@ public static class StringExtension
             delegate (Match m)
             {
                 var str = m.ToString();
-                if(char.IsLower(str[0]))
+                if (char.IsLower(str[0]))
                 {
                     var header = lower ? char.ToLower(str[0], CultureInfo.CurrentCulture) : char.ToUpper(str[0], CultureInfo.CurrentCulture);
                     return $"{header}{str[1..]}";

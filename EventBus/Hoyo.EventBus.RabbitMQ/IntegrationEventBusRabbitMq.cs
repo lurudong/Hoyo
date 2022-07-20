@@ -1,5 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Reflections;
-using Hoyo.EventBus.RabbitMQ.Attributes;
+﻿using Hoyo.EventBus.RabbitMQ.Attributes;
 using Hoyo.Extension;
 using Hoyo.Extensions;
 using Microsoft.Extensions.DependencyInjection;

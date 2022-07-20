@@ -25,9 +25,9 @@ public class ExtensionController : GridFSController
     {
         if (string.IsNullOrWhiteSpace(FileSetting.PhysicalPath)) throw new("RealPath is null");
         var fi = await (await Bucket.FindAsync("{_id:ObjectId('" + id + "')}")).SingleOrDefaultAsync() ?? throw new("no data find");
-        await using var mongoStream = await Bucket.OpenDownloadStreamAsync(ObjectId.Parse(id), new() { Seekable = true });
+        using var mongoStream = await Bucket.OpenDownloadStreamAsync(ObjectId.Parse(id), new() { Seekable = true });
         if (!Directory.Exists(FileSetting.PhysicalPath)) _ = Directory.CreateDirectory(FileSetting.PhysicalPath);
-        await using var fsWrite = new FileStream($"{FileSetting.PhysicalPath}{Path.DirectorySeparatorChar}{fi.Filename}", FileMode.Create);
+        using var fsWrite = new FileStream($"{FileSetting.PhysicalPath}{Path.DirectorySeparatorChar}{fi.Filename}", FileMode.Create);
         var buffer = new byte[1024 * 1024];
         while (true)
         {

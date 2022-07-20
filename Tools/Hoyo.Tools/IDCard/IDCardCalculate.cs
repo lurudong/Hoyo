@@ -14,6 +14,7 @@ public static class IDCardCalculate
         throw new("身份证号不合法");
     }
 
+#if !NETSTANDARD
     /// <summary>
     /// 根据身份证号码计算生日日期
     /// </summary>
@@ -28,6 +29,49 @@ public static class IDCardCalculate
             15 => DateOnly.FromDateTime($"19{idno.Substring(6, 2)}-{idno.Substring(8, 2)}-{idno.Substring(10, 2)}".ToDateTime()),
             _ => throw new("该身份证号无法正确计算出生日")
         };
+    }
+    /// <summary>
+    /// 根据出生日期，计算精确的年龄
+    /// </summary>
+    /// <param name="birthday">生日</param>
+    /// <returns></returns>
+    public static int CalculateAge(DateOnly birthday)
+    {
+        var now = DateTime.Now;
+        var age = now.Year - birthday.Year;
+        //再考虑月、天的因素
+        if (now.Month < birthday.Month || now.Month != birthday.Month || now.Day >= birthday.Day) age--;
+        return age;
+    }
+#endif
+    /// <summary>
+    /// 根据身份证号码计算生日日期
+    /// </summary>
+    /// <param name="idno">身份证号码</param>
+    /// <returns></returns>
+    public static void CalculateBirthday(this string idno, out DateTime birthday)
+    {
+        idno.ValidateIDCard();
+        birthday = idno.Length switch
+        {
+            18 => $"{idno.Substring(6, 4)}-{idno.Substring(10, 2)}-{idno.Substring(12, 2)}".ToDateTime(),
+            15 => $"19{idno.Substring(6, 2)}-{idno.Substring(8, 2)}-{idno.Substring(10, 2)}".ToDateTime(),
+            _ => throw new("该身份证号无法正确计算出生日")
+        };
+    }
+
+    /// <summary>
+    /// 根据出生日期，计算精确的年龄
+    /// </summary>
+    /// <param name="birthday">生日</param>
+    /// <returns></returns>
+    public static int CalculateAge(DateTime birthday)
+    {
+        var now = DateTime.Now;
+        var age = now.Year - birthday.Year;
+        //再考虑月、天的因素
+        if (now.Month < birthday.Month || now.Month != birthday.Month || now.Day >= birthday.Day) age--;
+        return age;
     }
 
     /// <summary>
@@ -45,19 +89,5 @@ public static class IDCardCalculate
             15 => int.Parse(idno.Substring(12, 3)) % 2 == 0 ? EGender.女 : EGender.男,
             _ => EGender.女
         };
-    }
-
-    /// <summary>
-    /// 根据出生日期，计算精确的年龄
-    /// </summary>
-    /// <param name="birthday">生日</param>
-    /// <returns></returns>
-    public static int CalculateAge(DateOnly birthday)
-    {
-        var now = DateTime.Now;
-        var age = now.Year - birthday.Year;
-        //再考虑月、天的因素
-        if (now.Month < birthday.Month || now.Month != birthday.Month || now.Day >= birthday.Day) age--;
-        return age;
     }
 }
