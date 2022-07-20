@@ -8,6 +8,10 @@ namespace example.net7.api;
 
 public class HoyoMongoGridFSModule : AppModule
 {
+    public HoyoMongoGridFSModule()
+    {
+        Enable = false;
+    }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var db = context.Services.GetService<DbContext>() ?? throw new("MongoDB数据库服务不存在,若是不适用默认的数据库服务,可以创建新的数据库链接来使用GridFS");

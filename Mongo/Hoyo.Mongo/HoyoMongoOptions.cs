@@ -15,7 +15,7 @@ public class HoyoMongoOptions
     public Dictionary<string, ConventionRegistryConfig> ConventionRegistry { get; private set; } = new()
     {
         {
-            "commonpack",
+            "hoyopack",
             new()
             {
                 Conventions = new()

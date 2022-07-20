@@ -1,5 +1,4 @@
-﻿using Hoyo.Mongo;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System.Linq.Expressions;
 
 namespace Hoyo.IdentityServer.Storage.MongoDB;
@@ -7,7 +6,7 @@ public class MongoRepository : IRepository
 {
     private readonly IMongoDatabase _database;
 
-    public MongoRepository(BaseDbContext db) => _database = db._database!;
+    public MongoRepository(IMongoDatabase db) => _database = db;
 
     public IQueryable<T> All<T>() where T : class, new() => _database.GetCollection<T>(typeof(T).Name).AsQueryable();
 

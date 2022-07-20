@@ -9,8 +9,7 @@ public class RepositoryPersistedGrantStore : IPersistedGrantStore
 
     public RepositoryPersistedGrantStore(IRepository repository) => _repository = repository;
 
-    public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter) =>
-        Task.FromResult(_repository.Where<PersistedGrant>(c => c.SubjectId == filter.SubjectId).AsEnumerable());
+    public Task<IEnumerable<PersistedGrant>> GetAllAsync(PersistedGrantFilter filter) => Task.FromResult(_repository.Where<PersistedGrant>(c => c.SubjectId == filter.SubjectId).AsEnumerable());
 
     public Task<PersistedGrant> GetAsync(string key) => Task.FromResult(_repository.Single<PersistedGrant>(i => i.Key == key));
 
