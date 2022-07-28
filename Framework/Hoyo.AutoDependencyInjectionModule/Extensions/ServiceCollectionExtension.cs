@@ -250,7 +250,7 @@ public static class ServiceCollectionExtension
                 continue;
             }
             var containerBuilderType = factoryInterface.GenericTypeArguments[0];
-            return (IServiceProvider)typeof(Extension)
+            return (IServiceProvider)typeof(HoyoExtension)
                 .GetTypeInfo()?
                 .GetMethods()?
                 .Single(m => m.Name == nameof(BuildServiceProviderFromFactory) && m.IsGenericMethod)?

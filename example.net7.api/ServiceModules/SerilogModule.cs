@@ -7,6 +7,10 @@ namespace example.net7.api;
 
 public class SerilogModule : AppModule
 {
+    public SerilogModule()
+    {
+        Enable = false;
+    }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         //添加SeriLog配置
@@ -19,11 +23,12 @@ public class SerilogModule : AppModule
         _ = context.Services.AddLogging(builder =>
         {
             _ = builder.ClearProviders().SetMinimumLevel(LogLevel.Information).AddConfiguration(config.GetSection("Logging")).AddConsole().AddDebug();
-            static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
+            //static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration)
                .Enrich.FromLogContext().WriteTo.Console(logEventLevel)
-               .WriteTo.Map(le => MapData(le), (key, log) => log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel)))
-                  .CreateLogger();
+               // 若是分文件写,需要引入Serilog.Sinks.Map
+               //.WriteTo.Map(le => MapData(le), (key, log) => log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel)))
+               .CreateLogger();
 
             _ = builder.AddSerilog();
         });
