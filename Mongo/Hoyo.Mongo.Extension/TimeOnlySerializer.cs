@@ -3,6 +3,9 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Hoyo.Mongo;
+/// <summary>
+/// TimeOnly序列化方式
+/// </summary>
 internal class TimeOnlySerializer : StructSerializerBase<TimeOnly>
 {
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, TimeOnly value)

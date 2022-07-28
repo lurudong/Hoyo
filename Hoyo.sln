@@ -41,6 +41,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus", "EventBus\H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus.RabbitMQ", "EventBus\Hoyo.EventBus.RabbitMQ\Hoyo.EventBus.RabbitMQ.csproj", "{B546ABE4-193E-4213-B0EB-3F9D56DB1C20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Mongo.Extension", "Mongo\Hoyo.Mongo.Extension\Hoyo.Mongo.Extension.csproj", "{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{B546ABE4-193E-4213-B0EB-3F9D56DB1C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B546ABE4-193E-4213-B0EB-3F9D56DB1C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B546ABE4-193E-4213-B0EB-3F9D56DB1C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -121,6 +127,7 @@ Global
 		{CCC4E967-8CD2-450E-8AA0-FBAD58E222BD} = {44B212AF-424A-443D-A83E-6740672EC4D6}
 		{848436BE-D9A5-4808-87C6-CA80FB8C3CE0} = {FB3F7678-8A3C-4432-AEF2-A7D2AE5A91A6}
 		{B546ABE4-193E-4213-B0EB-3F9D56DB1C20} = {FB3F7678-8A3C-4432-AEF2-A7D2AE5A91A6}
+		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD} = {44B212AF-424A-443D-A83E-6740672EC4D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F4651E82-3B77-4793-A9AA-BADAF35F55DF}

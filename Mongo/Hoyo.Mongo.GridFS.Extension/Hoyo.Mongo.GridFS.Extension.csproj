@@ -30,7 +30,7 @@
 		<PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="7.0.0-preview.6.22324.4" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\Hoyo.Mongo.GridFS\Hoyo.Mongo.GridFS.csproj" />
+		<ProjectReference Include="..\Hoyo.Mongo.GridFS\Hoyo.Mongo.GridFS.csproj" />
 	</ItemGroup>
 
 </Project>

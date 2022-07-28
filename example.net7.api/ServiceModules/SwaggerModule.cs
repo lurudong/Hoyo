@@ -85,7 +85,3 @@ public class SwaggerOperationFilter : IOperationFilter
         operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
     }
 }
-//startup.ConfigureServices中,会导致所有接口加锁图标
-//options.AddSecurityRequirement(new OpenApiSecurityRequirement {
-//    {new OpenApiSecurityScheme{ Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme,Id = "Bearer" }}, new string[] { } }
-//});

@@ -11,13 +11,13 @@
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0-preview.6.22330.3" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
-		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\EventBus\Hoyo.EventBus.RabbitMQ\Hoyo.EventBus.RabbitMQ.csproj" />
 		<ProjectReference Include="..\Framework\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj" />
 		<ProjectReference Include="..\Framework\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj" />
+		<ProjectReference Include="..\Mongo\Hoyo.Mongo.Extension\Hoyo.Mongo.Extension.csproj" />
 		<ProjectReference Include="..\Mongo\Hoyo.Mongo.GridFS.Extension\Hoyo.Mongo.GridFS.Extension.csproj" />
 		<ProjectReference Include="..\Mongo\Hoyo.Mongo\Hoyo.Mongo.csproj" />
 		<ProjectReference Include="..\Tools\Hoyo.Tools\Hoyo.Tools.csproj" />

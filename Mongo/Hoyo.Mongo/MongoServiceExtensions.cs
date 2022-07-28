@@ -5,6 +5,7 @@ namespace Hoyo.Mongo;
 /// <summary>
 /// 1.Create a DbContext use connectionString with [ConnectionStrings.Mongo in appsettings.json] or with [CONNECTIONSTRINGS_MONGO] setting value in environment variable
 /// 2.Inject DbContext use services.AddSingleton(db);
+/// 3.Inject IMongoDataBase use services.AddSingleton(db._database);
 /// </summary>
 public static class MongoServiceExtensions
 {
@@ -31,16 +32,16 @@ public static class MongoServiceExtensions
     /// <param name="configuration">IConfiguration</param>
     /// <param name="dboptions">DbContextOptions</param>
     /// <returns></returns>
-    public static async Task<T> AddMongoDbContext<T>(this IServiceCollection services, IConfiguration configuration, string connKey = "CONNECTIONSTRINGS_MONGO", HoyoMongoOptions? dboptions = null) where T : BaseDbContext
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, IConfiguration configuration, string connKey = "CONNECTIONSTRINGS_MONGO", HoyoMongoOptions? dboptions = null) where T : BaseDbContext
     {
         dboptions ??= new();
         var connectionString = ConnectionString(configuration, connKey);
         BaseDbContext.RegistryConventionPack(dboptions);
         var db = BaseDbContext.CreateInstance<T>(connectionString);
-        await db.BuildTransactCollections();
+        db.BuildTransactCollections();
         _ = services.AddSingleton(db);
         _ = services.AddSingleton(db._database!);
-        return db;
+        return services;
     }
 
     /// <summary>
@@ -51,15 +52,15 @@ public static class MongoServiceExtensions
     /// <param name="clientSettings">HoyoMongoClientSettings</param>
     /// <param name="dboptions">DbContextOptions</param>
     /// <returns></returns>
-    public static async Task<T> AddMongoDbContext<T>(this IServiceCollection services, HoyoMongoClientSettings clientSettings, HoyoMongoOptions? dboptions = null) where T : BaseDbContext
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, HoyoMongoClientSettings clientSettings, HoyoMongoOptions? dboptions = null) where T : BaseDbContext
     {
         dboptions ??= new();
         BaseDbContext.RegistryConventionPack(dboptions);
         var db = BaseDbContext.CreateInstance<T>(clientSettings);
-        await db.BuildTransactCollections();
+        db.BuildTransactCollections();
         _ = services.AddSingleton(db);
         _ = services.AddSingleton(db._database!);
-        return db;
+        return services;
     }
 
     /// <summary>
@@ -70,15 +71,15 @@ public static class MongoServiceExtensions
     /// <param name="configuration">IConfiguration</param>
     /// <param name="dboptions">DbContextOptions</param>
     /// <returns></returns>
-    public static async Task<T> AddMongoDbSet<T>(this IServiceCollection services, IConfiguration configuration, HoyoMongoOptions? dboptions = null) where T : BaseDbContext, IDbSet
+    public static IServiceCollection AddMongoDbSet<T>(this IServiceCollection services, IConfiguration configuration, HoyoMongoOptions? dboptions = null) where T : BaseDbContext, IDbSet
     {
         dboptions ??= new();
         var connectionString = ConnectionString(configuration);
         BaseDbContext.RegistryConventionPack(dboptions);
         var db = BaseDbContext.CreateInstance<T>(connectionString);
-        await db.BuildTransactCollections();
+        db.BuildTransactCollections();
         _ = services.AddSingleton(typeof(IDbSet), db);
         _ = services.AddSingleton(db._database!);
-        return db;
+        return services;
     }
 }

@@ -3,6 +3,9 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Hoyo.Mongo;
+/// <summary>
+/// DateOnly序列化方式
+/// </summary>
 internal class DateOnlySerializer : StructSerializerBase<DateOnly>
 {
     private static readonly TimeOnly zeroTimeComponent = new();

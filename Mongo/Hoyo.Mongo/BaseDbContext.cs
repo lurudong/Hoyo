@@ -36,43 +36,42 @@ public class BaseDbContext : IDbSet
         return t;
     }
 
-    public static void RegistryConventionPack(HoyoMongoOptions mracleOptions)
+    public static void RegistryConventionPack(HoyoMongoOptions hoyoOptions)
     {
-        mracleOptions.ConventionPackOptionsAction?.Invoke(options);
-        if (mracleOptions.First is not null & mracleOptions.First is true)
+        hoyoOptions.ConventionPackOptionsAction?.Invoke(options);
+        if (hoyoOptions.First is not null & hoyoOptions.First is true)
         {
             try
             {
-                foreach (var item in mracleOptions.ConventionRegistry)
+                foreach (var item in hoyoOptions.ConventionRegistry)
                 {
                     ConventionRegistry.Register(item.Key, item.Value.Conventions, item.Value.Filter);
                 }
                 BsonSerializer.RegisterSerializer(typeof(DateTime), new DateTimeSerializer(DateTimeKind.Local));//to local time
                 BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));//decimal to decimal default
-                BsonSerializer.RegisterSerializer(new DateOnlySerializer());
-                BsonSerializer.RegisterSerializer(new TimeOnlySerializer());
+                //BsonSerializer.RegisterSerializer(new TimeOnlySerializer());
+                //BsonSerializer.RegisterSerializer(new DateOnlySerializer());
             }
             catch (Exception ex)
             {
                 throw new($"已注册commonpack,请在第一次调用RegistConventionPack方法后修改 [first] 参数等于 false:{ex.Message}");
             }
         }
-        var idpack = new ConventionPack
+        ConventionRegistry.Register($"idpack{Guid.NewGuid()}", new ConventionPack
         {
             new StringObjectIdIdGeneratorConvention()//Id[string] mapping ObjectId
-        };
-        ConventionRegistry.Register($"idpack{Guid.NewGuid()}", idpack, x => options.IsConvertObjectIdToStringType(x) == false);
+        }, x => options.IsConvertObjectIdToStringType(x) == false);
     }
 
     protected virtual string[] GetTransactColletions() => Array.Empty<string>();
 
-    public async Task BuildTransactCollections()
+    public void BuildTransactCollections()
     {
         if (_database is null) throw new("_database 还未准备好,请在使用该函数前初始化DbContext");
         var transcolls = GetTransactColletions();
         if (transcolls.Length <= 0) return;
         var count = 1;
-        while (await CreateCollections(transcolls) == false && count < 10)
+        while (CreateCollections(transcolls).Result == false && count < 10)
         {
             Console.WriteLine($"[🤪]BuildTransactCollections:{count} 次错误,将在下一秒重试.[{DateTime.Now.ToLongTimeString()}]");
             count++;

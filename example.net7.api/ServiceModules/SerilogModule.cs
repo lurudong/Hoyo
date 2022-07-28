@@ -26,7 +26,7 @@ public class SerilogModule : AppModule
             //static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
             Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(configuration)
                .Enrich.FromLogContext().WriteTo.Console(logEventLevel)
-               // 若是分文件写,需要引入Serilog.Sinks.Map
+               // 若是分文件写,需要引入Serilog.Sinks.Map 与 Serilog.Sinks.Async
                //.WriteTo.Map(le => MapData(le), (key, log) => log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel)))
                .CreateLogger();
 

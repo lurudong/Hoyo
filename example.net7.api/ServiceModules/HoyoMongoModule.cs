@@ -1,12 +1,13 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
+using Hoyo.Mongo.Extension;
 using MongoDB.Bson.Serialization.Conventions;
 
 namespace example.net7.api;
 
 public class HoyoMongoModule : AppModule
 {
-    public override async void ConfigureServices(ConfigureServicesContext context)
+    public override void ConfigureServices(ConfigureServicesContext context)
     {
         var dboptions = new HoyoMongoOptions();
         dboptions.AppendConventionRegistry("IdentityServer Mongo Conventions", new()
@@ -18,7 +19,7 @@ public class HoyoMongoModule : AppModule
             Filter = _ => true
         });
 
-        var db = await context.Services.AddMongoDbContext<DbContext>(clientSettings: new()
+        _ = context.Services.AddMongoDbContext<DbContext>(clientSettings: new()
         {
             ServerAddresses = new()
             {
@@ -27,7 +28,7 @@ public class HoyoMongoModule : AppModule
             AuthDatabase = "admin",
             DatabaseName = "hoyo",
             UserName = "oneblogs",
-            Password = "&duyu789",
-        }, dboptions: dboptions);
+            Password = "&oneblogs789",
+        }, dboptions: dboptions).AddTypeExtension();
     }
 }

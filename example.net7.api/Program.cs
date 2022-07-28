@@ -21,7 +21,7 @@ _ = builder.Host.UseSerilog((webHost, logconfig) =>
     //日志事件级别
     var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), minilevel);
     _ = logconfig.ReadFrom.Configuration(configuration).Enrich.FromLogContext().WriteTo.Console(logEventLevel);
-    // 若是需要分文件写入需要引入包 Serilog.Sinks.Map
+    // 若是需要分文件写入需要引入包 Serilog.Sinks.Map 与 Serilog.Sinks.Async
     //_ = logconfig.WriteTo.Map(le => MapData(le), (key, log) => log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel)));
     //static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
 }).ConfigureLogging((hostcontext, builder) => builder.ClearProviders().SetMinimumLevel(LogLevel.Information).AddConfiguration(hostcontext.Configuration.GetSection("Logging")).AddConsole().AddDebug());
