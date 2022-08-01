@@ -30,7 +30,7 @@ public class WeatherForecastController : ControllerBase
     }
     [HttpGet("MongoGet")]
     public async Task<IEnumerable<MongoTest>> MongoGet() => await db.Test.Find(bf.Empty).ToListAsync();
-   
+
     [HttpGet("QRCode")]
     public object GetQRCode(string text) => QRCode.GetBase64(text, width: 320, height: 320);
 

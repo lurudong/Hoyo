@@ -25,7 +25,7 @@ public class TestEventBusController : ControllerBase
     [HttpGet]
     public void CreateTestIntegrationEvent()
     {
-        var test = new TestIntegrationEvent() { Name="大黄瓜1CM，真的猛" };
+        var test = new TestIntegrationEvent() { Name = "大黄瓜1CM，真的猛" };
         _integrationEventBus.Publish<TestIntegrationEvent>(test);
 
     }

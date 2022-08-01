@@ -19,7 +19,7 @@ public class SerilogModule : AppModule
         var minilevel = string.IsNullOrWhiteSpace(configuration.Value) ? LogEventLevel.Information.ToString() : configuration["MinimumLevel:Default"]!;
         //日志事件级别
         var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), minilevel);
-        
+
         _ = context.Services.AddLogging(builder =>
         {
             _ = builder.ClearProviders().SetMinimumLevel(LogLevel.Information).AddConfiguration(config.GetSection("Logging")).AddConsole().AddDebug();

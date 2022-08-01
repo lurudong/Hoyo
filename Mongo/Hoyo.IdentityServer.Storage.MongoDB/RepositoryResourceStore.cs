@@ -15,16 +15,16 @@ public class RepositoryResourceStore : IResourceStore
 
     public Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames) =>
         Task.FromResult(_repository.Where<ApiResource>(e => apiResourceNames.Contains(e.Name)).AsEnumerable());
-    
+
     public Task<IEnumerable<ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames) =>
         Task.FromResult(_repository.Where<ApiResource>(e => scopeNames.Contains(e.Name)).AsEnumerable());
-    
+
     public Task<IEnumerable<ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames) =>
         Task.FromResult(_repository.Where<ApiScope>(e => scopeNames.Contains(e.Name)).AsEnumerable());
-    
+
     public Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames) =>
         Task.FromResult(_repository.Where<IdentityResource>(e => scopeNames.Contains(e.Name)).AsEnumerable());
-    
-    public Task<Resources> GetAllResourcesAsync() => 
+
+    public Task<Resources> GetAllResourcesAsync() =>
         Task.FromResult(new Resources(GetAllIdentityResources(), GetAllApiResources(), GetAllApiScopes()));
 }

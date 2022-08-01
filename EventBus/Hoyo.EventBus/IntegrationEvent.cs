@@ -2,7 +2,7 @@
 
 namespace Hoyo.EventBus;
 
-public class IntegrationEvent: IIntegrationEvent
+public class IntegrationEvent : IIntegrationEvent
 {
     public IntegrationEvent()
     {

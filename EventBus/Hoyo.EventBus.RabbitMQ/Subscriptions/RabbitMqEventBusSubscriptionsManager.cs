@@ -59,8 +59,10 @@ public class RabbitMqEventBusSubscriptionsManager : IIntegrationEventBusSubscrip
         if (!_handlers[eventName].Any())
         {
             //_handlers.Remove(eventName);
-            EventRemovedEventArgs args = new EventRemovedEventArgs();
-            args.EventType = typeof(T);
+            EventRemovedEventArgs args = new()
+            {
+                EventType = typeof(T)
+            };
             OnEventRemoved?.Invoke(this, args);
         }
     }

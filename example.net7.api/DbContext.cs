@@ -8,7 +8,7 @@ public class DbContext : BaseDbContext
     /// 作息时间管理
     /// </summary>
     public IMongoCollection<MongoTest> Test => _database!.GetCollection<MongoTest>("mongo.test");
-    
+
 }
 public class MongoTest
 {

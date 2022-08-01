@@ -208,7 +208,7 @@ public static class ServiceCollectionExtension
         var service = services.GetSingletonInstanceOrNull<T>();
         return service is null ? throw new InvalidOperationException($"找不到singleton服务: {typeof(T).AssemblyQualifiedName}") : service;
     }
-    
+
     #region New Module
 
     public static ObjectAccessor<T> TryAddObjectAccessor<T>(this IServiceCollection services) => services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>))

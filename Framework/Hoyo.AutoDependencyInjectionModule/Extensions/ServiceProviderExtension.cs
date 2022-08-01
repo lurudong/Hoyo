@@ -35,7 +35,7 @@ public static class ServiceProviderExtension
     /// <param name="type"></param>
     /// <returns></returns>
     public static ILogger GetLogger(this ILazyServiceProvider provider, Type type) => provider.LazyGetService<ILoggerFactory>().CreateLogger(type);
-    
+
     public static object GetServiceOrCreateInstance(this IServiceProvider provider, Type type) => ActivatorUtilities.GetServiceOrCreateInstance(provider, type);
 
     public static object CreateInstance(this IServiceProvider provider, Type type, params object[] arguments) => ActivatorUtilities.CreateInstance(provider, type, arguments);
