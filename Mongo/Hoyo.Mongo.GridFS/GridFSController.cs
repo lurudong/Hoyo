@@ -45,8 +45,8 @@ public class GridFSController : ControllerBase
         var list = await Coll.FindAsync(f, new()
         {
             Sort = Builders<GridFSItemInfo>.Sort.Descending(c => c.CreatTime),
-            Limit = info.Size,
-            Skip = (info.Index - 1) * info.Size
+            Limit = info.PageSize,
+            Skip = (info.Current - 1) * info.PageSize
         }).Result.ToListAsync();
         return PageResult.Wrap(total, list);
     }

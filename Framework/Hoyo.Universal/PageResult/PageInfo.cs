@@ -4,11 +4,11 @@ public class PageInfo
     /// <summary>
     /// 页码
     /// </summary>
-    public int Index { get; set; }
+    public int Current { get; set; }
     /// <summary>
     /// 每页数据量
     /// </summary>
-    public int Size { get; set; }
+    public int PageSize { get; set; }
 }
 
 public class KeywordPageInfo : PageInfo
