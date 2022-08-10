@@ -10,7 +10,7 @@ public class RabbitMQConfig
 
     public int RetryCount { get; set; } = default!;
 
-    public int Port { get; set; } = default!;
+    public int Port { get; set; } = 5672;
 
     public string VirtualHost { get; set; } = "/";
 }
