@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -56,7 +55,7 @@ public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
         _logger.LogInformation("RabbitMQ客户端尝试连接");
         lock (sync_root)
         {
-            var policy = RetryPolicy.Handle<SocketException>()
+            var policy = Policy.Handle<SocketException>()
                 .Or<BrokerUnreachableException>()
                 .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, time) => _logger.LogWarning(ex, "RabbitMQ客户端在{TimeOut}s超时后无法创建链接,({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message));

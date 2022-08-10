@@ -37,6 +37,7 @@ public static class ServiceCollectionExtension
                 UserName = config.UserName,
                 Password = config.PassWord,
                 Port = config.Port,
+                VirtualHost=config.VirtualHost
             };
             return new DefaultRabbitMQPersistentConnection(factory, logger, config.RetryCount);
         });
