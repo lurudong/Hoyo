@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus", "EventBus\H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus.RabbitMQ", "EventBus\Hoyo.EventBus.RabbitMQ\Hoyo.EventBus.RabbitMQ.csproj", "{B546ABE4-193E-4213-B0EB-3F9D56DB1C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hoyo.Mongo.Extension", "Mongo\Hoyo.Mongo.Extension\Hoyo.Mongo.Extension.csproj", "{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo.Extension", "Mongo\Hoyo.Mongo.Extension\Hoyo.Mongo.Extension.csproj", "{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

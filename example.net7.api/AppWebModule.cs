@@ -9,7 +9,6 @@ namespace example.net7.api;
  */
 [DependsOn(
     typeof(DependencyAppModule),
-    typeof(SerilogModule),
     typeof(CorsModule),
     typeof(ControllersModule),
     typeof(HoyoMongoModule),
