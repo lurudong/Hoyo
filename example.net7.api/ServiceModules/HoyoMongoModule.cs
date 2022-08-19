@@ -27,14 +27,6 @@ public class HoyoMongoModule : AppModule
 
         var config = context.Services.GetConfiguration();
 
-        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(new()
-        {
-            ServerAddresses = new()
-            {
-                new("101.34.26.221", 40003),
-            },
-            UserName = "oneblogs",
-            Password = "&oneblogs789"
-        }, dboptions: dboptions);
+        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(config, dboptions: dboptions);
     }
 }

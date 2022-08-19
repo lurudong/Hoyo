@@ -33,7 +33,7 @@ public class BaseDbContext
         if (string.IsNullOrWhiteSpace(connectionString)) throw new("连接字符串为空");
         var mongoUrl = new MongoUrl(connectionString);
         t._client = new MongoClient(mongoUrl);
-        var dbname = string.IsNullOrWhiteSpace(db) ? mongoUrl.DatabaseName : db;
+        var dbname = !string.IsNullOrWhiteSpace(mongoUrl.DatabaseName) ? mongoUrl.DatabaseName : db;
         t._database = t._client.GetDatabase(dbname);
         return t;
     }
