@@ -9,23 +9,20 @@ public class HoyoMongoOptions
     /// </summary>
     public Action<ConventionPackOptions>? ConventionPackOptionsAction { get; set; } = null;
     /// <summary>
-    /// RegistryConventionPack first
+    /// 是否使用本库提供的默认转换,默认为true
     /// </summary>
-    public bool? First { get; set; } = true;
-    public Dictionary<string, ConventionRegistryConfig> ConventionRegistry { get; private set; } = new()
+    public bool UseDefalutConventionRegistryConfig = true;
+
+    internal Dictionary<string, ConventionPack> ConventionRegistry { get; set; } = new()
     {
         {
-            "hoyopack",
+            HoyoStatic.HoyoPack,
             new()
             {
-                Conventions = new()
-                {
-                    new CamelCaseElementNameConvention(), // 驼峰名称格式
-                    new IgnoreExtraElementsConvention(true), //
-                    new NamedIdMemberConvention("Id","ID"), // _id映射为实体中的ID或者Id
-                    new EnumRepresentationConvention(BsonType.String) // 将枚举类型存储为字符串格式
-                },
-                Filter = _ => true
+                new CamelCaseElementNameConvention(), // 驼峰名称格式
+                new IgnoreExtraElementsConvention(true), //
+                new NamedIdMemberConvention("Id","ID"), // _id映射为实体中的ID或者Id
+                new EnumRepresentationConvention(BsonType.String) // 将枚举类型存储为字符串格式
             }
         }
     };
@@ -34,11 +31,11 @@ public class HoyoMongoOptions
     /// </summary>
     /// <param name="name">名称</param>
     /// <param name="config">ConventionRegistryConfig</param>
-    public void AppendConventionRegistry(string name, ConventionRegistryConfig config) => ConventionRegistry.Add(name, config);
-}
-
-public class ConventionRegistryConfig
-{
-    public ConventionPack Conventions { get; set; } = new();
-    public Func<Type, bool>? Filter { get; set; } = null;
+    public void AppendConventionRegistry(Dictionary<string, ConventionPack> dic)
+    {
+        foreach (var item in dic)
+        {
+            ConventionRegistry.Add(item.Key, item.Value);
+        }
+    }
 }

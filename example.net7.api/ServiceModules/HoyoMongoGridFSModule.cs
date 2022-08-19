@@ -31,7 +31,7 @@ public class HoyoMongoGridFSModule : AppModule
             DefalutDB = true,
             ItemInfo = "item.info"
         };
-        _ = context.Services.AddHoyoGridFS(db?._database!, fsop);
+        _ = context.Services.AddHoyoGridFS(db._database, fsop);
     }
 
     public override void ApplicationInitialization(ApplicationContext context)

@@ -1,4 +1,5 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Modules;
+﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
+using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
 using Hoyo.Mongo.Extension;
 using MongoDB.Bson.Serialization.Conventions;
@@ -9,26 +10,31 @@ public class HoyoMongoModule : AppModule
 {
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var dboptions = new HoyoMongoOptions();
-        dboptions.AppendConventionRegistry("IdentityServer Mongo Conventions", new()
+        var dboptions = new HoyoMongoOptions()
         {
-            Conventions = new()
+            //UseDefalutConventionRegistryConfig = false,
+        };
+        dboptions.AppendConventionRegistry(new()
+        {
             {
-                new IgnoreIfDefaultConvention(true)
-            },
-            Filter = _ => true
+                "IdentityServer Mongo Conventions",
+                new()
+                {
+                   new IgnoreIfDefaultConvention(true)
+                }
+            }
         });
 
-        _ = context.Services.AddMongoDbContext<DbContext>(clientSettings: new()
+        var config = context.Services.GetConfiguration();
+
+        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(new()
         {
             ServerAddresses = new()
             {
                 new("101.34.26.221", 40003),
             },
-            AuthDatabase = "admin",
-            DatabaseName = "hoyo",
             UserName = "oneblogs",
-            Password = "&oneblogs789",
-        }, dboptions: dboptions).AddTypeExtension();
+            Password = "&oneblogs789"
+        }, dboptions: dboptions);
     }
 }

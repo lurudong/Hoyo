@@ -12,6 +12,7 @@ public class DbContext : BaseDbContext
 }
 public class MongoTest
 {
+    public string Id { get; set; } = string.Empty;
     public DateTime DateTime { get; set; }
     public TimeSpan TimeSpan { get; set; }
     public DateOnly DateOnly { get; set; }

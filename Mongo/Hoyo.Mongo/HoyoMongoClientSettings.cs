@@ -1,7 +1,7 @@
 ﻿using MongoDB.Driver;
 
 namespace Hoyo.Mongo;
-public class HoyoMongoClientSettings
+public class HoyoMongoSettings
 {
     /// <summary>
     /// 验证数据库
@@ -22,11 +22,11 @@ public class HoyoMongoClientSettings
     /// <summary>
     /// 数据库名称
     /// </summary>
-    public string DatabaseName { get; set; } = string.Empty;
+    public string DatabaseName { get; set; } = HoyoStatic.HoyoDbName;
     /// <summary>
     /// 获取客户端设置
     /// </summary>
-    public MongoClientSettings ClientSettings
+    internal MongoClientSettings ClientSettings
     {
         get => new()
         {
@@ -37,5 +37,5 @@ public class HoyoMongoClientSettings
     /// <summary>
     /// 验证地址是否存在或数据库名称不为空
     /// </summary>
-    public bool Validate => ServerAddresses.Count == 0 | string.IsNullOrWhiteSpace(DatabaseName);
+    public bool Validate => ServerAddresses.Count == 0;
 }
