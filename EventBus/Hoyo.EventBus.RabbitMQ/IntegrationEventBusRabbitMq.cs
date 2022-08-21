@@ -125,6 +125,10 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
     /// <exception cref="ArgumentNullException"></exception>
     public void Subscribe()
     {
+        if (!_persistentConnection.IsConnected)
+        {
+            _ = _persistentConnection.TryConnect();
+        }
         var handlerTypes = AssemblyHelper.FindTypes(o => o.IsClass && !o.IsAbstract && o.IsBaseOn(typeof(IIntegrationEventHandler<>)));
         foreach (var handlerType in handlerTypes)
         {
@@ -156,10 +160,6 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
     /// <returns></returns>
     private IModel CreateConsumerChannel(RabbitMQAttribute rabbitMqAttribute)
     {
-        if (!_persistentConnection.IsConnected)
-        {
-            _ = _persistentConnection.TryConnect();
-        }
         _logger.LogTrace("创建RabbitMQ消费者通道");
         var channel = _persistentConnection.CreateModel();
         //创建交换机
