@@ -20,6 +20,7 @@ _ = builder.Host.UseSerilog((hbc, lc) =>
 {
     _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Information).Enrich.FromLogContext().WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
     _ = lc.WriteTo.Debug();
+    //_ = lc.WriteTo.MongoDB(hbc.Configuration["Logging:DataBase:Mongo"]);
     // 不建议将日志写入文件,会造成日志文件越来越大,服务器可能因此宕机.
     // 若是需要分文件写入需要引入包 Serilog.Sinks.Map
     //_ = lc.WriteTo.Map(le =>
