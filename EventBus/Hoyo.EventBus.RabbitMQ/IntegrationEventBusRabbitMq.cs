@@ -49,7 +49,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
                 (ex, time) => _logger.LogWarning(ex, "无法发布事件: {EventId} 超时 {Timeout}s ({ExceptionMessage})", @event.EventId, $"{time.TotalSeconds:n1}", ex.Message));
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
         var rabbitMqAttribute = type.GetCustomAttribute<RabbitMQAttribute>();
-        if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>特性,无法发布事件");
+        if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
         var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
         {
@@ -141,7 +141,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
             IntegrationEventBusRabbitMq.CheckEventType(eventType);
             IntegrationEventBusRabbitMq.CheckHandlerType(handlerType);
             var rabbitMqAttribute = eventType.GetCustomAttribute<RabbitMQAttribute>();
-            if (rabbitMqAttribute == null) throw new($"{nameof(eventType)}未设置<RabbitMQAttribute>特性,无法发布事件");
+            if (rabbitMqAttribute == null) throw new($"{nameof(eventType)}未设置<RabbitMQAttribute>,无法发布事件");
             _ = Task.Factory.StartNew(() =>
             {
                 using var consumerChannel = CreateConsumerChannel(rabbitMqAttribute);
@@ -193,7 +193,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogWarning(ex, "----- 错误处理消息 \"{Message}\"", message);
+                    _logger.LogWarning(ex, "错误处理消息 \"{Message}\"", message);
                 }
                 // Even on exception we take the message off the queue.
                 // in a REAL WORLD app this should be handled with a Dead Letter Exchange (DLX). 
@@ -266,7 +266,7 @@ public class IntegrationEventBusRabbitMq : IIntegrationEventBus, IDisposable
         }
         using var channel = _persistentConnection.CreateModel();
         var type = args.EventType?.GetCustomAttribute<RabbitMQAttribute>();
-        if (type is null) throw new($"事件未配置[RabbitMQAttribute] 特性");
+        if (type is null) throw new($"事件未配置[RabbitMQAttribute]");
         channel.QueueUnbind(type.Queue ?? eventName, type.Exchange, type.RoutingKey);
     }
 

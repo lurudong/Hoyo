@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace Hoyo.WebCore;
@@ -8,14 +9,18 @@ namespace Hoyo.WebCore;
 /// </summary>
 public class ExceptionFilter : ExceptionFilterAttribute
 {
+    private readonly ILogger _logger;
+    public ExceptionFilter(ILogger<ExceptionFilter> logger) => _logger = logger;
     public override Task OnExceptionAsync(ExceptionContext context)
     {
+        _logger.LogError("{stacktrace}", context.Exception.StackTrace);
         context.Result = new ObjectResult(new
         {
             StatusCode = HttpStatusCode.InternalServerError,
             Msg = context.Exception.Message,
             Data = default(object)
         });
+        context.ExceptionHandled = true;
         return base.OnExceptionAsync(context);
     }
 }

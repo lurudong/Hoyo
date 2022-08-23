@@ -3,6 +3,8 @@ using Hoyo.AutoDependencyInjectionModule.Modules;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Events;
+// 将输出日志格式化为ES需要的格式.
+//using Serilog.Formatting.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,17 +16,21 @@ builder.WebHost.ConfigureKestrel((context, options) => options.ListenAnyIP(5273,
 }));
 
 //添加SeriLog配置
-_ = builder.Host.UseSerilog((webHost, logconfig) =>
+_ = builder.Host.UseSerilog((hbc, lc) =>
 {
-    var configuration = webHost.Configuration.GetSection("Serilog");
-    var minilevel = string.IsNullOrWhiteSpace(configuration.Value) ? LogEventLevel.Information.ToString() : configuration["MinimumLevel:Default"]!;
-    //日志事件级别
-    var logEventLevel = (LogEventLevel)Enum.Parse(typeof(LogEventLevel), minilevel);
-    _ = logconfig.ReadFrom.Configuration(configuration).Enrich.FromLogContext().WriteTo.Console(logEventLevel);
-    // 若是需要分文件写入需要引入包 Serilog.Sinks.Map 与 Serilog.Sinks.Async
-    //_ = logconfig.WriteTo.Map(le => MapData(le), (key, log) => log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel)));
-    //static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
-}).ConfigureLogging((hostcontext, builder) => builder.ClearProviders().SetMinimumLevel(LogLevel.Information).AddConfiguration(hostcontext.Configuration.GetSection("Logging")).AddConsole().AddDebug());
+    _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Information).Enrich.FromLogContext().WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
+    _ = lc.WriteTo.Debug();
+    // 不建议将日志写入文件,会造成日志文件越来越大,服务器可能因此宕机.
+    // 若是需要分文件写入需要引入包 Serilog.Sinks.Map
+    //_ = lc.WriteTo.Map(le =>
+    //{
+    //    static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
+    //    return MapData(le);
+    //}, (key, log) =>
+    //{
+    //    log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel));
+    //});    
+});
 
 // Add services to the container.
 // 自动注入服务模块

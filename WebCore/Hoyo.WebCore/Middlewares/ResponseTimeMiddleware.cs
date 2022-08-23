@@ -8,7 +8,7 @@ namespace Hoyo.WebCore;
 /// </summary>
 public class ResponseTimeMiddleware
 {
-    private const string RESPONSE_HEADER_RESPONSE_TIME = "Hoyo-Response-Time";
+    private const string RESPONSE_TIME = "Hoyo-Response-Time";
     private readonly RequestDelegate next;
     public ResponseTimeMiddleware(RequestDelegate next) => this.next = next;
     public async Task Invoke(HttpContext context)
@@ -18,7 +18,7 @@ public class ResponseTimeMiddleware
         context.Response.OnStarting(() =>
         {
             watch.Stop();
-            context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = $"{watch.ElapsedMilliseconds} ms";
+            context.Response.Headers[RESPONSE_TIME] = $"{watch.ElapsedMilliseconds} ms";
             return Task.CompletedTask;
         });
         await next(context);
