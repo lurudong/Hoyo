@@ -30,7 +30,7 @@ _ = builder.Host.UseSerilog((hbc, lc) =>
     //}, (key, log) =>
     //{
     //    log.Async(o => o.File(Path.Combine("logs", @$"{key.time:yyyyMMdd}{Path.DirectorySeparatorChar}{key.level.ToString().ToLower()}.log"), logEventLevel));
-    //});    
+    //});
 });
 
 // Add services to the container.

@@ -30,7 +30,6 @@ public class BaseDbContext
     internal static T CreateInstance<T>(string connectionString, string db = HoyoStatic.HoyoDbName) where T : BaseDbContext
     {
         var t = Activator.CreateInstance<T>();
-        if (string.IsNullOrWhiteSpace(connectionString)) throw new("连接字符串为空");
         var mongoUrl = new MongoUrl(connectionString);
         t._client = new MongoClient(mongoUrl);
         var dbname = !string.IsNullOrWhiteSpace(mongoUrl.DatabaseName) ? mongoUrl.DatabaseName : db;

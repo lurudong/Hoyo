@@ -17,7 +17,7 @@ public static class MongoServiceExtensions
         var connectionString = configuration[connKey];
         if (string.IsNullOrWhiteSpace(connectionString)) connectionString = configuration.GetConnectionString("Mongo");
         return string.IsNullOrWhiteSpace(connectionString)
-            ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsetting.json中不存在ConnectionStrings:Mongo配置")
+            ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsettings.json中不存在ConnectionStrings:Mongo配置")
             : connectionString;
     }
 
