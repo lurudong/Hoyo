@@ -12,7 +12,7 @@ public class HoyoEventBusRabbitMQModule : AppModule
             x.UserName = "admin";
             x.Host = "101.34.26.221";
             x.Port = 40013;
-            x.PassWord = "&duyu789";
+            x.PassWord = "&oneblogs789";
         });
     }
 }
