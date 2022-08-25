@@ -18,7 +18,8 @@ builder.WebHost.ConfigureKestrel((context, options) => options.ListenAnyIP(5273,
 //添加SeriLog配置
 _ = builder.Host.UseSerilog((hbc, lc) =>
 {
-    _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Information).Enrich.FromLogContext().WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
+    _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Information).MinimumLevel.Override("System", LogEventLevel.Information).Enrich.FromLogContext();
+    _ = lc.WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
     _ = lc.WriteTo.Debug();
     //_ = lc.WriteTo.MongoDB(hbc.Configuration["Logging:DataBase:Mongo"]);
     // 不建议将日志写入文件,会造成日志文件越来越大,服务器可能因此宕机.
