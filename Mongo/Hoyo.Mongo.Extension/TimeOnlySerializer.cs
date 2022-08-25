@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Hoyo.Mongo;
@@ -17,8 +16,7 @@ internal class TimeOnlySerializer : StructSerializerBase<TimeOnly>
     public override TimeOnly Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var ticks = context.Reader.ReadString();
-        // 使用一个特殊的日子作为日期部分.得到一个本地化的DateTime类型.
-        var dateTime = BsonUtils.ToLocalTime(DateTime.Parse($"1994-02-15 {ticks}"));
-        return TimeOnly.FromDateTime(dateTime);
+        var success = TimeOnly.TryParse(ticks, out var result);
+        return success ? result : throw new("不受支持的数据格式.");
     }
 }

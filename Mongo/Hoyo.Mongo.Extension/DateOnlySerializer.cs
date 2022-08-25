@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
+﻿using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace Hoyo.Mongo;
@@ -8,19 +7,16 @@ namespace Hoyo.Mongo;
 /// </summary>
 internal class DateOnlySerializer : StructSerializerBase<DateOnly>
 {
-    private static readonly TimeOnly zeroTimeComponent = new();
-
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, DateOnly value)
     {
-        var dateTime = value.ToDateTime(zeroTimeComponent);
-        var str = dateTime.ToString("yyyy-MM-dd");
+        var str = value.ToString("yyyy-MM-dd");
         context.Writer.WriteString(str);
     }
 
     public override DateOnly Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var str = context.Reader.ReadString();
-        var dateTime = BsonUtils.ToLocalTime(DateTime.Parse(str));
-        return DateOnly.FromDateTime(dateTime);
+        var success = DateOnly.TryParse(str, out var result);
+        return success ? result : throw new("不受支持的数据格式.");
     }
 }

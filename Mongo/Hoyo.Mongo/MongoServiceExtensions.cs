@@ -37,6 +37,7 @@ public static class MongoServiceExtensions
         var db = BaseDbContext.CreateInstance<T>(connectionString);
         _ = services.AddSingleton(db);
         _ = services.AddSingleton(db._database);
+        _ = services.AddSingleton(db._client);
         return services;
     }
 
@@ -55,6 +56,7 @@ public static class MongoServiceExtensions
         var db = BaseDbContext.CreateInstance<T>(settings);
         _ = services.AddSingleton(db);
         _ = services.AddSingleton(db._database);
+        _ = services.AddSingleton(db._client);
         return services;
     }
 }

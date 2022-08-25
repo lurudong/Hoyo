@@ -19,7 +19,11 @@ public static class GridFSExtensions
     {
         var client = services.BuildServiceProvider().GetService<IMongoClient>();
         fsoptions ??= new();
-        if (db is null) fsoptions.DefalutDB = true;
+        if (db is null)
+        {
+            fsoptions.DefalutDB = true;
+            if (client is null) throw new("无法从容器中获取IMongoClient的服务依赖,请考虑是否使用Hoyo.Mongo包添加Mongodb服务或显示传入db参数.");
+        }
         BusinessApp = fsoptions.BusinessApp;
         var hoyodb = fsoptions.DefalutDB ? client.GetDatabase("hoyofs") : db;
         _ = services.Configure<FormOptions>(c =>
