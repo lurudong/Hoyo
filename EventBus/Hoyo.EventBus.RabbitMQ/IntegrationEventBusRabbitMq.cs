@@ -92,10 +92,6 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
         if (rabbitMqAttribute.Type != Attributes.ExchangeType.DelayedMessage.ToDescription()) throw new($"延时队列的交换机类型必须为{Attributes.ExchangeType.DelayedMessage}");
-        var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -123,7 +119,10 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey, true, properties, body);
+            channel.BasicPublish(rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
         });
     }
 
@@ -215,23 +214,19 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     {
         _logger.LogTrace("创建RabbitMQ消费者通道");
         var channel = _persistentConnection.CreateModel();
-        Dictionary<string, object>? args = null;
-        if (rabbitMqAttribute.Type == Attributes.ExchangeType.DelayedMessage.ToDescription())
-        {
-            args = new()
+        var args = rabbitMqAttribute.Type == Attributes.ExchangeType.DelayedMessage.ToDescription()
+            ? new Dictionary<string, object>()
             {
                 { "x-delayed-type", "direct" } //x-delayed-type必须加
-            };
-        }
+            } : null;
         //创建交换机
         channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: args);
         //创建队列
-        _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false, arguments: null);
+        _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         channel.CallbackException += (sender, ea) =>
         {
             _logger.LogWarning(ea.Exception, "重新创建RabbitMQ消费者通道");
             _subsManager.Clear();
-            // _consumerChannel = CreateConsumerChannel(rabbitMqAttribute);
             Subscribe();
         };
         return channel;
