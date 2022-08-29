@@ -17,16 +17,20 @@ public class TestEventBusController : ControllerBase
     [HttpPost]
     public void CreateOrder()
     {
-        var orderEvent = new CreateOrderIntegrationEvent() { OrderNo = "test0000000001" };
-        _integrationEventBus.Publish<CreateOrderIntegrationEvent>(orderEvent);
-
+        var orderEvent = new CreateOrderEvent() { Message = "test0000000001" };
+        _integrationEventBus.Publish<CreateOrderEvent>(orderEvent);
     }
 
     [HttpGet]
-    public void CreateTestIntegrationEvent()
+    public void CreateTestEvent()
     {
-        var test = new TestIntegrationEvent() { Name = "大黄瓜1CM，真的猛" };
-        _integrationEventBus.Publish<TestIntegrationEvent>(test);
-
+        var test = new TestEvent() { Message = "大黄瓜1CM，真的猛" };
+        _integrationEventBus.Publish<TestEvent>(test);
+    }
+    [HttpPost("TTLTest")]
+    public void TTLTest()
+    {
+        var ttlobj = new DelayedMessageEvent() { Message = "大黄瓜0.5cm,猛不起来了" };
+        _integrationEventBus.PublishWithTTL<DelayedMessageEvent>(ttlobj, 5000);
     }
 }

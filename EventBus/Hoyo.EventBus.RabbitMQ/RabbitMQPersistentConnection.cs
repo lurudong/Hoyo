@@ -7,16 +7,16 @@ using System.Net.Sockets;
 
 namespace Hoyo.EventBus.RabbitMQ;
 
-public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
+public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
-    private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
+    private readonly ILogger<RabbitMQPersistentConnection> _logger;
     private readonly int _retryCount;
     IConnection? _connection;
     bool _disposed;
     readonly object sync_root = new();
 
-    public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 5)
+    public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<RabbitMQPersistentConnection> logger, int retryCount = 5)
     {
         _connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));

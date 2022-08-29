@@ -51,5 +51,10 @@ public enum ExchangeType
     /// 订阅模式
     /// </summary>
     [Description("fanout")]
-    Subscribe = 3
+    Subscribe = 3,
+    /// <summary>
+    /// 延时x-delayed-message模式
+    /// </summary>
+    [Description("x-delayed-message")]
+    DelayedMessage = 4
 }

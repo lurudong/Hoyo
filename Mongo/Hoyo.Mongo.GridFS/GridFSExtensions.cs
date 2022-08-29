@@ -25,13 +25,13 @@ public static class GridFSExtensions
             if (client is null) throw new("无法从容器中获取IMongoClient的服务依赖,请考虑是否使用Hoyo.Mongo包添加Mongodb服务或显示传入db参数.");
         }
         BusinessApp = fsoptions.BusinessApp;
-        var hoyodb = fsoptions.DefalutDB ? client.GetDatabase("hoyofs") : db;
+        var hoyodb = fsoptions.DefalutDB ? client!.GetDatabase("hoyofs") : db;
         _ = services.Configure<FormOptions>(c =>
         {
             c.MultipartBodyLengthLimit = long.MaxValue;
             c.ValueLengthLimit = int.MaxValue;
         }).Configure<KestrelServerOptions>(c => c.Limits.MaxRequestBodySize = int.MaxValue).AddSingleton(new GridFSBucket(hoyodb, fsoptions.Options));
-        _ = services.AddSingleton(hoyodb?.GetCollection<GridFSItemInfo>(fsoptions.ItemInfo));
+        _ = services.AddSingleton(hoyodb!.GetCollection<GridFSItemInfo>(fsoptions.ItemInfo));
         return services;
     }
 }

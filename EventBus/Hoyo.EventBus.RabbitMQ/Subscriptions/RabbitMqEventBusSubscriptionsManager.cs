@@ -2,7 +2,7 @@
 
 namespace Hoyo.EventBus.RabbitMQ;
 
-public class RabbitMqEventBusSubscriptionsManager : IIntegrationEventBusSubscriptionsManager
+public class RabbitMQEventBusSubscriptionsManager : IIntegrationEventBusSubscriptionsManager
 {
     private readonly ConcurrentDictionary<string, List<Type>> _handlers = new();
 

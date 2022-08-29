@@ -1,6 +1,5 @@
 using example.net7.api;
 using Hoyo.AutoDependencyInjectionModule.Modules;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Serilog;
 using Serilog.Events;
 // 将输出日志格式化为ES需要的格式.
@@ -9,11 +8,11 @@ using Serilog.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 // 配置支持HTTP1/2/3
-builder.WebHost.ConfigureKestrel((context, options) => options.ListenAnyIP(5273, listenOptions =>
-{
-    listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
-    _ = listenOptions.UseHttps();
-}));
+//builder.WebHost.ConfigureKestrel((context, options) => options.ListenAnyIP(80, listenOptions =>
+//{
+//    listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
+//    //_ = listenOptions.UseHttps();
+//}));
 
 //添加SeriLog配置
 _ = builder.Host.UseSerilog((hbc, lc) =>

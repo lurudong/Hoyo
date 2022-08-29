@@ -6,12 +6,12 @@ namespace Hoyo.EventBus.RabbitMQ;
 /// <summary>
 /// 后台任务进行事件订阅
 /// </summary>
-public class RabbitMqIntegrationEventBusBackgroundServiceSubscribe : BackgroundService
+public class RabbitMQIntegrationEventBusBackgroundServiceSubscribe : BackgroundService
 {
 
     private readonly IServiceProvider _rootServiceProvider;
 
-    public RabbitMqIntegrationEventBusBackgroundServiceSubscribe(IServiceProvider serviceProvider)
+    public RabbitMQIntegrationEventBusBackgroundServiceSubscribe(IServiceProvider serviceProvider)
     {
         _rootServiceProvider = serviceProvider;
     }
@@ -22,7 +22,7 @@ public class RabbitMqIntegrationEventBusBackgroundServiceSubscribe : BackgroundS
         var eventBus = scope.ServiceProvider.GetService<IIntegrationEventBus>();
         if (eventBus is null)
         {
-            throw new Exception("RabbitMQ集成事件总线没有注册");
+            throw new("RabbitMQ集成事件总线没有注册");
         }
         eventBus.Subscribe();
         while (true && !stoppingToken.IsCancellationRequested)
