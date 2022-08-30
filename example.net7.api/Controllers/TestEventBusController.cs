@@ -33,4 +33,11 @@ public class TestEventBusController : ControllerBase
         var ttlobj = new DelayedMessageEvent() { Message = "大黄瓜0.5cm,猛不起来了" };
         _integrationEventBus.PublishWithTTL<DelayedMessageEvent>(ttlobj, 5000);
     }
+
+    [HttpPost("TTLTest_1")]
+    public void TTLTest_1()
+    {
+        var ttlobj = new DelayedMessageEvent() { Message = "大黄瓜0.5cm,猛不起来了" };
+        _integrationEventBus.Publish<DelayedMessageEvent>(ttlobj);
+    }
 }
