@@ -4,7 +4,7 @@ using Hoyo.EventBus.RabbitMQ.Attributes;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ(exchange:"hoyo.rabbitmqbus.delayedmessage", exchangeType: ExchangeType.DelayedMessage, "delay", "testdelay")]
+[RabbitMQ(exchange: "hoyo.rabbitmqbus.delayedmessage", exchangeType: ExchangeType.DelayedMessage, "delay", "testdelay")]
 public class DelayedMessageEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;

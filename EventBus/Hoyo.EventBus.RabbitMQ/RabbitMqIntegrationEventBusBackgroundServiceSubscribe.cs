@@ -20,10 +20,7 @@ public class RabbitMQIntegrationEventBusBackgroundServiceSubscribe : BackgroundS
     {
         using var scope = _rootServiceProvider.CreateScope();
         var eventBus = scope.ServiceProvider.GetService<IIntegrationEventBus>();
-        if (eventBus is null)
-        {
-            throw new("RabbitMQ集成事件总线没有注册");
-        }
+        if (eventBus is null) throw new("RabbitMQ集成事件总线没有注册");
         eventBus.Subscribe();
         while (true && !stoppingToken.IsCancellationRequested)
         {

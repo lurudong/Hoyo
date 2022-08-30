@@ -18,10 +18,10 @@ public class SystemTextJsonConvert
     {
         public override decimal? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return reader.TokenType == JsonTokenType.Number 
+            return reader.TokenType == JsonTokenType.Number
                 ? reader.GetDecimal()
-                : string.IsNullOrEmpty(reader.GetString()) 
-                ? default(decimal?) 
+                : string.IsNullOrEmpty(reader.GetString())
+                ? default(decimal?)
                 : decimal.Parse(reader.GetString()!);
         }
 
