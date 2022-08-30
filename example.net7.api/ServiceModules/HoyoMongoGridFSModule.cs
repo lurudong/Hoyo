@@ -16,10 +16,10 @@ public class HoyoMongoGridFSModule : AppModule
     {
         var db = context.Services.GetService<DbContext>() ?? throw new("MongoDB数据库服务不存在,若是不适用默认的数据库服务,可以创建新的数据库链接来使用GridFS");
 
-        var fsop = new HoyoGridFSOptions()
+        _ = context.Services.AddHoyoGridFS(db._database, op =>
         {
-            BusinessApp = "HoyoFS",
-            Options = new()
+            op.BusinessApp = "HoyoFS";
+            op.Options = new()
             {
                 BucketName = "hoyo",
                 ChunkSizeBytes = 1024,
@@ -27,11 +27,10 @@ public class HoyoMongoGridFSModule : AppModule
                 ReadConcern = new() { },
                 ReadPreference = ReadPreference.Primary,
                 WriteConcern = WriteConcern.Unacknowledged
-            },
-            DefalutDB = true,
-            ItemInfo = "item.info"
-        };
-        _ = context.Services.AddHoyoGridFS(db._database, fsop);
+            };
+            op.DefalutDB = true;
+            op.ItemInfo = "item.info";
+        });
     }
 
     public override void ApplicationInitialization(ApplicationContext context)
