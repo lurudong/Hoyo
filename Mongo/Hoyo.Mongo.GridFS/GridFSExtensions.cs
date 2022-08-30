@@ -15,23 +15,24 @@ public static class GridFSExtensions
     /// <param name="db">IMongoDatabase,为空情况下使用默认数据库hoyofs</param>
     /// <param name="fsoptions"></param>
     /// <returns></returns>
-    public static IServiceCollection AddHoyoGridFS(this IServiceCollection services, IMongoDatabase? db = null, HoyoGridFSOptions? fsoptions = null)
+    public static IServiceCollection AddHoyoGridFS(this IServiceCollection services, IMongoDatabase? db = null, Action<HoyoGridFSOptions>? fsoptions = null)
     {
         var client = services.BuildServiceProvider().GetService<IMongoClient>();
-        fsoptions ??= new();
+        var options = new HoyoGridFSOptions();
+        fsoptions?.Invoke(options);
         if (db is null)
         {
-            fsoptions.DefalutDB = true;
+            options.DefalutDB = true;
             if (client is null) throw new("无法从容器中获取IMongoClient的服务依赖,请考虑是否使用Hoyo.Mongo包添加Mongodb服务或显示传入db参数.");
         }
-        BusinessApp = fsoptions.BusinessApp;
-        var hoyodb = fsoptions.DefalutDB ? client!.GetDatabase("hoyofs") : db;
+        BusinessApp = options.BusinessApp;
+        var hoyodb = options.DefalutDB ? client!.GetDatabase("hoyofs") : db;
         _ = services.Configure<FormOptions>(c =>
         {
             c.MultipartBodyLengthLimit = long.MaxValue;
             c.ValueLengthLimit = int.MaxValue;
-        }).Configure<KestrelServerOptions>(c => c.Limits.MaxRequestBodySize = int.MaxValue).AddSingleton(new GridFSBucket(hoyodb, fsoptions.Options));
-        _ = services.AddSingleton(hoyodb!.GetCollection<GridFSItemInfo>(fsoptions.ItemInfo));
+        }).Configure<KestrelServerOptions>(c => c.Limits.MaxRequestBodySize = int.MaxValue).AddSingleton(new GridFSBucket(hoyodb, options.Options));
+        _ = services.AddSingleton(hoyodb!.GetCollection<GridFSItemInfo>(options.ItemInfo));
         return services;
     }
 }
