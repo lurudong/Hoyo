@@ -14,9 +14,7 @@ public class CreateOrderEvent : IntegrationEvent
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
 public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent>
 {
-
     private readonly ILogger<CreateOrderEventHandler> _logger;
-
     public CreateOrderEventHandler(ILogger<CreateOrderEventHandler> logger)
     {
         _logger = logger;

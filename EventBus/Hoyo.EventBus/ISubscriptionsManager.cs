@@ -1,6 +1,6 @@
 ﻿namespace Hoyo.EventBus;
 
-public interface IIntegrationEventBusSubscriptionsManager
+public interface ISubscriptionsManager
 {
 
     event EventHandler<EventRemovedEventArgs> OnEventRemoved;

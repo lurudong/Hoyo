@@ -12,9 +12,9 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<RabbitMQPersistentConnection> _logger;
     private readonly int _retryCount;
-    IConnection? _connection;
-    bool _disposed;
-    readonly object sync_root = new();
+    private IConnection? _connection;
+    private bool _disposed;
+    private readonly object sync_root = new();
 
     public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<RabbitMQPersistentConnection> logger, int retryCount = 5)
     {

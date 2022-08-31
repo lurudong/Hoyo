@@ -16,7 +16,6 @@ public class DelayedMessageEvent : IntegrationEvent
 public class DelayedMessageEventHandler : IIntegrationEventHandler<DelayedMessageEvent>
 {
     private readonly ILogger<DelayedMessageEventHandler> _logger;
-
     public DelayedMessageEventHandler(ILogger<DelayedMessageEventHandler> logger)
     {
         _logger = logger;

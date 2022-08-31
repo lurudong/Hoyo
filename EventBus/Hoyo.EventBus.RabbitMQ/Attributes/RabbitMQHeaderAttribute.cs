@@ -6,6 +6,5 @@
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RabbitMQHeaderAttribute : RabbitDictionaryAttribute
 {
-    public RabbitMQHeaderAttribute(string key, object value) : base(key, value)
-    { }
+    public RabbitMQHeaderAttribute(string key, object value) : base(key, value) { }
 }
