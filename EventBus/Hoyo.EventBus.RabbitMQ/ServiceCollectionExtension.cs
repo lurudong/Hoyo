@@ -15,13 +15,13 @@ public static class ServiceCollectionExtension
         {
             var rabbitMQPersistentConnection = serviceProvider.GetRequiredService<IRabbitMQPersistentConnection>();
             var logger = serviceProvider.GetRequiredService<ILogger<IntegrationEventBusRabbitMQ>>();
-            var subsManager = serviceProvider.GetRequiredService<IIntegrationEventBusSubscriptionsManager>();
+            var subsManager = serviceProvider.GetRequiredService<ISubscriptionsManager>();
             return rabbitMQPersistentConnection is null || logger is null
                 ? throw new(nameof(rabbitMQPersistentConnection))
                 : new IntegrationEventBusRabbitMQ(rabbitMQPersistentConnection, logger, config.RetryCount, subsManager, serviceProvider);
         });
-        _ = service.AddSingleton<IIntegrationEventBusSubscriptionsManager, RabbitMQEventBusSubscriptionsManager>();
-        _ = service.AddHostedService<RabbitMQIntegrationEventBusBackgroundServiceSubscribe>();
+        _ = service.AddSingleton<ISubscriptionsManager, RabbitMQSubscriptionsManager>();
+        _ = service.AddHostedService<RabbitMQSubscribeService>();
         return service;
     }
 
@@ -30,7 +30,7 @@ public static class ServiceCollectionExtension
         _ = service.AddSingleton<IRabbitMQPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<RabbitMQPersistentConnection>>();
-            var factory = new ConnectionFactory()
+            return new RabbitMQPersistentConnection(new ConnectionFactory()
             {
                 HostName = config.Host,
                 DispatchConsumersAsync = true,
@@ -38,8 +38,7 @@ public static class ServiceCollectionExtension
                 Password = config.PassWord,
                 Port = config.Port,
                 VirtualHost = config.VirtualHost
-            };
-            return new RabbitMQPersistentConnection(factory, logger, config.RetryCount);
+            }, logger, config.RetryCount);
         });
         return service;
     }

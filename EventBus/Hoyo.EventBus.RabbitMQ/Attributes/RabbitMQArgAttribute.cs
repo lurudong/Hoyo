@@ -6,6 +6,5 @@
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RabbitMQArgAttribute : RabbitDictionaryAttribute
 {
-    public RabbitMQArgAttribute(string key, object value) : base(key, value)
-    { }
+    public RabbitMQArgAttribute(string key, object value) : base(key, value) { }
 }

@@ -5,7 +5,7 @@ using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ("hoyo.rabbitmqbus.test", EExchange.Routing, "createorder", "testqueue")]
+[RabbitMQ("hoyo.rabbitmqbus.test", EExchange.Routing, "createorder", "orderqueue")]
 public class CreateOrderEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;
@@ -14,9 +14,7 @@ public class CreateOrderEvent : IntegrationEvent
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
 public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent>
 {
-
     private readonly ILogger<CreateOrderEventHandler> _logger;
-
     public CreateOrderEventHandler(ILogger<CreateOrderEventHandler> logger)
     {
         _logger = logger;
