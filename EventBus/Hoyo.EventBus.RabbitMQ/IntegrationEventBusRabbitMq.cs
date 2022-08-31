@@ -52,10 +52,6 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var rabbitMqAttribute = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
-        var body = JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
 
@@ -89,7 +85,10 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey, true, properties, body);
+            channel.BasicPublish(rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+            {
+                WriteIndented = true
+            }));
         });
     }
 
@@ -255,14 +254,11 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             var implementedType = handlerType.GetTypeInfo().ImplementedInterfaces.Where(o => o.IsBaseOn(typeof(IIntegrationEventHandler<>))).FirstOrDefault();
             var eventType = implementedType?.GetTypeInfo().GenericTypeArguments.FirstOrDefault();
-            if (eventType == null)
-            {
-                continue;
-            }
+            if (eventType is null) continue;
             CheckEventType(eventType);
             CheckHandlerType(handlerType);
             var rabbitMqAttribute = eventType.GetCustomAttribute<RabbitMQAttribute>();
-            if (rabbitMqAttribute == null) throw new($"{nameof(eventType)}未设置<RabbitMQAttribute>,无法发布事件");
+            if (rabbitMqAttribute is null) throw new($"{nameof(eventType)}未设置<RabbitMQAttribute>,无法发布事件");
             _ = Task.Factory.StartNew(() =>
             {
                 using var consumerChannel = CreateConsumerChannel(rabbitMqAttribute, eventType);
@@ -352,16 +348,16 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                 if (integrationEvent is null) throw new("集成事件不能为空。。。");
                 var method = concreteType.GetMethod(_handleName);
-                if (method == null)
+                if (method is null)
                 {
                     _logger.LogError("无法找到IIntegrationEventHandler事件处理器,下处理者方法");
                     throw new("无法找到IIntegrationEventHandler事件处理器,下处理者方法");
                 }
                 var handler = scope?.ServiceProvider.GetService(subscriptionType);
-                if (handler == null) continue;
+                if (handler is null) continue;
                 await Task.Yield();
                 var obj = method.Invoke(handler, new object[] { integrationEvent });
-                if (obj == null) continue;
+                if (obj is null) continue;
                 await (Task)obj;
             }
         }

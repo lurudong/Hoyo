@@ -21,14 +21,8 @@ public class RabbitMQEventBusSubscriptionsManager : IIntegrationEventBusSubscrip
     private void DoAddSubscription(Type handlerType, string eventName)
     {
 
-        if (!HasSubscriptionsForEvent(eventName))
-        {
-            _ = _handlers.TryAdd(eventName, new List<Type>());
-        }
-        if (_handlers[eventName].Any(o => o == handlerType))
-        {
-            throw new ArgumentException($"类型:{handlerType.Name} 已注册 '{eventName}'", nameof(handlerType));
-        }
+        if (!HasSubscriptionsForEvent(eventName)) _ = _handlers.TryAdd(eventName, new List<Type>());
+        if (_handlers[eventName].Any(o => o == handlerType)) throw new ArgumentException($"类型:{handlerType.Name} 已注册 '{eventName}'", nameof(handlerType));
         _handlers[eventName].Add(handlerType);
     }
 
@@ -50,10 +44,7 @@ public class RabbitMQEventBusSubscriptionsManager : IIntegrationEventBusSubscrip
 
     public void RemoveSubscription<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
     {
-        if (!HasSubscriptionsForEvent<T>())
-        {
-            return;
-        }
+        if (!HasSubscriptionsForEvent<T>()) return;
         var eventName = GetEventKey<T>();
         _ = _handlers[eventName].Remove(typeof(TH));
         if (!_handlers[eventName].Any())

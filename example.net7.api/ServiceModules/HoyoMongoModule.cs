@@ -10,23 +10,21 @@ public class HoyoMongoModule : AppModule
 {
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var dboptions = new HoyoMongoOptions()
-        {
-            //UseDefalutConventionRegistryConfig = false,
-        };
-        dboptions.AppendConventionRegistry(new()
-        {
-            {
-                "IdentityServer Mongo Conventions",
-                new()
-                {
-                   new IgnoreIfDefaultConvention(true)
-                }
-            }
-        });
-
         var config = context.Services.GetConfiguration();
 
-        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(config, dboptions: dboptions);
+        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(config, dboptions: op =>
+        {
+            op.AppendConventionRegistry(new()
+            {
+                {
+                    "IdentityServer Mongo Conventions",
+                    new()
+                    {
+                        new IgnoreIfDefaultConvention(true)
+                    }
+                }
+            });
+            op.UseDefalutConventionRegistryConfig = true;
+        });
     }
 }
