@@ -15,7 +15,7 @@ internal class RabbitMQSubscribeService : BackgroundService
         _rootServiceProvider = serviceProvider;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override async Task ExecuteAsync(CancellationToken cancelToken)
     {
         using var scope = _rootServiceProvider.CreateScope();
         var eventBus = scope.ServiceProvider.GetService<IIntegrationEventBus>();

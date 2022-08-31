@@ -289,13 +289,6 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         }
     }
 
-    public void Unsubscribe<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
-    {
-        var eventName = _subsManager.GetEventKey<T>();
-        _logger.LogInformation("移除事件 {EventName}", eventName);
-        _subsManager.RemoveSubscription<T, TH>();
-    }
-
     private void SubsManager_OnEventRemoved(object? sender, EventRemovedEventArgs args)
     {
         var eventName = args.EventType?.Name;
