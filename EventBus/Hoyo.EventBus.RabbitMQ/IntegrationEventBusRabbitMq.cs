@@ -110,6 +110,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         }
         return keyValuePairs;
     }
+
     /// <summary>
     /// 基于rabbitmq_delayed_message_exchange插件实现,使用前请确认已安装好插件,发布延时队列消息,需要RabbitMQ开启延时队列
     /// </summary>
