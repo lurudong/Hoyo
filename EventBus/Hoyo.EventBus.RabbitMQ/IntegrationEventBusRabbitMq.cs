@@ -142,7 +142,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     private static void CheckEventType(Type eventType)
     {
         _ = Utils.NotNull(eventType is not null, nameof(eventType));
-        if (eventType?.IsDeriveClassFrom<IIntegrationEvent>() == false)
+        if (!eventType!.IsDeriveClassFrom<IIntegrationEvent>())
             throw new ArgumentNullException(nameof(eventType), $"{eventType}没有继承{nameof(IIntegrationEvent)}");
     }
 
@@ -154,7 +154,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     private static void CheckHandlerType(Type handlerType)
     {
         _ = Utils.NotNull(handlerType, nameof(handlerType));
-        if (handlerType.IsBaseOn(typeof(IIntegrationEventHandler<>)) == false)
+        if (!handlerType.IsBaseOn(typeof(IIntegrationEventHandler<>)))
             throw new ArgumentNullException(nameof(handlerType), $"{nameof(handlerType)}未派生自IIntegrationEventHandler<>");
     }
 
@@ -261,7 +261,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             {
                 var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-                if (integrationEvent is null) throw new("集成事件不能为空。。。");
+                if (integrationEvent is null) throw new("集成事件不能为空");
                 var method = concreteType.GetMethod(_handleName);
                 if (method is null)
                 {
@@ -303,27 +303,15 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     }
 
     /// <summary>
-    /// 释放对象和链接
-    /// </summary>
-    /// <param name="disposing"></param>
-    private void Dispose(bool disposing)
-    {
-        if (!_isDisposed)
-        {
-            if (disposing)
-            {
-                _subsManager.Clear();
-            }
-            _isDisposed = true;
-        }
-    }
-
-    /// <summary>
     /// 释放对象
     /// </summary>
     public void Dispose()
     {
-        Dispose(true);
+        if (!_isDisposed)
+        {
+            _subsManager.Clear();
+            _isDisposed = true;
+        }
         //告诉GC，不要调用析构函数
         GC.SuppressFinalize(this);
     }

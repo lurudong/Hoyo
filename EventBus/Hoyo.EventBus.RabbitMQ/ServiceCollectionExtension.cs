@@ -30,7 +30,7 @@ public static class ServiceCollectionExtension
         _ = service.AddSingleton<IRabbitMQPersistentConnection>(sp =>
         {
             var logger = sp.GetRequiredService<ILogger<RabbitMQPersistentConnection>>();
-            var factory = new ConnectionFactory()
+            return new RabbitMQPersistentConnection(new ConnectionFactory()
             {
                 HostName = config.Host,
                 DispatchConsumersAsync = true,
@@ -38,8 +38,7 @@ public static class ServiceCollectionExtension
                 Password = config.PassWord,
                 Port = config.Port,
                 VirtualHost = config.VirtualHost
-            };
-            return new RabbitMQPersistentConnection(factory, logger, config.RetryCount);
+            }, logger, config.RetryCount);
         });
         return service;
     }
