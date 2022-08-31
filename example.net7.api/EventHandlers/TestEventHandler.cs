@@ -1,10 +1,11 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.EventBus;
 using Hoyo.EventBus.RabbitMQ.Attributes;
+using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ("hoyo.mqtest.002", ExchangeType.Routing, "test", "testqueue")]
+[RabbitMQ("hoyo.mqtest.002", EExchange.Routing, "test", "testqueue")]
 public class TestEvent : IntegrationEvent
 {
     public string Message { get; set; } = "";

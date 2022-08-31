@@ -1,17 +1,12 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.EventBus;
 using Hoyo.EventBus.RabbitMQ.Attributes;
-using Polly.Caching;
-using RabbitMQ.Client;
-using System.Linq.Expressions;
-using ExchangeType = Hoyo.EventBus.RabbitMQ.Attributes.ExchangeType;
+using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ(exchange: "hoyo.rabbitmqbus.delayedmessage", exchangeType: ExchangeType.DelayedMessage, routingKey: "delay", queue: "testdelay")]
+[RabbitMQ(exchange: "hoyo.rabbitmqbus.delayedmessage", exchangeType: EExchange.DelayedMessage, routingKey: "delay", queue: "testdelay")]
 
-[RabbitMQHeader("x-delay", 5000)]
-[RabbitMQArg("x-delayed-type", "direct")]
 public class DelayedMessageEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;
@@ -20,7 +15,6 @@ public class DelayedMessageEvent : IntegrationEvent
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
 public class DelayedMessageEventHandler : IIntegrationEventHandler<DelayedMessageEvent>
 {
-
     private readonly ILogger<DelayedMessageEventHandler> _logger;
 
     public DelayedMessageEventHandler(ILogger<DelayedMessageEventHandler> logger)

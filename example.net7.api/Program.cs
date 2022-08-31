@@ -17,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 //Ìí¼ÓSeriLogÅäÖÃ
 _ = builder.Host.UseSerilog((hbc, lc) =>
 {
-    _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Information).MinimumLevel.Override("System", LogEventLevel.Information).Enrich.FromLogContext();
+    _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Warning).MinimumLevel.Override("System", LogEventLevel.Warning).Enrich.FromLogContext();
     _ = lc.WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
     _ = lc.WriteTo.Debug();
     //_ = lc.WriteTo.MongoDB(hbc.Configuration["Logging:DataBase:Mongo"]);

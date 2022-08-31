@@ -8,6 +8,10 @@ namespace example.net7.api;
 
 public class HoyoMongoModule : AppModule
 {
+    public HoyoMongoModule()
+    {
+        Enable = false;
+    }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var config = context.Services.GetConfiguration();

@@ -1,10 +1,10 @@
 ﻿using Hoyo.EventBus.RabbitMQ.Attributes;
+using Hoyo.EventBus.RabbitMQ.Enums;
 using Hoyo.Extension;
 using Hoyo.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.Caching;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
@@ -54,24 +54,13 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
-
-
-        if (rabbitMqAttribute?.Type == Attributes.ExchangeType.DelayedMessage.ToDescription())
-        {
-            properties.Persistent = true;
-        }
-
-
-
-        var headers = GetHeaderAttributeFormDic(rabbitMqAttribute, @event);
+        properties.Persistent = true;
+        var headers = GetHeaderAttributeFormDic(@event);
         if (headers.Any())
         {
             properties.Headers = headers;
         }
-
-        var args = GetArgAttributeFormDic(rabbitMqAttribute, @event);
-
-
+        var args = GetArgAttributeFormDic(@event);
         //创建交换机
         channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, arguments: args);
         //创建队列
@@ -92,50 +81,31 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         });
     }
 
-    private IDictionary<string, object> GetHeaderAttributeFormDic(RabbitMQAttribute rabbitMqAttribute, IIntegrationEvent @event)
+    private static IDictionary<string, object> GetHeaderAttributeFormDic(IIntegrationEvent @event)
     {
         var type = @event.GetType();
         var rabbitMQHeaderAttributes = type.GetCustomAttributes<RabbitMQHeaderAttribute>();
-
-        if (rabbitMqAttribute?.Type == Attributes.ExchangeType.DelayedMessage.ToDescription() && !rabbitMQHeaderAttributes.Any())
-        {
-
-            throw new($"{nameof(@event)}延时队列未设置<RabbitMQHeaderAttribute>,无法发布事件");
-        }
-
-
-        return this.RabbitDictionarysByDic(rabbitMQHeaderAttributes);
-
+        return RabbitDictionarysByDic(rabbitMQHeaderAttributes);
     }
 
-
-    private IDictionary<string, object> GetArgAttributeFormDic(RabbitMQAttribute rabbitMqAttribute, IIntegrationEvent @event)
+    private static IDictionary<string, object> GetArgAttributeFormDic(IIntegrationEvent @event)
     {
         var type = @event.GetType();
         var rabbitMQArgAttributes = type.GetCustomAttributes<RabbitMQArgAttribute>();
-
-        if (rabbitMqAttribute?.Type == Attributes.ExchangeType.DelayedMessage.ToDescription() && !rabbitMQArgAttributes.Any())
-        {
-
-            throw new($"{nameof(@event)}延时队列未设置<RabbitMQArgAttribute>,无法发布事件");
-        }
-        return this.RabbitDictionarysByDic(rabbitMQArgAttributes);
-
+        return RabbitDictionarysByDic(rabbitMQArgAttributes);
     }
 
-    private IDictionary<string, object> GetArgAttributeFormDic(Type eventType)
+    private static IDictionary<string, object> GetArgAttributeFormDic(Type eventType)
     {
-        var type = eventType;
-        var rabbitMQArgAttributes = type.GetCustomAttributes<RabbitMQArgAttribute>();
-        return this.RabbitDictionarysByDic(rabbitMQArgAttributes);
-
+        var rabbitMQArgAttributes = eventType.GetCustomAttributes<RabbitMQArgAttribute>();
+        return RabbitDictionarysByDic(rabbitMQArgAttributes);
     }
-    private IDictionary<string, object> RabbitDictionarysByDic(IEnumerable<RabbitDictionaryAttribute> rabbitDictionaryAttributes)
+
+    private static IDictionary<string, object> RabbitDictionarysByDic(IEnumerable<RabbitDictionaryAttribute> rabbitDictionaryAttributes)
     {
-        IDictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+        var keyValuePairs = new Dictionary<string, object>();
         foreach (var rabbitDictionaryAttribute in rabbitDictionaryAttributes)
         {
-
             keyValuePairs.Add(rabbitDictionaryAttribute.Key, rabbitDictionaryAttribute.Value);
         }
         return keyValuePairs;
@@ -158,8 +128,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var rabbitMqAttribute = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<RabbitMQAttribute>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
-
-        if (rabbitMqAttribute.Type != Attributes.ExchangeType.DelayedMessage.ToDescription()) throw new($"延时队列的交换机类型必须为{Attributes.ExchangeType.DelayedMessage}");
+        if (rabbitMqAttribute.Type != EExchange.DelayedMessage.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.DelayedMessage}");
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -168,12 +137,11 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             { "x-delay", ttl }
         };
-        Dictionary<string, object> args = new()
+        ////创建延时交换机,type类型为x-delayed-message
+        channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: new Dictionary<string, object>()
         {
             { "x-delayed-type", "direct" } //x-delayed-type必须加
-        };
-        ////创建延时交换机,type类型为x-delayed-message
-        channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: args);
+        });
         //创建延时消息队列
         _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         //创建队列
@@ -279,16 +247,14 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     {
         _logger.LogTrace("创建RabbitMQ消费者通道");
         var channel = _persistentConnection.CreateModel();
-
-        //var args = rabbitMqAttribute.Type == Attributes.ExchangeType.DelayedMessage.ToDescription()
-        //    ? new Dictionary<string, object>()
-        //    {
-        //        { "x-delayed-type", "direct" } //x-delayed-type必须加
-        //    } : null;
-
         var args = GetArgAttributeFormDic(eventType);
+        var success = args.TryGetValue("x-delayed-type", out _);
+        if (!success && rabbitMqAttribute.Type == EExchange.DelayedMessage.ToDescription())
+        {
+            args.Add("x-delayed-type", "direct");//x-delayed-type必须加
+        }
         //创建交换机
-        channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: args.Any() ? args : null);
+        channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: args);
         //创建队列
         _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         channel.CallbackException += (sender, ea) =>
@@ -343,7 +309,6 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             var subscriptionTypes = _subsManager.GetHandlersForEvent(eventName);
             foreach (var subscriptionType in subscriptionTypes)
             {
-                //var eventType = _subsManager.GetEventTypeByName(eventName);
                 var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                 if (integrationEvent is null) throw new("集成事件不能为空。。。");

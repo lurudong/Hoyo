@@ -30,14 +30,16 @@ public class TestEventBusController : ControllerBase
     [HttpPost("TTLTest")]
     public void TTLTest()
     {
-        var ttlobj = new DelayedMessageEvent() { Message = "大黄瓜0.5cm,猛不起来了" };
-        _integrationEventBus.PublishWithTTL<DelayedMessageEvent>(ttlobj, 5000);
+        var rand = new Random();
+        var ttl = rand.Next(1000, 10000);
+        var ttlobj = new DelayedMessageEvent() { Message = $"延迟{ttl}毫秒,当前时间{DateTime.Now:yyyy-MM-dd HH:mm:ss},猛不起来了" };
+        _integrationEventBus.PublishWithTTL<DelayedMessageEvent>(ttlobj, (uint)ttl);
     }
 
     [HttpPost("TTLTest_1")]
     public void TTLTest_1()
     {
-        var ttlobj = new DelayedMessageEvent() { Message = "大黄瓜0.5cm,猛不起来了" };
-        _integrationEventBus.Publish<DelayedMessageEvent>(ttlobj);
+        var ttlobj = new DelayedMessageEvent2() { Message = $"大黄瓜0.5cm,当前时间{DateTime.Now:yyyy-MM-dd HH:mm:ss},猛不起来了" };
+        _integrationEventBus.Publish<DelayedMessageEvent2>(ttlobj);
     }
 }

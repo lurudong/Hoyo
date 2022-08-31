@@ -1,10 +1,11 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.EventBus;
 using Hoyo.EventBus.RabbitMQ.Attributes;
+using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ("hoyo.rabbitmqbus.test", ExchangeType.Routing, "createorder", "testqueue")]
+[RabbitMQ("hoyo.rabbitmqbus.test", EExchange.Routing, "createorder", "testqueue")]
 public class CreateOrderEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;

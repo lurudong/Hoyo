@@ -10,7 +10,7 @@ public class HoyoMongoGridFSModule : AppModule
 {
     public HoyoMongoGridFSModule()
     {
-        Enable = !false;
+        Enable = false;
     }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
