@@ -11,7 +11,7 @@ public static class IDCardCalculate
     private static void ValidateIDCard(this string idno)
     {
         if (idno.CheckIDCard()) return;
-        throw new("身份证号不合法");
+        throw new($"身份证号不合法:{idno}");
     }
 
 #if !NETSTANDARD
