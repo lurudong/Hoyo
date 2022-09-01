@@ -36,7 +36,6 @@ public static class IDCardValidation
             sum += Wi[i] * int.Parse(Ai[i].ToString());
         }
         _ = Math.DivRem(sum, 11, out var y);
-        Console.WriteLine($"校验位应为:{verifyCode[y]},传入的为:{idno[17..]}");
         return verifyCode[y] == idno[17..];
     }
     /// <summary>  
