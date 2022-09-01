@@ -26,7 +26,7 @@ public static class IDCardValidation
         if (long.TryParse(idno.Remove(17), out var n) == false || n < Math.Pow(10, 16) || long.TryParse(idno.Replace('x', '0').Replace('X', '0'), out _) == false) return false; //数字验证
         if (!address.Contains(idno.Remove(2))) return false; //省份验证  
         var birth = idno.Substring(6, 8).Insert(6, "-").Insert(4, "-");
-        if (DateTime.TryParse(birth, out _) == false) return false; //生日验证
+        if (!DateTime.TryParse(birth, out _)) return false; //生日验证
         var verifyCode = new[] { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
         var Wi = new[] { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
         var Ai = idno.Remove(17).ToCharArray();
@@ -36,7 +36,8 @@ public static class IDCardValidation
             sum += Wi[i] * int.Parse(Ai[i].ToString());
         }
         _ = Math.DivRem(sum, 11, out var y);
-        return verifyCode[y] == idno.Substring(17, 1);
+        Console.WriteLine($"校验位应为:{verifyCode[y]},传入的为:{idno[17..]}");
+        return verifyCode[y] == idno[17..];
     }
     /// <summary>  
     /// 15位身份证号码验证  

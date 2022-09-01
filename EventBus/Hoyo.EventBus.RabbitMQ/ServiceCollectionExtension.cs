@@ -11,14 +11,14 @@ public static class ServiceCollectionExtension
         RabbitMQConfig config = new();
         action.Invoke(config);
         _ = service.AddRabbitMQPersistentConnection(config);
-        _ = service.AddSingleton<IIntegrationEventBus, IntegrationEventBusRabbitMQ>(serviceProvider =>
+        _ = service.AddSingleton<IIntegrationEventBus, IntegrationEventBusRabbitMQ>(sp =>
         {
-            var rabbitMQPersistentConnection = serviceProvider.GetRequiredService<IRabbitMQPersistentConnection>();
-            var logger = serviceProvider.GetRequiredService<ILogger<IntegrationEventBusRabbitMQ>>();
-            var subsManager = serviceProvider.GetRequiredService<ISubscriptionsManager>();
+            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var logger = sp.GetRequiredService<ILogger<IntegrationEventBusRabbitMQ>>();
+            var subsManager = sp.GetRequiredService<ISubscriptionsManager>();
             return rabbitMQPersistentConnection is null || logger is null
                 ? throw new(nameof(rabbitMQPersistentConnection))
-                : new IntegrationEventBusRabbitMQ(rabbitMQPersistentConnection, logger, config.RetryCount, subsManager, serviceProvider);
+                : new IntegrationEventBusRabbitMQ(rabbitMQPersistentConnection, logger, config.RetryCount, subsManager, sp);
         });
         _ = service.AddSingleton<ISubscriptionsManager, RabbitMQSubscriptionsManager>();
         _ = service.AddHostedService<RabbitMQSubscribeService>();
