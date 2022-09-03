@@ -13,8 +13,8 @@ public static class IDCardValidation
     /// <returns></returns>  
     public static bool CheckIDCard(this string idno) => idno.Length switch
     {
-        18 => CheckIDCard18(idno),
-        15 => CheckIDCard15(idno),
+        18 => CheckIDCard18(idno.ToUpper()),
+        15 => CheckIDCard15(idno.ToUpper()),
         _ => false
     };
 
