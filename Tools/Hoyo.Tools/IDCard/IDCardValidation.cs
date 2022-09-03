@@ -13,8 +13,8 @@ public static class IDCardValidation
     /// <returns></returns>  
     public static bool CheckIDCard(this string idno) => idno.Length switch
     {
-        18 => CheckIDCard18(idno),
-        15 => CheckIDCard15(idno),
+        18 => CheckIDCard18(idno.ToUpper()),
+        15 => CheckIDCard15(idno.ToUpper()),
         _ => false
     };
 
@@ -36,7 +36,6 @@ public static class IDCardValidation
             sum += Wi[i] * int.Parse(Ai[i].ToString());
         }
         _ = Math.DivRem(sum, 11, out var y);
-        Console.WriteLine($"校验位应为:{verifyCode[y]},传入的为:{idno[17..]}");
         return verifyCode[y] == idno[17..];
     }
     /// <summary>  
