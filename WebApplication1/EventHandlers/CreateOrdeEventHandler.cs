@@ -2,7 +2,7 @@
 using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.EventBus;
 
-namespace example.net7.api.EventHandlers;
+namespace WebApplication1.EventHandlers;
 
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
 public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent>
@@ -15,7 +15,7 @@ public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent
 
     public Task HandleAsync(CreateOrderEvent @event)
     {
-        _logger.LogInformation("CreateOrderIntegrationEvent_{event}-----{date}", @event.Message, DateTime.Now);
+        _logger.LogInformation("CreateOrderIntegrationEvent2_{event}-----{date}", @event.Message, DateTime.Now);
         return Task.CompletedTask;
     }
 }

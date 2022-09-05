@@ -1,4 +1,5 @@
-﻿using example.net7.api.EventHandlers;
+﻿using CustomEvent;
+using example.net7.api.EventHandlers;
 using Hoyo.EventBus;
 using Microsoft.AspNetCore.Mvc;
 

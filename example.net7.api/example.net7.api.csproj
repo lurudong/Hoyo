@@ -20,6 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\CustomEvent\CustomEvent.csproj" />
 		<ProjectReference Include="..\EventBus\Hoyo.EventBus.RabbitMQ\Hoyo.EventBus.RabbitMQ.csproj" />
 		<ProjectReference Include="..\Framework\Hoyo.AutoDependencyInjectionModule\Hoyo.AutoDependencyInjectionModule.csproj" />
 		<ProjectReference Include="..\Framework\Hoyo.Framework.NativeAssets\Hoyo.Framework.NativeAssets.csproj" />

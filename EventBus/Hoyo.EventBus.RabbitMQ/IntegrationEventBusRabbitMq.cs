@@ -176,15 +176,18 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             if (eventType is null) continue;
             CheckEventType(eventType);
             CheckHandlerType(handlerType);
-            var rabbitMqAttribute = eventType.GetCustomAttribute<RabbitMQAttribute>();
-            if (rabbitMqAttribute is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
+            var rabbitmqattrs = eventType.GetCustomAttributes<RabbitMQAttribute>();
+            if (rabbitmqattrs is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
             _ = Task.Factory.StartNew(() =>
             {
-                using var consumerChannel = CreateConsumerChannel(rabbitMqAttribute, eventType);
-                var eventName = _subsManager.GetEventKey(eventType);
-                DoInternalSubscription(eventName, rabbitMqAttribute, consumerChannel);
-                _subsManager.AddSubscription(eventType, handlerType);
-                StartBasicConsume(eventType, rabbitMqAttribute, consumerChannel);
+                foreach (var rabbitmqattr in rabbitmqattrs)
+                {
+                    using var consumerChannel = CreateConsumerChannel(rabbitmqattr, eventType);
+                    var eventName = _subsManager.GetEventKey(eventType);
+                    DoInternalSubscription(eventName, rabbitmqattr, consumerChannel);
+                    _subsManager.AddSubscription(eventType, handlerType);
+                    StartBasicConsume(eventType, rabbitmqattr, consumerChannel);
+                }
             });
         }
     }
