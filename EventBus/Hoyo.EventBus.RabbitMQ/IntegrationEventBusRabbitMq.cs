@@ -66,11 +66,11 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, arguments: args);
         //创建队列
         //channel.QueueDeclare(queue: rabbitMQAttribute.Queue, durable: false);
-        if (!string.IsNullOrEmpty(rabbitMqAttribute.RoutingKey) && !string.IsNullOrEmpty(rabbitMqAttribute.Queue))
-        {
-            //通过RoutingKey将队列绑定交换机
-            channel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
-        }
+        //if (!string.IsNullOrEmpty(rabbitMqAttribute.RoutingKey) && !string.IsNullOrEmpty(rabbitMqAttribute.Queue))
+        //{
+        //    //通过RoutingKey将队列绑定交换机
+        //    channel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
+        //}
         policy.Execute(() =>
         {
             properties.DeliveryMode = 2;
@@ -100,7 +100,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var rabbitMqAttribute = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitMqAttribute is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitMqAttribute.Queue)) rabbitMqAttribute.Queue = type.Name;
-        if (rabbitMqAttribute.Type != EExchange.DelayedMessage.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.DelayedMessage}");
+        if (rabbitMqAttribute.Type != EExchange.DelayedMsg.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.DelayedMsg}");
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -115,14 +115,14 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             { "x-delayed-type", "direct" } //x-delayed-type必须加
         });
         //创建延时消息队列
-        _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
+        //_ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         //创建队列
         //channel.QueueDeclare(queue: rabbitMQAttribute.Queue, durable: false);
-        if (!string.IsNullOrEmpty(rabbitMqAttribute.RoutingKey) && !string.IsNullOrEmpty(rabbitMqAttribute.Queue))
-        {
-            //通过RoutingKey将队列绑定交换机
-            channel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
-        }
+        //if (!string.IsNullOrEmpty(rabbitMqAttribute.RoutingKey) && !string.IsNullOrEmpty(rabbitMqAttribute.Queue))
+        //{
+        //    //通过RoutingKey将队列绑定交换机
+        //    channel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
+        //}
         policy.Execute(() =>
         {
             properties.DeliveryMode = 2;
@@ -189,6 +189,16 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         }
     }
 
+    private void DoInternalSubscription(string eventName, RabbitMQAttribute rabbitMqAttribute, IModel consumerChannel)
+    {
+        var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
+        if (!containsKey)
+        {
+            if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
+            consumerChannel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
+        }
+    }
+
     /// <summary>
     /// 创建通道
     /// </summary>
@@ -200,7 +210,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var channel = _persistentConnection.CreateModel();
         var args = eventType.GetArgAttributes();
         var success = args.TryGetValue("x-delayed-type", out _);
-        if (!success && rabbitMqAttribute.Type == EExchange.DelayedMessage.ToDescription())
+        if (!success && rabbitMqAttribute.Type == EExchange.DelayedMsg.ToDescription())
         {
             args.Add("x-delayed-type", "direct");//x-delayed-type必须加
         }
@@ -277,16 +287,6 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             }
         }
         else _logger.LogWarning("没有订阅RabbitMQ事件: {EventName}", eventName);
-    }
-
-    private void DoInternalSubscription(string eventName, RabbitMQAttribute rabbitMqAttribute, IModel consumerChannel)
-    {
-        var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
-        if (!containsKey)
-        {
-            if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
-            consumerChannel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
-        }
     }
 
     private void SubsManager_OnEventRemoved(object? sender, EventRemovedEventArgs args)
