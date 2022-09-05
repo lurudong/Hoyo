@@ -10,9 +10,9 @@ public class HoyoEventBusRabbitMQModule : AppModule
         context.Services.AddEventBusRabbitMQ(x =>
         {
             x.UserName = "admin";
-            x.Host = "222.83.110.103";
-            x.Port = 40004;
-            x.PassWord = "&oneblogs789";
+            x.Host = "117.190.71.69";
+            x.Port = 5672;
+            x.PassWord = "dqsf2987";
         });
     }
 }
