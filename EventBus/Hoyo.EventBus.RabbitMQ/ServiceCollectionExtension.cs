@@ -6,23 +6,23 @@ namespace Hoyo.EventBus.RabbitMQ;
 
 public static class ServiceCollectionExtension
 {
-    public static IServiceCollection AddEventBusRabbitMQ(this IServiceCollection service, Action<RabbitMQConfig> action)
+    public static void AddEventBusRabbitMQ(this IServiceCollection service, Action<RabbitMQConfig>? action = null)
     {
         RabbitMQConfig config = new();
-        action.Invoke(config);
+        action?.Invoke(config);
         _ = service.AddRabbitMQPersistentConnection(config);
         _ = service.AddSingleton<IIntegrationEventBus, IntegrationEventBusRabbitMQ>(sp =>
         {
-            var rabbitMQPersistentConnection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
+            var rabbitmqconn = sp.GetRequiredService<IRabbitMQPersistentConnection>();
             var logger = sp.GetRequiredService<ILogger<IntegrationEventBusRabbitMQ>>();
             var subsManager = sp.GetRequiredService<ISubscriptionsManager>();
-            return rabbitMQPersistentConnection is null || logger is null
-                ? throw new(nameof(rabbitMQPersistentConnection))
-                : new IntegrationEventBusRabbitMQ(rabbitMQPersistentConnection, logger, config.RetryCount, subsManager, sp);
+            return rabbitmqconn is null || logger is null
+                ? throw new(nameof(rabbitmqconn))
+                : new IntegrationEventBusRabbitMQ(rabbitmqconn, logger, config.RetryCount, subsManager, sp);
         });
         _ = service.AddSingleton<ISubscriptionsManager, RabbitMQSubscriptionsManager>();
         _ = service.AddHostedService<RabbitMQSubscribeService>();
-        return service;
+        //return service;
     }
 
     private static IServiceCollection AddRabbitMQPersistentConnection(this IServiceCollection service, RabbitMQConfig config)

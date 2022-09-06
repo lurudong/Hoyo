@@ -43,10 +43,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.EventBus.RabbitMQ", "E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hoyo.Mongo.Extension", "Mongo\Hoyo.Mongo.Extension\Hoyo.Mongo.Extension.csproj", "{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{2CA9BDE4-0F8C-497F-ABFA-215F246A3723}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomEvent", "CustomEvent\CustomEvent.csproj", "{4737EFFB-EB37-4B8B-9213-2C5AAC2414B9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,14 +109,6 @@ Global
 		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E274F8EB-536A-41C3-B5F8-A6EDA1AEA6DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2CA9BDE4-0F8C-497F-ABFA-215F246A3723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2CA9BDE4-0F8C-497F-ABFA-215F246A3723}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2CA9BDE4-0F8C-497F-ABFA-215F246A3723}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2CA9BDE4-0F8C-497F-ABFA-215F246A3723}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4737EFFB-EB37-4B8B-9213-2C5AAC2414B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4737EFFB-EB37-4B8B-9213-2C5AAC2414B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4737EFFB-EB37-4B8B-9213-2C5AAC2414B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4737EFFB-EB37-4B8B-9213-2C5AAC2414B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

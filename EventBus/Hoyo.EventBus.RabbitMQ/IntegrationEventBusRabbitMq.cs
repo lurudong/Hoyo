@@ -100,7 +100,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var rabbitmqattr = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitmqattr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
         if (string.IsNullOrEmpty(rabbitmqattr.Queue)) rabbitmqattr.Queue = type.Name;
-        if (rabbitmqattr.Type != EExchange.DelayedMsg.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.DelayedMsg}");
+        if (rabbitmqattr.Type != EExchange.Delayed.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.Delayed}");
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -213,7 +213,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var channel = _persistentConnection.CreateModel();
         var args = eventType.GetArgAttributes();
         var success = args.TryGetValue("x-delayed-type", out _);
-        if (!success && rabbitMqAttribute.Type == EExchange.DelayedMsg.ToDescription())
+        if (!success && rabbitMqAttribute.Type == EExchange.Delayed.ToDescription())
         {
             args.Add("x-delayed-type", "direct");//x-delayed-type必须加
         }

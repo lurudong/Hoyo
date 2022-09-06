@@ -1,8 +1,15 @@
-﻿using CustomEvent;
-using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
+﻿using Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 using Hoyo.EventBus;
+using Hoyo.EventBus.RabbitMQ.Attributes;
+using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
+
+[RabbitMQ("hoyo.test", EExchange.Routing, "", "orderqueue2")]
+public class CreateOrderEvent : IntegrationEvent
+{
+    public string Message { get; set; } = default!;
+}
 
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
 public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent>
