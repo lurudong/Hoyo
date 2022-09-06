@@ -5,24 +5,24 @@ using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ("hoyo.test", EExchange.Routing, "", "orderqueue2")]
-public class CreateOrderEvent : IntegrationEvent
+[RabbitMQ("hoyo.test", EExchange.Routing, "test", "orderqueue2")]
+public class TestEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;
 }
 
 [DependencyInjection(ServiceLifetime.Transient, AddSelf = true)]
-public class CreateOrderEventHandler : IIntegrationEventHandler<CreateOrderEvent>
+public class TestEventHandler : IIntegrationEventHandler<TestEvent>
 {
-    private readonly ILogger<CreateOrderEventHandler> _logger;
-    public CreateOrderEventHandler(ILogger<CreateOrderEventHandler> logger)
+    private readonly ILogger<TestEventHandler> _logger;
+    public TestEventHandler(ILogger<TestEventHandler> logger)
     {
         _logger = logger;
     }
 
-    public Task HandleAsync(CreateOrderEvent @event)
+    public Task HandleAsync(TestEvent @event)
     {
-        _logger.LogInformation("CreateOrderIntegrationEvent_{event}-----{date}", @event.Message, DateTime.Now);
+        _logger.LogInformation("TestEvent_{event}-----{date}", @event.Message, DateTime.Now);
         return Task.CompletedTask;
     }
 }
