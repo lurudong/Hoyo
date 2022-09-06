@@ -3,7 +3,10 @@ using Hoyo.Extensions;
 
 namespace Hoyo.EventBus.RabbitMQ.Attributes;
 
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+/// <summary>
+/// 当同一个队列应用多个特性的时候,务必使用Publish交换机模式
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RabbitMQAttribute : Attribute
 {
     public RabbitMQAttribute(string exchange, EExchange exchangeType, string routingKey, string? queue = null)
@@ -12,7 +15,6 @@ public class RabbitMQAttribute : Attribute
         Type = exchangeType.ToDescription() ?? "direct";
         RoutingKey = routingKey;
         Queue = queue;
-        //Args = args ?? new Dictionary<string, object>();
     }
     /// <summary>
     /// 交换机

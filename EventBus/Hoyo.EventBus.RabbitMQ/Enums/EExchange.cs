@@ -9,8 +9,18 @@ public enum EExchange
     [Description("direct")]
     Routing,
     /// <summary>
+    /// 发布/订阅模式
+    /// </summary>
+    [Description("fanout")]
+    Publish,
+    /// <summary>
+    /// 主题模式
+    /// </summary>
+    [Description("topic")]
+    Topic,
+    /// <summary>
     /// 延时x-delayed-message模式
     /// </summary>
     [Description("x-delayed-message")]
-    DelayedMsg
+    Delayed
 }
