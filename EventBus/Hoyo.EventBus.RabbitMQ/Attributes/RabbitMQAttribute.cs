@@ -9,12 +9,13 @@ namespace Hoyo.EventBus.RabbitMQ.Attributes;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class RabbitMQAttribute : Attribute
 {
-    public RabbitMQAttribute(string exchange, EExchange exchangeType, string routingKey, string? queue = null)
+    public RabbitMQAttribute(string exchange, EExchange exchangeType, string routingKey, string? queue = null, bool enable = true)
     {
         Exchange = exchange;
         Type = exchangeType.ToDescription() ?? "direct";
         RoutingKey = routingKey;
         Queue = queue;
+        Enable = enable;
     }
     /// <summary>
     /// 交换机
@@ -32,4 +33,8 @@ public class RabbitMQAttribute : Attribute
     /// 队列名称《队列名称和路由键配合使用》
     /// </summary>
     public string? Queue { get; set; }
+    /// <summary>
+    /// 是否启用队列
+    /// </summary>
+    public bool Enable { get; set; } = true;
 }
