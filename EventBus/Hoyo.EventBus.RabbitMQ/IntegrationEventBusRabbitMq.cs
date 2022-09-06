@@ -39,9 +39,9 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// 发布消息
     /// </summary>
     /// <param name="event"></param>
-    /// <typeparam name="TEvent"></typeparam>
+    /// <typeparam name="T"></typeparam>
     /// <exception cref="ArgumentNullException"></exception>
-    public void Publish<TEvent>(IIntegrationEvent @event) where TEvent : IIntegrationEvent
+    public void Publish<T>(T @event) where T : IIntegrationEvent
     {
         if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
         var type = @event.GetType();
@@ -52,6 +52,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
         var rabbitmqattr = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitmqattr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
+        if (!rabbitmqattr.Enable) return;
         if (string.IsNullOrEmpty(rabbitmqattr.Queue)) rabbitmqattr.Queue = type.Name;
         using var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
@@ -88,7 +89,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// <typeparam name="TEvent"></typeparam>
     /// <param name="event"></param>
     /// <param name="ttl"></param>
-    public void PublishWithTTL<TEvent>(IIntegrationEvent @event, uint ttl) where TEvent : IIntegrationEvent
+    public void Publish<T>(T @event, uint ttl) where T : IIntegrationEvent
     {
         if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
         var type = @event.GetType();
@@ -99,6 +100,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
         var rabbitmqattr = type.GetCustomAttribute<RabbitMQAttribute>();
         if (rabbitmqattr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
+        if (!rabbitmqattr.Enable) return;
         if (string.IsNullOrEmpty(rabbitmqattr.Queue)) rabbitmqattr.Queue = type.Name;
         if (rabbitmqattr.Type != EExchange.Delayed.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.Delayed}");
         using var channel = _persistentConnection.CreateModel();
@@ -176,18 +178,16 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             if (eventType is null) continue;
             CheckEventType(eventType);
             CheckHandlerType(handlerType);
-            var rabbitmqattrs = eventType.GetCustomAttributes<RabbitMQAttribute>();
-            if (rabbitmqattrs is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
+            var rabbitmqattr = eventType.GetCustomAttribute<RabbitMQAttribute>();
+            if (rabbitmqattr is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
+            if (!rabbitmqattr.Enable) continue;
             _ = Task.Factory.StartNew(() =>
             {
-                foreach (var rabbitmqattr in rabbitmqattrs)
-                {
-                    using var consumerChannel = CreateConsumerChannel(rabbitmqattr, eventType);
-                    var eventName = _subsManager.GetEventKey(eventType);
-                    DoInternalSubscription(eventName, rabbitmqattr, consumerChannel);
-                    _subsManager.AddSubscription(eventType, handlerType);
-                    StartBasicConsume(eventType, rabbitmqattr, consumerChannel);
-                }
+                using var consumerChannel = CreateConsumerChannel(rabbitmqattr, eventType);
+                var eventName = _subsManager.GetEventKey(eventType);
+                DoInternalSubscription(eventName, rabbitmqattr, consumerChannel);
+                _subsManager.AddSubscription(eventType, handlerType);
+                StartBasicConsume(eventType, rabbitmqattr, consumerChannel);
             });
         }
     }
