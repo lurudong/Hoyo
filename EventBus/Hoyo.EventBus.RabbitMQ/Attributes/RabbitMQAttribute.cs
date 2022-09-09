@@ -4,9 +4,9 @@ using Hoyo.Extensions;
 namespace Hoyo.EventBus.RabbitMQ.Attributes;
 
 /// <summary>
-/// 当同一个队列应用多个特性的时候,务必使用Publish交换机模式
+/// 应用交换机队列等参数
 /// </summary>
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class RabbitMQAttribute : Attribute
 {
     public RabbitMQAttribute(string exchange, EExchange exchangeType, string routingKey, string? queue = null, bool enable = true)

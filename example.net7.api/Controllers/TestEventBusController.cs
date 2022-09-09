@@ -28,12 +28,15 @@ public class TestEventBusController : ControllerBase
         var ttl = rand.Next(1000, 10000);
         var ttlobj = new DelayedMessageEvent() { Message = $"延迟{ttl}毫秒,当前时间{DateTime.Now:yyyy-MM-dd HH:mm:ss},猛不起来了" };
         _integrationEventBus.Publish(ttlobj, (uint)ttl);
+        _integrationEventBus.Publish(ttlobj);
     }
 
     [HttpPost("TTLTest_1")]
     public void TTLTest_1()
     {
         var ttlobj = new DelayedMessageEvent2() { Message = $"大黄瓜0.5cm,当前时间{DateTime.Now:yyyy-MM-dd HH:mm:ss},猛不起来了" };
+        _integrationEventBus.Publish(ttlobj, 3000);
         _integrationEventBus.Publish(ttlobj);
+        _integrationEventBus.Publish(ttlobj, 7000);
     }
 }

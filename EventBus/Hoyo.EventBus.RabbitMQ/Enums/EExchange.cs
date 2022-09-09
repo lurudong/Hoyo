@@ -19,7 +19,7 @@ public enum EExchange
     [Description("topic")]
     Topic,
     /// <summary>
-    /// 延时x-delayed-message模式
+    /// 延时x-delayed-message模式,必须添加RabbitMQArg特性,键:x-delayed-type,值为RabbitMQ所支持的.
     /// </summary>
     [Description("x-delayed-message")]
     Delayed
