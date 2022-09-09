@@ -88,8 +88,8 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// </summary>
     /// <typeparam name="TEvent"></typeparam>
     /// <param name="event"></param>
-    /// <param name="ttl"></param>
-    public void Publish<T>(T @event, uint ttl) where T : IIntegrationEvent
+    /// <param name="ttl">若是未指定ttl以及RabbitMQHeader('x-delay',uint)特性将立即消费</param>
+    public void Publish<T>(T @event, uint ttl = 0) where T : IIntegrationEvent
     {
         if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
         var type = @event.GetType();
@@ -107,15 +107,16 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
         //延时时间从header赋值
-        properties.Headers = new Dictionary<string, object>()
-        {
-            { "x-delay", ttl }
-        };
+        var headers = @event.GetHeaderAttributes();
+        var xdelay = headers.TryGetValue("x-delay", out var delay);
+        headers["x-delay"] = xdelay && ttl == 0 && delay is not null ? delay! : ttl;
+        properties.Headers = headers;
+        // x-delayed-type 必须加
+        var args = @event.GetArgAttributes();
+        var hasdelayedtype = args.TryGetValue("x-delayed-type", out var delayedtype);
+        args["x-delayed-type"] = !hasdelayedtype || delayedtype is null ? "direct" : delayedtype!;
         ////创建延时交换机,type类型为x-delayed-message
-        channel.ExchangeDeclare(rabbitmqattr.Exchange, rabbitmqattr.Type, durable: true, autoDelete: false, arguments: new Dictionary<string, object>()
-        {
-            { "x-delayed-type", "direct" } //x-delayed-type必须加
-        });
+        channel.ExchangeDeclare(rabbitmqattr.Exchange, rabbitmqattr.Type, durable: true, autoDelete: false, arguments: args);
         //创建延时消息队列
         //_ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         //创建队列

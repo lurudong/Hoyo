@@ -7,12 +7,13 @@ public class HoyoEventBusRabbitMQModule : AppModule
 {
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        context.Services.AddEventBusRabbitMQ(x =>
+        context.Services.AddEventBusRabbitMQ(c =>
         {
-            x.UserName = "admin";
-            x.Host = "117.190.71.69";
-            x.Port = 5672;
-            x.PassWord = "dqsf2987";
+            c.UserName = "admin";
+            c.Host = "101.34.26.221";
+            c.Port = 40003;
+            c.PassWord = "&oneblogs789";
+            c.VirtualHost = "/";
         });
     }
 }
