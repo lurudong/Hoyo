@@ -14,7 +14,7 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
     private readonly int _retryCount;
     IConnection? _connection;
     bool _disposed;
-    readonly object sync_root = new();
+    private readonly SemaphoreSlim _connectionLock = new SemaphoreSlim(1, 1);
 
     public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<RabbitMQPersistentConnection> logger, int retryCount = 5)
     {
@@ -53,12 +53,13 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
     public bool TryConnect()
     {
         _logger.LogInformation("RabbitMQ客户端尝试连接");
-        lock (sync_root)
+        _connectionLock.Wait();
+        try
         {
             var policy = Policy.Handle<SocketException>()
-                .Or<BrokerUnreachableException>()
-                .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, time) => _logger.LogWarning(ex, "RabbitMQ客户端在{TimeOut}s超时后无法创建链接,({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message));
+               .Or<BrokerUnreachableException>()
+               .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+               (ex, time) => _logger.LogWarning(ex, "RabbitMQ客户端在{TimeOut}s超时后无法创建链接,({ExceptionMessage})", $"{time.TotalSeconds:n1}", ex.Message));
             _ = policy.Execute(() => _connection = _connectionFactory.CreateConnection());
             if (IsConnected && _connection is not null)
             {
@@ -74,6 +75,10 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
                 _logger.LogCritical("RabbitMQ连接不能被创建和打开");
                 return false;
             }
+        }
+        finally {
+
+            _connectionLock.Release();
         }
     }
 
