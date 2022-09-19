@@ -113,8 +113,8 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         properties.Headers = headers;
         // x-delayed-type 必须加
         var args = @event.GetArgAttributes();
-        var hasdelayedtype = args.TryGetValue("x-delayed-type", out var delayedtype);
-        args["x-delayed-type"] = !hasdelayedtype || delayedtype is null ? "direct" : delayedtype!;
+        var xdelayedtype = args.TryGetValue("x-delayed-type", out var delayedtype);
+        args["x-delayed-type"] = !xdelayedtype || delayedtype is null ? "direct" : delayedtype!;
         ////创建延时交换机,type类型为x-delayed-message
         channel.ExchangeDeclare(rabbitmqattr.Exchange, rabbitmqattr.Type, durable: true, autoDelete: false, arguments: args);
         //创建延时消息队列
