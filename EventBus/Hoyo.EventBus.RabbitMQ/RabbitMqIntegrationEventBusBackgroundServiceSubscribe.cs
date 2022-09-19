@@ -22,9 +22,14 @@ public class RabbitMQIntegrationEventBusBackgroundServiceSubscribe : BackgroundS
         var eventBus = scope.ServiceProvider.GetService<IIntegrationEventBus>();
         if (eventBus is null) throw new("RabbitMQ集成事件总线没有注册");
         eventBus.Subscribe();
-        while (true && !stoppingToken.IsCancellationRequested)
+        //这样不行？？、
+        while (!stoppingToken.IsCancellationRequested)
         {
             await Task.Delay(5000, stoppingToken);
         }
+        //while (true && !stoppingToken.IsCancellationRequested)
+        //{
+        //    await Task.Delay(5000, stoppingToken);
+        //}
     }
 }
