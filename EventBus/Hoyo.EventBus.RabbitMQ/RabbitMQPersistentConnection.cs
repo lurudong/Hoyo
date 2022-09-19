@@ -12,9 +12,9 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<RabbitMQPersistentConnection> _logger;
     private readonly int _retryCount;
-    IConnection? _connection;
-    bool _disposed;
-    private readonly SemaphoreSlim _connectionLock = new SemaphoreSlim(1, 1);
+    private IConnection? _connection;
+    private bool _disposed;
+    private readonly SemaphoreSlim _connectionLock = new(1, 1);
 
     public RabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<RabbitMQPersistentConnection> logger, int retryCount = 5)
     {
@@ -23,32 +23,11 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
         _retryCount = retryCount;
     }
 
-    public bool IsConnected => _connection != null && _connection.IsOpen && !_disposed;
+    public bool IsConnected => _connection is not null && _connection.IsOpen && !_disposed;
 
     public IModel CreateModel() => !IsConnected
             ? throw new InvalidOperationException("RabbitMQ连接失败")
             : _connection is null ? throw new InvalidOperationException("RabbitMQ连接未创建") : _connection.CreateModel();
-
-    public void Dispose()
-    {
-        if (_disposed) return;
-        _disposed = true;
-        if (_connection is not null)
-        {
-            try
-            {
-                _connection.ConnectionShutdown -= OnConnectionShutdown;
-                _connection.CallbackException -= OnCallbackException;
-                _connection.ConnectionBlocked -= OnConnectionBlocked;
-                _connection.Dispose();
-            }
-            catch (IOException ex)
-            {
-                _logger.LogCritical(message: "{message}", ex.Message);
-            }
-        }
-        GC.SuppressFinalize(this);
-    }
 
     public bool TryConnect()
     {
@@ -76,9 +55,9 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
                 return false;
             }
         }
-        finally {
-
-            _connectionLock.Release();
+        finally
+        {
+            _ = _connectionLock.Release();
         }
     }
 
@@ -101,5 +80,25 @@ public class RabbitMQPersistentConnection : IRabbitMQPersistentConnection
         if (_disposed) return;
         _logger.LogWarning("RabbitMQ连接处于关闭状态,正在尝试重新连接...");
         _ = TryConnect();
+    }
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+        if (_connection is not null)
+        {
+            try
+            {
+                _connection.ConnectionShutdown -= OnConnectionShutdown;
+                _connection.CallbackException -= OnCallbackException;
+                _connection.ConnectionBlocked -= OnConnectionBlocked;
+                _connection.Dispose();
+            }
+            catch (IOException ex)
+            {
+                _logger.LogCritical(message: "{message}", ex.Message);
+            }
+        }
+        GC.SuppressFinalize(this);
     }
 }

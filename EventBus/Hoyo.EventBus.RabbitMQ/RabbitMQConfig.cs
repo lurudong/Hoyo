@@ -2,10 +2,10 @@
 
 public class RabbitMQConfig
 {
-    public string Host { get; set; } = default!;
-    public string PassWord { get; set; } = default!;
-    public string UserName { get; set; } = default!;
-    public int RetryCount { get; set; } = default!;
+    public string Host { get; set; } = "localhost";
+    public string PassWord { get; set; } = "guest";
+    public string UserName { get; set; } = "guest";
+    public int RetryCount { get; set; } = 5;
     public int Port { get; set; } = 5672;
     public string VirtualHost { get; set; } = "/";
 }

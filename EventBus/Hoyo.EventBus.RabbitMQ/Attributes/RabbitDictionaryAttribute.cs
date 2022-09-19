@@ -9,6 +9,5 @@ public class RabbitDictionaryAttribute : Attribute
         Value = value;
     }
     public string Key { get; }
-
     public object Value { get; }
 }

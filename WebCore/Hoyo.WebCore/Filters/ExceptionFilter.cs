@@ -13,7 +13,7 @@ public class ExceptionFilter : ExceptionFilterAttribute
     public ExceptionFilter(ILogger<ExceptionFilter> logger) => _logger = logger;
     public override Task OnExceptionAsync(ExceptionContext context)
     {
-        _logger.LogError("{stacktrace}", context.Exception.StackTrace);
+        _logger.LogError("{stacktrace}", context.Exception.ToString());
         context.Result = new ObjectResult(new
         {
             StatusCode = HttpStatusCode.InternalServerError,
