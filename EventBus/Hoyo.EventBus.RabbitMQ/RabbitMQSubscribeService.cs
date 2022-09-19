@@ -21,6 +21,9 @@ internal class RabbitMQSubscribeService : BackgroundService
         var eventBus = scope.ServiceProvider.GetService<IIntegrationEventBus>();
         if (eventBus is null) throw new("RabbitMQ集成事件总线没有注册");
         eventBus.Subscribe();
-        await Task.CompletedTask;
+        while (!cancelToken.IsCancellationRequested)
+        {
+            await Task.Delay(5000, cancelToken);
+        }
     }
 }
