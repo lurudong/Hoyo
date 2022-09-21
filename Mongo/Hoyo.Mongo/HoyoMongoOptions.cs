@@ -12,6 +12,10 @@ public class HoyoMongoOptions
     /// 是否使用本库提供的默认转换,默认为true
     /// </summary>
     public bool UseDefalutConventionRegistryConfig = true;
+    /// <summary>
+    /// 是否是第一次注册,重复注册会报错.
+    /// </summary>
+    public bool RegistryPackFirst = true;
 
     internal Dictionary<string, ConventionPack> ConventionRegistry { get; set; } = new()
     {

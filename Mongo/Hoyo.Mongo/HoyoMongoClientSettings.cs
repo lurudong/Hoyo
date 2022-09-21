@@ -37,5 +37,5 @@ public class HoyoMongoSettings
     /// <summary>
     /// 验证地址是否存在或数据库名称不为空
     /// </summary>
-    public bool Validate => ServerAddresses.Count == 0;
+    internal bool Validate => ServerAddresses.Count == 0;
 }

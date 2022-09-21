@@ -10,6 +10,15 @@ public class DbContext : BaseDbContext
     public IMongoCollection<MongoTest> Test => _database!.GetCollection<MongoTest>("mongo.test");
 
 }
+
+public class DbContext2 : BaseDbContext
+{
+    /// <summary>
+    /// 作息时间管理
+    /// </summary>
+    public IMongoCollection<MongoTest> Test => _database!.GetCollection<MongoTest>("mongo.test2");
+
+}
 public class MongoTest
 {
     public string Id { get; set; } = string.Empty;

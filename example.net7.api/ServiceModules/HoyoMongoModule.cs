@@ -29,6 +29,20 @@ public class HoyoMongoModule : AppModule
                 }
             });
             op.UseDefalutConventionRegistryConfig = true;
+        }).AddMongoDbContext<DbContext2>(config, dboptions: op =>
+        {
+            op.RegistryPackFirst = false;
+            op.AppendConventionRegistry(new()
+            {
+                {
+                    "IdentityServer Mongo Conventions",
+                    new()
+                    {
+                        new IgnoreIfDefaultConvention(true)
+                    }
+                }
+            });
+            op.UseDefalutConventionRegistryConfig = true;
         });
     }
 }
