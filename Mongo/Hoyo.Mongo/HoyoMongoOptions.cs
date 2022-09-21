@@ -5,27 +5,27 @@ namespace Hoyo.Mongo;
 public class HoyoMongoOptions
 {
     /// <summary>
-    /// ConventionPackOptions Action
+    /// ObjectId到String转换的类型[该列表中的对象,不会将Id,ID字段转化为ObjectId类型.在数据库中存为字符串格式]
     /// </summary>
-    public Action<ConventionPackOptions>? ConventionPackOptionsAction { get; set; } = null;
+    public List<Type> ObjectIdToStringTypes { get; set; } = new();
     /// <summary>
-    /// 是否使用本库提供的默认转换,默认为true
+    /// 是否使用本库提供的默认转换,默认:true
+    /// 1.驼峰名称格式
+    /// 2.忽略代码中未定义的字段
+    /// 3._id映射为实体中的ID或者Id,反之亦然
+    /// 4.将枚举类型存储为字符串格式
     /// </summary>
-    public bool UseDefalutConventionRegistryConfig = true;
-    /// <summary>
-    /// 是否是第一次注册,重复注册会报错.
-    /// </summary>
-    public bool RegistryPackFirst = true;
+    public bool DefalutConventionRegistry = true;
 
     internal Dictionary<string, ConventionPack> ConventionRegistry { get; set; } = new()
     {
         {
-            HoyoStatic.HoyoPack,
+            $"{HoyoStatic.HoyoPack}-{Guid.NewGuid()}",
             new()
             {
                 new CamelCaseElementNameConvention(), // 驼峰名称格式
                 new IgnoreExtraElementsConvention(true), //
-                new NamedIdMemberConvention("Id","ID"), // _id映射为实体中的ID或者Id
+                new NamedIdMemberConvention("Id", "ID"), // _id映射为实体中的ID或者Id
                 new EnumRepresentationConvention(BsonType.String) // 将枚举类型存储为字符串格式
             }
         }

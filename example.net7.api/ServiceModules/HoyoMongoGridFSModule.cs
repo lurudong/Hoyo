@@ -16,7 +16,7 @@ public class HoyoMongoGridFSModule : AppModule
     {
         var db = context.Services.GetService<DbContext>() ?? throw new("MongoDB数据库服务不存在,若是不适用默认的数据库服务,可以创建新的数据库链接来使用GridFS");
 
-        _ = context.Services.AddHoyoGridFS(db._database, op =>
+        _ = context.Services.AddHoyoGridFS(db.Database, op =>
         {
             op.BusinessApp = "HoyoFS";
             op.Options = new()

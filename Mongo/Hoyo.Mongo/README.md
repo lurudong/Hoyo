@@ -31,7 +31,7 @@
 ```csharp
 using example.api;
 using Hoyo.Mongo;
-using Miracle.WebApi.Middlewares;
+using Hoyo.WebCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
