@@ -52,17 +52,20 @@ public class BaseDbContext
         hoyoOptions.ConventionPackOptionsAction?.Invoke(options);
         try
         {
-            if (!hoyoOptions.UseDefalutConventionRegistryConfig)
+            if (hoyoOptions.RegistryPackFirst)
             {
-                _ = hoyoOptions.ConventionRegistry.Remove(HoyoStatic.HoyoPack);
+                if (!hoyoOptions.UseDefalutConventionRegistryConfig)
+                {
+                    _ = hoyoOptions.ConventionRegistry.Remove(HoyoStatic.HoyoPack);
+                }
+                foreach (var item in hoyoOptions.ConventionRegistry)
+                {
+                    ConventionRegistry.Register(item.Key, item.Value, _ => true);
+                }
+                BsonSerializer.RegisterSerializer(typeof(DateTime), new DateTimeSerializer(DateTimeKind.Local));//to local time
+                BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));//decimal to decimal default
+                                                                                              //BsonSerializer.RegisterSerializer(new TimeOnlySerializer());
             }
-            foreach (var item in hoyoOptions.ConventionRegistry)
-            {
-                ConventionRegistry.Register(item.Key, item.Value, _ => true);
-            }
-            BsonSerializer.RegisterSerializer(typeof(DateTime), new DateTimeSerializer(DateTimeKind.Local));//to local time
-            BsonSerializer.RegisterSerializer(new DecimalSerializer(BsonType.Decimal128));//decimal to decimal default
-            //BsonSerializer.RegisterSerializer(new TimeOnlySerializer());
         }
         catch (Exception ex)
         {
