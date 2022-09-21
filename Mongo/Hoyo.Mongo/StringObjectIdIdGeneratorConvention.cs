@@ -8,7 +8,7 @@ namespace Hoyo.Mongo;
 /// <summary>
 /// map the [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId]
 /// </summary>
-public class StringObjectIdIdGeneratorConvention : ConventionBase, IPostProcessingConvention
+internal class StringObjectIdIdGeneratorConvention : ConventionBase, IPostProcessingConvention
 {
     public void PostProcess(BsonClassMap classMap)
     {

@@ -2,7 +2,9 @@
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
 using Hoyo.Mongo.Extension;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
+using MongoDB.Bson.Serialization.Serializers;
 
 namespace example.net7.api;
 
@@ -10,13 +12,13 @@ public class HoyoMongoModule : AppModule
 {
     public HoyoMongoModule()
     {
-        Enable = false;
+        Enable = !false;
     }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var config = context.Services.GetConfiguration();
 
-        _ = context.Services.AddTypeExtension().AddMongoDbContext<DbContext>(config, dboptions: op =>
+        context.Services.AddMongoDbContext<DbContext>("mongodb://bl:a123456@altzyxy.com:27010/test1?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
         {
             op.AppendConventionRegistry(new()
             {
@@ -28,10 +30,10 @@ public class HoyoMongoModule : AppModule
                     }
                 }
             });
-            op.UseDefalutConventionRegistryConfig = true;
-        }).AddMongoDbContext<DbContext2>(config, dboptions: op =>
+            op.DefalutConventionRegistry = true;
+        }).AddMongoDbContext<DbContext2>("mongodb://bl:a123456@altzyxy.com:27010/test2?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
         {
-            op.RegistryPackFirst = false;
+            op.DefalutConventionRegistry = true;
             op.AppendConventionRegistry(new()
             {
                 {
@@ -42,7 +44,8 @@ public class HoyoMongoModule : AppModule
                     }
                 }
             });
-            op.UseDefalutConventionRegistryConfig = true;
-        });
+            op.ObjectIdToStringTypes = new() { typeof(MongoTest) };
+        }).RegisterHoyoSerializer();
+        _ = context.Services.RegisterHoyoSerializer(new DoubleSerializer(BsonType.Double));
     }
 }

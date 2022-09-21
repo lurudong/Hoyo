@@ -14,11 +14,26 @@ public static class MongoServiceExtensions
     /// </summary>
     private static string ConnectionString(IConfiguration configuration)
     {
-        var connectionString = configuration["CONNECTIONSTRINGS_MONGO"];
-        if (string.IsNullOrWhiteSpace(connectionString)) connectionString = configuration.GetConnectionString("Mongo");
-        return string.IsNullOrWhiteSpace(connectionString)
-            ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsettings.json中不存在ConnectionStrings:Mongo配置")
-            : connectionString;
+        var connstr = configuration["CONNECTIONSTRINGS_MONGO"];
+        if (string.IsNullOrWhiteSpace(connstr)) connstr = configuration.GetConnectionString("Mongo");
+        return string.IsNullOrWhiteSpace(connstr)
+            ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsettings.json中不存在ConnectionStrings::Mongo配置")
+            : connstr;
+    }
+
+    /// <summary>
+    /// 通过默认连接字符串名称添加DbContext
+    /// </summary>
+    /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
+    /// <param name="services">IServiceCollection</param>
+    /// <param name="configuration">IConfiguration</param>
+    /// <param name="options">DbContextOptions</param>
+    /// <returns></returns>
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, IConfiguration configuration, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
+    {
+        var connstr = ConnectionString(configuration);
+        _ = services.AddMongoDbContext<T>(connstr, options);
+        return services;
     }
 
     /// <summary>
@@ -26,19 +41,16 @@ public static class MongoServiceExtensions
     /// </summary>
     /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
     /// <param name="services">IServiceCollection</param>
-    /// <param name="configuration">IConfiguration</param>
-    /// <param name="dboptions">DbContextOptions</param>
+    /// <param name="connstr">链接字符串</param>
+    /// <param name="options">DbContextOptions</param>
     /// <returns></returns>
-    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, IConfiguration configuration, Action<HoyoMongoOptions>? dboptions = null) where T : BaseDbContext
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, string connstr, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
-        var options = new HoyoMongoOptions();
-        dboptions?.Invoke(options);
-        var connectionString = ConnectionString(configuration);
-        BaseDbContext.RegistryConventionPack(options);
-        var db = BaseDbContext.CreateInstance<T>(connectionString);
-        _ = services.AddSingleton(db);
-        _ = services.AddSingleton(db._database);
-        _ = services.AddSingleton(db._client);
+        var dboptions = new HoyoMongoOptions();
+        options?.Invoke(dboptions);
+        BaseDbContext.RegistryConventionPack(dboptions);
+        var db = BaseDbContext.CreateInstance<T>(connstr);
+        _ = services.AddSingleton(db).AddSingleton(db.Database).AddSingleton(db.Client);
         return services;
     }
 
@@ -48,19 +60,17 @@ public static class MongoServiceExtensions
     /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
     /// <param name="services">IServiceCollection</param>
     /// <param name="settings">HoyoMongoClientSettings</param>
-    /// <param name="dboptions">DbContextOptions</param>
+    /// <param name="options">DbContextOptions</param>
     /// <returns></returns>
-    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, Action<HoyoMongoSettings> settings, Action<HoyoMongoOptions>? dboptions = null) where T : BaseDbContext
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, Action<HoyoMongoSettings> settings, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
-        var options = new HoyoMongoOptions();
+        var dboptions = new HoyoMongoOptions();
         var setting = new HoyoMongoSettings();
-        dboptions?.Invoke(options);
+        options?.Invoke(dboptions);
         settings.Invoke(setting);
-        BaseDbContext.RegistryConventionPack(options);
+        BaseDbContext.RegistryConventionPack(dboptions);
         var db = BaseDbContext.CreateInstance<T>(setting);
-        _ = services.AddSingleton(db);
-        _ = services.AddSingleton(db._database);
-        _ = services.AddSingleton(db._client);
+        _ = services.AddSingleton(db).AddSingleton(db.Database).AddSingleton(db.Client);
         return services;
     }
 }
