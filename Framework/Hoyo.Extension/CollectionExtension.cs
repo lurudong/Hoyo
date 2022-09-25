@@ -1,10 +1,9 @@
 ﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
 namespace Hoyo.Extensions;
 
-public static partial class CollectionExtension
+public static class CollectionExtension
 {
     /// <summary>
     /// 把集合转成SqlIn
@@ -24,7 +23,7 @@ public static partial class CollectionExtension
             return string.Empty;
         }
         enumerable.ToList().ForEach(o => _ = sb.Append($"{left}{o}{right}{separator}"));
-        return sb.ToString()?.TrimEnd($"{separator}".ToCharArray())!;
+        return sb.ToString().TrimEnd($"{separator}".ToCharArray());
     }
     /// <summary>
     /// WhereIf 扩展,可显著减少if的使用
@@ -34,56 +33,49 @@ public static partial class CollectionExtension
     /// <param name="predicate"></param>
     /// <param name="condition"></param>
     /// <returns></returns>
-    public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool condition) where TSource : IEnumerable
-    {
-        source.NotNullOrEmpty(nameof(source));
-        predicate.NotNull(nameof(predicate));
-        return condition ? source.Where(predicate) : source;
-    }
+    public static IEnumerable<TSource> WhereIf<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate, bool condition) where TSource : IEnumerable => condition ? source.Where(predicate) : source;
 
     /// <summary>
     /// 将列表转换为树形结构（泛型无限递归）
     /// </summary>
     /// <typeparam name="T">类型</typeparam>
     /// <param name="list">数据</param>
-    /// <param name="rootwhere">根条件</param>
-    /// <param name="childswhere">节点条件</param>
-    /// <param name="addchilds">添加子节点</param>
+    /// <param name="rootWhere">根条件</param>
+    /// <param name="childrenWhere">节点条件</param>
+    /// <param name="addChildren">添加子节点</param>
     /// <param name="entity"></param>
     /// <returns></returns>
-    public static List<T> ToTree<T>(this List<T> list, Func<T, T, bool> rootwhere, Func<T, T, bool> childswhere, Action<T, IEnumerable<T>> addchilds, T? entity = default)
+    public static List<T> ToTree<T>(this List<T> list, Func<T, T, bool> rootWhere, Func<T, T, bool> childrenWhere, Action<T, IEnumerable<T>> addChildren, T? entity = default)
     {
-        var treelist = new List<T>();
+        var treeList = new List<T>();
         //空树
-        if (list == null || list.Count == 0)
+        if (list.Count == 0)
         {
-            return treelist;
+            return treeList;
         }
-        if (!list.Any<T>(e => rootwhere(entity!, e)))
+        if (!list.Any(e => rootWhere(entity!, e)))
         {
-            return treelist;
+            return treeList;
         }
         //树根
-        if (list.Any<T>(e => rootwhere(entity!, e)))
+        if (list.Any(e => rootWhere(entity!, e)))
         {
-            treelist.AddRange(list.Where(e => rootwhere(entity!, e)));
+            treeList.AddRange(list.Where(e => rootWhere(entity!, e)));
         }
         //树叶
-        foreach (var item in treelist)
+        foreach (var item in treeList)
         {
-            if (list.Any(e => childswhere(item, e)))
+            if (!list.Any(e => childrenWhere(item, e))) continue;
+            var nodeData = list.Where(e => childrenWhere(item, e)).ToList();
+            foreach (var child in nodeData)
             {
-                var nodedata = list.Where(e => childswhere(item, e)).ToList();
-                foreach (var child in nodedata)
-                {
-                    //添加子集
-                    var data = list.ToTree(childswhere, childswhere, addchilds, child);
-                    addchilds(child, data);
-                }
-                addchilds(item, nodedata);
+                //添加子集
+                var data = list.ToTree(childrenWhere, childrenWhere, addChildren, child);
+                addChildren(child, data);
             }
+            addChildren(item, nodeData);
         }
-        return treelist;
+        return treeList;
     }
 
     /// <summary>
@@ -93,7 +85,7 @@ public static partial class CollectionExtension
     /// <param name="source"></param>
     /// <param name="item"></param>
     /// <returns></returns>
-    public static bool AddIfNotContains<T>([NotNull] this ICollection<T> source, T item)
+    public static bool AddIfNotContains<T>(this ICollection<T> source, T item)
     {
         if (source.Contains(item))
         {

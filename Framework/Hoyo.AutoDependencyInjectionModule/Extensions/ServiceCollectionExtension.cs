@@ -51,7 +51,7 @@ public static class ServiceCollectionExtension
     /// <returns>services</returns>
     public static IServiceCollection RegisterAssemblyTypes(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
     {
-        if (assemblies is null || assemblies.Length == 0)
+        if (assemblies.Length == 0)
         {
             assemblies = ReflectHelper.GetAssemblies();
         }
@@ -62,7 +62,7 @@ public static class ServiceCollectionExtension
         }
         foreach (var type in types)
         {
-            services.Add(new ServiceDescriptor(type, type, serviceLifetime));
+            services.Add(new(type, type, serviceLifetime));
         }
         return services;
     }
@@ -106,20 +106,20 @@ public static class ServiceCollectionExtension
     /// <returns>services</returns>
     public static IServiceCollection RegisterAssemblyTypesAsImplementedInterfaces(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
     {
-        if (assemblies is null || assemblies?.Length == 0)
+        if (assemblies.Length == 0)
         {
             assemblies = ReflectHelper.GetAssemblies();
         }
-        var types = assemblies?.Select(assembly => assembly.GetExportedTypes()).SelectMany(t => t);
+        var types = assemblies.Select(assembly => assembly.GetExportedTypes()).SelectMany(t => t);
         if (typesFilter is not null)
         {
-            types = types?.Where(typesFilter);
+            types = types.Where(typesFilter);
         }
-        foreach (var type in types!)
+        foreach (var type in types)
         {
             foreach (var implementedInterface in type.GetImplementedInterfaces())
             {
-                services.Add(new ServiceDescriptor(implementedInterface, type, serviceLifetime));
+                services.Add(new(implementedInterface, type, serviceLifetime));
             }
         }
         return services;
@@ -134,12 +134,9 @@ public static class ServiceCollectionExtension
     /// <returns>services</returns>
     public static IServiceCollection RegisterTypeAsImplementedInterfaces(this IServiceCollection services, Type type, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
     {
-        if (type is not null)
+        foreach (var interfaceType in type.GetImplementedInterfaces())
         {
-            foreach (var interfaceType in type.GetImplementedInterfaces())
-            {
-                services.Add(new ServiceDescriptor(interfaceType, type, serviceLifetime));
-            }
+            services.Add(new(interfaceType, type, serviceLifetime));
         }
         return services;
     }
@@ -166,12 +163,9 @@ public static class ServiceCollectionExtension
     public static TServiceType GetOrAddSingletonService<TServiceType, TImplementation>(this IServiceCollection services) where TServiceType : class where TImplementation : class, TServiceType
     {
         var type = services.GetSingletonInstanceOrNull<TServiceType>();
-        if (type is null)
-        {
-            var provider = services.BuildServiceProvider();
-            return (TServiceType)provider.GetInstance(new ServiceDescriptor(typeof(TServiceType), typeof(TImplementation), ServiceLifetime.Singleton))!;
-        }
-        return type;
+        if (type is not null) return type;
+        var provider = services.BuildServiceProvider();
+        return (TServiceType)provider.GetInstance(new(typeof(TServiceType), typeof(TImplementation), ServiceLifetime.Singleton))!;
     }
 
     /// <summary>
@@ -181,13 +175,11 @@ public static class ServiceCollectionExtension
 
     public static TServiceType GetOrAddSingletonService<TServiceType>(this IServiceCollection services, Func<TServiceType> factory) where TServiceType : class
     {
-        var servciceType = services.GetSingletonInstanceOrNull<TServiceType>();
-        if (servciceType is null)
-        {
-            servciceType = factory();
-            _ = services.AddSingleton<TServiceType>(servciceType);
-        }
-        return servciceType;
+        var serviceType = services.GetSingletonInstanceOrNull<TServiceType>();
+        if (serviceType is not null) return serviceType;
+        serviceType = factory();
+        _ = services.AddSingleton(serviceType);
+        return serviceType;
     }
 
     public static IConfiguration GetConfiguration(this IServiceCollection services) => services.GetBuildService<IConfiguration>() ?? throw new("未找到IConfiguration服务");
@@ -244,20 +236,15 @@ public static class ServiceCollectionExtension
                 .GetInterfaces()
                 .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
                                      i.GetGenericTypeDefinition() == typeof(IServiceProviderFactory<>));
-
-            if (factoryInterface is null)
-            {
-                continue;
-            }
+            if (factoryInterface is null) continue;
             var containerBuilderType = factoryInterface.GenericTypeArguments[0];
-            return (IServiceProvider)typeof(HoyoExtension)
-                .GetTypeInfo()?
-                .GetMethods()?
-                .Single(m => m.Name == nameof(BuildServiceProviderFromFactory) && m.IsGenericMethod)?
-                .MakeGenericMethod(containerBuilderType)?
+            return (IServiceProvider)typeof(ServiceCollectionExtension)
+                .GetTypeInfo()
+                .GetMethods()
+                .Single(m => m.Name == nameof(BuildServiceProviderFromFactory) && m.IsGenericMethod)
+                .MakeGenericMethod(containerBuilderType)
                 .Invoke(null, new object[] { services, null! })!;
         }
-
         return services.BuildServiceProvider();
     }
 

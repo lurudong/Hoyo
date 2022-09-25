@@ -1,7 +1,6 @@
 ﻿using Hoyo.EventBus.RabbitMQ.Attributes;
 using Hoyo.EventBus.RabbitMQ.Enums;
 using Hoyo.EventBus.RabbitMQ.Extensions;
-using Hoyo.Extension;
 using Hoyo.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -16,21 +15,21 @@ using System.Text.Json;
 
 namespace Hoyo.EventBus.RabbitMQ;
 
-public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
+public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
 {
-    private readonly IRabbitMQPersistentConnection _persistentConnection;
-    private readonly ILogger<IntegrationEventBusRabbitMQ> _logger;
+    private readonly IRabbitPersistentConnection _persistentConnection;
+    private readonly ILogger<IntegrationEventBusRabbit> _logger;
     private readonly int _retryCount;
     private readonly ISubscriptionsManager _subsManager;
     private readonly IServiceProvider _serviceProvider;
-    private readonly string _handleName = nameof(IIntegrationEventHandler<IIntegrationEvent>.HandleAsync);
-    private bool _isDisposed = false;
-    public IntegrationEventBusRabbitMQ(IRabbitMQPersistentConnection persistentConnection, ILogger<IntegrationEventBusRabbitMQ> logger, int retryCount, ISubscriptionsManager subsManager, IServiceProvider serviceProvider)
+    private const string HandleName = nameof(IIntegrationEventHandler<IIntegrationEvent>.HandleAsync);
+    private bool _isDisposed;
+    public IntegrationEventBusRabbit(IRabbitPersistentConnection persistentConnection, ILogger<IntegrationEventBusRabbit> logger, int retryCount, ISubscriptionsManager subsManager, IServiceProvider serviceProvider)
     {
         _persistentConnection = persistentConnection;
         _logger = logger;
         _retryCount = retryCount;
-        _subsManager = subsManager ?? new RabbitMQSubscriptionsManager();
+        _subsManager = subsManager;
         _serviceProvider = serviceProvider;
         _subsManager.OnEventRemoved += SubsManager_OnEventRemoved;
     }
@@ -50,11 +49,11 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, time) => _logger.LogWarning(ex, "无法发布事件: {EventId} 超时 {Timeout}s ({ExceptionMessage})", @event.EventId, $"{time.TotalSeconds:n1}", ex.Message));
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
-        var rabbitmqattr = type.GetCustomAttribute<RabbitMQAttribute>();
-        if (rabbitmqattr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
-        if (!rabbitmqattr.Enable) return;
-        if (string.IsNullOrEmpty(rabbitmqattr.Queue)) rabbitmqattr.Queue = type.Name;
-        using var channel = _persistentConnection.CreateModel();
+        var rabbitAttr = type.GetCustomAttribute<RabbitAttribute>();
+        if (rabbitAttr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitAttribute)}>,无法发布事件");
+        if (!rabbitAttr.Enable) return;
+        if (string.IsNullOrWhiteSpace(rabbitAttr.Queue)) rabbitAttr.Queue = type.Name;
+        var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
         var headers = @event.GetHeaderAttributes();
@@ -64,7 +63,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         }
         var args = @event.GetArgAttributes();
         //创建交换机
-        channel.ExchangeDeclare(rabbitmqattr.Exchange, rabbitmqattr.Type, durable: true, arguments: args);
+        channel.ExchangeDeclare(rabbitAttr.Exchange, rabbitAttr.Type, durable: true, arguments: args);
         //创建队列
         //channel.QueueDeclare(queue: rabbitMQAttribute.Queue, durable: false);
         //if (!string.IsNullOrEmpty(rabbitMqAttribute.RoutingKey) && !string.IsNullOrEmpty(rabbitMqAttribute.Queue))
@@ -76,7 +75,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitmqattr.Exchange, rabbitmqattr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
+            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
             {
                 WriteIndented = true
             }));
@@ -86,10 +85,10 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// <summary>
     /// 基于rabbitmq_delayed_message_exchange插件实现,使用前请确认已安装好插件,发布延时队列消息,需要RabbitMQ开启延时队列
     /// </summary>
-    /// <typeparam name="TEvent"></typeparam>
+    /// <typeparam name="T"></typeparam>
     /// <param name="event"></param>
     /// <param name="ttl">若是未指定ttl以及RabbitMQHeader('x-delay',uint)特性将立即消费</param>
-    public void Publish<T>(T @event, uint ttl = 0) where T : IIntegrationEvent
+    public void Publish<T>(T @event, uint ttl) where T : IIntegrationEvent
     {
         if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
         var type = @event.GetType();
@@ -98,25 +97,25 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, time) => _logger.LogWarning(ex, "无法发布事件: {EventId} 超时 {Timeout}s ({ExceptionMessage})", @event.EventId, $"{time.TotalSeconds:n1}", ex.Message));
         _logger.LogTrace("创建RabbitMQ通道来发布事件: {EventId} ({EventName})", @event.EventId, type.Name);
-        var rabbitmqattr = type.GetCustomAttribute<RabbitMQAttribute>();
-        if (rabbitmqattr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
-        if (!rabbitmqattr.Enable) return;
-        if (string.IsNullOrEmpty(rabbitmqattr.Queue)) rabbitmqattr.Queue = type.Name;
-        if (rabbitmqattr.Type != EExchange.Delayed.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.Delayed}");
-        using var channel = _persistentConnection.CreateModel();
+        var rabbitAttr = type.GetCustomAttribute<RabbitAttribute>();
+        if (rabbitAttr is null) throw new($"{nameof(@event)}未设置<{nameof(RabbitAttribute)}>,无法发布事件");
+        if (!rabbitAttr.Enable) return;
+        if (string.IsNullOrWhiteSpace(rabbitAttr.Queue)) rabbitAttr.Queue = type.Name;
+        if (rabbitAttr.Type != EExchange.Delayed.ToDescription()) throw new($"延时队列的交换机类型必须为{EExchange.Delayed}");
+        var channel = _persistentConnection.CreateModel();
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
         //延时时间从header赋值
         var headers = @event.GetHeaderAttributes();
-        var xdelay = headers.TryGetValue("x-delay", out var delay);
-        headers["x-delay"] = xdelay && ttl == 0 && delay is not null ? delay! : ttl;
+        var xDelay = headers.TryGetValue("x-delay", out var delay);
+        headers["x-delay"] = xDelay && ttl == 0 && delay is not null ? delay : ttl;
         properties.Headers = headers;
         // x-delayed-type 必须加
         var args = @event.GetArgAttributes();
-        var xdelayedtype = args.TryGetValue("x-delayed-type", out var delayedtype);
-        args["x-delayed-type"] = !xdelayedtype || delayedtype is null ? "direct" : delayedtype!;
+        var xDelayedType = args.TryGetValue("x-delayed-type", out var delayedType);
+        args["x-delayed-type"] = !xDelayedType || delayedType is null ? "direct" : delayedType;
         ////创建延时交换机,type类型为x-delayed-message
-        channel.ExchangeDeclare(rabbitmqattr.Exchange, rabbitmqattr.Type, durable: true, autoDelete: false, arguments: args);
+        channel.ExchangeDeclare(rabbitAttr.Exchange, rabbitAttr.Type, durable: true, autoDelete: false, arguments: args);
         //创建延时消息队列
         //_ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
         //创建队列
@@ -130,10 +129,11 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitmqattr.Exchange, rabbitmqattr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-            {
-                WriteIndented = true
-            }));
+            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey,
+                true, properties,
+                JsonSerializer.SerializeToUtf8Bytes(@event,
+                    @event.GetType(),
+                    new JsonSerializerOptions {WriteIndented = true}));
         });
     }
 
@@ -144,8 +144,8 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// <exception cref="ArgumentNullException"></exception>
     private static void CheckEventType(Type eventType)
     {
-        _ = Utils.NotNull(eventType is not null, nameof(eventType));
-        if (!eventType!.IsDeriveClassFrom<IIntegrationEvent>())
+        //_ = Utils.NotNull(eventType is not null, nameof(eventType));
+        if (!eventType.IsDeriveClassFrom<IIntegrationEvent>())
             throw new ArgumentNullException(nameof(eventType), $"{eventType}没有继承{nameof(IIntegrationEvent)}");
     }
 
@@ -156,7 +156,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
     /// <exception cref="ArgumentNullException"></exception>
     private static void CheckHandlerType(Type handlerType)
     {
-        _ = Utils.NotNull(handlerType, nameof(handlerType));
+        //_ = Utils.NotNull(handlerType, nameof(handlerType));
         if (!handlerType.IsBaseOn(typeof(IIntegrationEventHandler<>)))
             throw new ArgumentNullException(nameof(handlerType), $"{nameof(handlerType)}未派生自IIntegrationEventHandler<>");
     }
@@ -174,41 +174,41 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         var handlerTypes = AssemblyHelper.FindTypes(o => o.IsClass && !o.IsAbstract && o.IsBaseOn(typeof(IIntegrationEventHandler<>)));
         foreach (var handlerType in handlerTypes)
         {
-            var implementedType = handlerType.GetTypeInfo().ImplementedInterfaces.Where(o => o.IsBaseOn(typeof(IIntegrationEventHandler<>))).FirstOrDefault();
+            var implementedType = handlerType.GetTypeInfo().ImplementedInterfaces.FirstOrDefault(o => o.IsBaseOn(typeof(IIntegrationEventHandler<>)));
             var eventType = implementedType?.GetTypeInfo().GenericTypeArguments.FirstOrDefault();
             if (eventType is null) continue;
             CheckEventType(eventType);
             CheckHandlerType(handlerType);
-            var rabbitmqattr = eventType.GetCustomAttribute<RabbitMQAttribute>();
-            if (rabbitmqattr is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitMQAttribute)}>,无法发布事件");
-            if (!rabbitmqattr.Enable) continue;
+            var rabbitAttr = eventType.GetCustomAttribute<RabbitAttribute>();
+            if (rabbitAttr is null) throw new($"{nameof(eventType)}未设置<{nameof(RabbitAttribute)}>,无法发布事件");
+            if (!rabbitAttr.Enable) continue;
             _ = Task.Factory.StartNew(() =>
             {
-                using var consumerChannel = CreateConsumerChannel(rabbitmqattr, eventType);
+                using var consumerChannel = CreateConsumerChannel(rabbitAttr, eventType);
                 var eventName = _subsManager.GetEventKey(eventType);
-                DoInternalSubscription(eventName, rabbitmqattr, consumerChannel);
+                DoInternalSubscription(eventName, rabbitAttr, consumerChannel);
                 _subsManager.AddSubscription(eventType, handlerType);
-                StartBasicConsume(eventType, rabbitmqattr, consumerChannel);
+                StartBasicConsume(eventType, rabbitAttr, consumerChannel);
             });
         }
     }
 
-    private void DoInternalSubscription(string eventName, RabbitMQAttribute rabbitMqAttribute, IModel consumerChannel)
+    private void DoInternalSubscription(string eventName, RabbitAttribute rabbitMqAttribute, IModel consumerChannel)
     {
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
-        if (!containsKey)
-        {
-            if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
-            consumerChannel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
-        }
+        if (containsKey)
+            return;
+        if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
+        consumerChannel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
     }
 
     /// <summary>
     /// 创建通道
     /// </summary>
     /// <param name="rabbitMqAttribute"></param>
+    /// <param name="eventType"></param>
     /// <returns></returns>
-    private IModel CreateConsumerChannel(RabbitMQAttribute rabbitMqAttribute, Type eventType)
+    private IModel CreateConsumerChannel(RabbitAttribute rabbitMqAttribute, Type eventType)
     {
         _logger.LogTrace("创建RabbitMQ消费者通道");
         var channel = _persistentConnection.CreateModel();
@@ -222,7 +222,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         channel.ExchangeDeclare(rabbitMqAttribute.Exchange, rabbitMqAttribute.Type, durable: true, autoDelete: false, arguments: args);
         //创建队列
         _ = channel.QueueDeclare(queue: rabbitMqAttribute.Queue, durable: true, exclusive: false, autoDelete: false);
-        channel.CallbackException += (sender, ea) =>
+        channel.CallbackException += (_, ea) =>
         {
             _logger.LogWarning(ea.Exception, "重新创建RabbitMQ消费者通道");
             _subsManager.Clear();
@@ -231,13 +231,13 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
         return channel;
     }
 
-    private void StartBasicConsume(Type eventType, RabbitMQAttribute rabbitMqAttribute, IModel? consumerChannel)
+    private void StartBasicConsume(Type eventType, RabbitAttribute rabbitMqAttribute, IModel? consumerChannel)
     {
         _logger.LogTrace("启动RabbitMQ基本消费");
         if (consumerChannel is not null)
         {
             var consumer = new AsyncEventingBasicConsumer(consumerChannel);
-            consumer.Received += async (model, ea) =>
+            consumer.Received += async (_, ea) =>
             {
                 var message = Encoding.UTF8.GetString(ea.Body.Span);
                 try
@@ -260,7 +260,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
                 Thread.Sleep(100000);
             }
         }
-        else _logger.LogError("当_consumerChannel为null时StartBasicConsume不能调用");
+        _logger.LogError("当_consumerChannel为null时StartBasicConsume不能调用");
     }
 
     private async Task ProcessEvent(Type eventType, string message)
@@ -276,7 +276,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
                 var integrationEvent = JsonSerializer.Deserialize(message, eventType, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
                 var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                 if (integrationEvent is null) throw new("集成事件不能为空");
-                var method = concreteType.GetMethod(_handleName);
+                var method = concreteType.GetMethod(HandleName);
                 if (method is null)
                 {
                     _logger.LogError("无法找到IIntegrationEventHandler事件处理器下处理者方法");
@@ -285,7 +285,7 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
                 var handler = scope?.ServiceProvider.GetService(subscriptionType);
                 if (handler is null) continue;
                 await Task.Yield();
-                var obj = method.Invoke(handler, new object[] { integrationEvent });
+                var obj = method.Invoke(handler, new[] { integrationEvent });
                 if (obj is null) continue;
                 await (Task)obj;
             }
@@ -301,8 +301,8 @@ public class IntegrationEventBusRabbitMQ : IIntegrationEventBus, IDisposable
             _ = _persistentConnection.TryConnect();
         }
         using var channel = _persistentConnection.CreateModel();
-        var type = args.EventType?.GetCustomAttribute<RabbitMQAttribute>();
-        if (type is null) throw new($"事件未配置[{nameof(RabbitMQAttribute)}]");
+        var type = args.EventType?.GetCustomAttribute<RabbitAttribute>();
+        if (type is null) throw new($"事件未配置[{nameof(RabbitAttribute)}]");
         channel.QueueUnbind(type.Queue ?? eventName, type.Exchange, type.RoutingKey);
     }
 

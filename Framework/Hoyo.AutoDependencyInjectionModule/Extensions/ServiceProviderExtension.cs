@@ -19,14 +19,12 @@ public static class ServiceProviderExtension
     /// <param name="provider"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static ILogger? GetLogger(this IServiceProvider provider, Type type) => provider.GetService<ILoggerFactory>()!.CreateLogger(type);
+    public static ILogger GetLogger(this IServiceProvider provider, Type type) => provider.GetService<ILoggerFactory>()!.CreateLogger(type);
 
     public static object? GetInstance(this IServiceProvider provider, ServiceDescriptor descriptor) =>
-        descriptor.ImplementationInstance is not null
-            ? descriptor.ImplementationInstance
-            : descriptor.ImplementationType is not null
-            ? provider.GetServiceOrCreateInstance(descriptor.ImplementationType)
-            : descriptor.ImplementationFactory is not null ? descriptor.ImplementationFactory(provider) : null;
+        descriptor.ImplementationInstance ?? (descriptor.ImplementationType is { } type
+            ? provider.GetServiceOrCreateInstance(type)
+            : descriptor.ImplementationFactory?.Invoke(provider));
 
     /// <summary>
     /// 获取日志记录器

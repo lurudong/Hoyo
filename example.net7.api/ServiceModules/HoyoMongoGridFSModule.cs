@@ -28,7 +28,7 @@ public class HoyoMongoGridFSModule : AppModule
                 ReadPreference = ReadPreference.Primary,
                 WriteConcern = WriteConcern.Unacknowledged
             };
-            op.DefalutDB = true;
+            op.DefaultDB = true;
             op.ItemInfo = "item.info";
         });
     }

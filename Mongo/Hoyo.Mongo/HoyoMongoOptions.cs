@@ -15,7 +15,7 @@ public class HoyoMongoOptions
     /// 3._id映射为实体中的ID或者Id,反之亦然
     /// 4.将枚举类型存储为字符串格式
     /// </summary>
-    public bool DefalutConventionRegistry = true;
+    public bool DefaultConventionRegistry = true;
 
     internal Dictionary<string, ConventionPack> ConventionRegistry { get; set; } = new()
     {
@@ -30,11 +30,11 @@ public class HoyoMongoOptions
             }
         }
     };
+
     /// <summary>
     /// 添加自己的一些Convention配置,用于设置mongodb序列化反序列化的一些表现.
     /// </summary>
-    /// <param name="name">名称</param>
-    /// <param name="config">ConventionRegistryConfig</param>
+    /// <param name="dic"></param>
     public void AppendConventionRegistry(Dictionary<string, ConventionPack> dic)
     {
         foreach (var item in dic)

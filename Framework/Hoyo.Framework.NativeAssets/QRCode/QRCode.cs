@@ -6,7 +6,7 @@ using ZXing.QrCode.Internal;
 
 namespace Hoyo.Framework.NativeAssets;
 
-public static class QRCode
+public static class QrCode
 {
     /// <summary>
     /// 生成二维码(默认大小:320*320)
@@ -17,7 +17,7 @@ public static class QRCode
     /// <param name="height"></param>
     public static string GetBase64(string text, int keepWhiteBorderPixelVal = -1, int width = 320, int height = 320)
     {
-        var bytes = QRCoder(text, null, keepWhiteBorderPixelVal, width, height);
+        var bytes = QrCoder(text, null, keepWhiteBorderPixelVal, width, height);
         return $"data:image/png;base64,{Convert.ToBase64String(bytes)}";
     }
     /// <summary>
@@ -29,7 +29,7 @@ public static class QRCode
     /// <param name="width">宽度</param>
     /// <param name="height">高度</param>
     /// <returns></returns>
-    private static byte[] QRCoder(string text, byte[]? logoImgae = null, int keepWhiteBorderPixelVal = -1, int width = 320, int height = 320)
+    private static byte[] QrCoder(string text, byte[]? logoImgae = null, int keepWhiteBorderPixelVal = -1, int width = 320, int height = 320)
     {
         var qRCodeWriter = new QRCodeWriter();
         var hints = new Dictionary<EncodeHintType, object>
@@ -160,7 +160,7 @@ public static class QRCode
     /// </summary>
     /// <param name="base64"></param>
     /// <returns></returns>
-    public static string QRDecoder(string base64)
+    public static string QrDecoder(string base64)
     {
         if (string.IsNullOrWhiteSpace(base64)) throw new("base64 is null or empty");
         var data = base64[(base64.IndexOf(",", StringComparison.Ordinal) + 1)..];
@@ -183,8 +183,8 @@ public static class QRCode
                 byteIndex += 3;
             }
         }
-        var rGBLuminanceSource = new RGBLuminanceSource(bytes, w, h);
-        var hybridBinarizer = new HybridBinarizer(rGBLuminanceSource);
+        var rGbLuminanceSource = new RGBLuminanceSource(bytes, w, h);
+        var hybridBinarizer = new HybridBinarizer(rGbLuminanceSource);
         var binaryBitmap = new BinaryBitmap(hybridBinarizer);
         var hints = new Dictionary<DecodeHintType, object>
         {

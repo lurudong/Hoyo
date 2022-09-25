@@ -10,7 +10,7 @@ public static class RegisterSerializerExtension
     /// 添加MongoDB类型转化支持,如.Net6+新增TimeOnly和DateOnly
     /// 默认将时间本地化
     /// </summary>
-    /// <param name="services"></param>
+    /// <param name="_"></param>
     /// <returns></returns>
     public static void RegisterHoyoSerializer(this IServiceCollection _)
     {

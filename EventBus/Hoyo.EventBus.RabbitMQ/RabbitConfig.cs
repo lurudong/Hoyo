@@ -1,6 +1,6 @@
 ﻿namespace Hoyo.EventBus.RabbitMQ;
 
-public class RabbitMQConfig
+public class RabbitConfig
 {
     public string Host { get; set; } = "localhost";
     public string PassWord { get; set; } = "guest";

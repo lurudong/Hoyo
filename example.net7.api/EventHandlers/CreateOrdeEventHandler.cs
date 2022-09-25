@@ -5,7 +5,7 @@ using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ("hoyo.test", EExchange.Routing, "test", "orderqueue2")]
+[Rabbit("hoyo.test", EExchange.Routing, "test", "orderqueue2")]
 public class TestEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;

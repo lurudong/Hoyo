@@ -7,26 +7,26 @@ public static class IDCardCalculate
     /// <summary>
     /// 验证身份证号码
     /// </summary>
-    /// <param name="idno">身份证号码</param>
-    private static void ValidateIDCard(this string idno)
+    /// <param name="idNo">身份证号码</param>
+    private static void ValidateIDCard(this string idNo)
     {
-        if (idno.CheckIDCard()) return;
-        throw new($"身份证号不合法:{idno}");
+        if (idNo.CheckIDCard()) return;
+        throw new($"身份证号不合法:{idNo}");
     }
 
 #if !NETSTANDARD
     /// <summary>
     /// 根据身份证号码计算生日日期
     /// </summary>
-    /// <param name="idno">身份证号码</param>
+    /// <param name="idNo">身份证号码</param>
     /// <returns></returns>
-    public static DateOnly CalculateBirthday(this string idno)
+    public static DateOnly CalculateBirthday(this string idNo)
     {
-        idno.ValidateIDCard();
-        return idno.Length switch
+        idNo.ValidateIDCard();
+        return idNo.Length switch
         {
-            18 => DateOnly.FromDateTime($"{idno.Substring(6, 4)}-{idno.Substring(10, 2)}-{idno.Substring(12, 2)}".ToDateTime()),
-            15 => DateOnly.FromDateTime($"19{idno.Substring(6, 2)}-{idno.Substring(8, 2)}-{idno.Substring(10, 2)}".ToDateTime()),
+            18 => DateOnly.FromDateTime($"{idNo.Substring(6, 4)}-{idNo.Substring(10, 2)}-{idNo.Substring(12, 2)}".ToDateTime()),
+            15 => DateOnly.FromDateTime($"19{idNo.Substring(6, 2)}-{idNo.Substring(8, 2)}-{idNo.Substring(10, 2)}".ToDateTime()),
             _ => throw new("该身份证号无法正确计算出生日")
         };
     }
@@ -47,15 +47,16 @@ public static class IDCardCalculate
     /// <summary>
     /// 根据身份证号码计算生日日期
     /// </summary>
-    /// <param name="idno">身份证号码</param>
+    /// <param name="idNo">身份证号码</param>
+    /// <param name="birthday">生日日期</param>
     /// <returns></returns>
-    public static void CalculateBirthday(this string idno, out DateTime birthday)
+    public static void CalculateBirthday(this string idNo, out DateTime birthday)
     {
-        idno.ValidateIDCard();
-        birthday = idno.Length switch
+        idNo.ValidateIDCard();
+        birthday = idNo.Length switch
         {
-            18 => $"{idno.Substring(6, 4)}-{idno.Substring(10, 2)}-{idno.Substring(12, 2)}".ToDateTime(),
-            15 => $"19{idno.Substring(6, 2)}-{idno.Substring(8, 2)}-{idno.Substring(10, 2)}".ToDateTime(),
+            18 => $"{idNo.Substring(6, 4)}-{idNo.Substring(10, 2)}-{idNo.Substring(12, 2)}".ToDateTime(),
+            15 => $"19{idNo.Substring(6, 2)}-{idNo.Substring(8, 2)}-{idNo.Substring(10, 2)}".ToDateTime(),
             _ => throw new("该身份证号无法正确计算出生日")
         };
     }
@@ -77,16 +78,16 @@ public static class IDCardCalculate
     /// <summary>
     /// 根据身份证号码计算出性别
     /// </summary>
-    /// <param name="idno">身份证号码</param>
+    /// <param name="idNo">身份证号码</param>
     /// <returns>EGender Enum</returns>
-    public static EGender CalculateGender(this string idno)
+    public static EGender CalculateGender(this string idNo)
     {
-        idno.ValidateIDCard();
+        idNo.ValidateIDCard();
         //性别代码为偶数是女性奇数为男性
-        return idno.Length switch
+        return idNo.Length switch
         {
-            18 => int.Parse(idno.Substring(14, 3)) % 2 == 0 ? EGender.女 : EGender.男,
-            15 => int.Parse(idno.Substring(12, 3)) % 2 == 0 ? EGender.女 : EGender.男,
+            18 => int.Parse(idNo.Substring(14, 3)) % 2 == 0 ? EGender.女 : EGender.男,
+            15 => int.Parse(idNo.Substring(12, 3)) % 2 == 0 ? EGender.女 : EGender.男,
             _ => EGender.女
         };
     }
