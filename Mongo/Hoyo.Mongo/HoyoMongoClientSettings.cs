@@ -29,12 +29,9 @@ public class HoyoMongoSettings
     /// <summary>
     /// 获取客户端设置
     /// </summary>
-    internal MongoClientSettings ClientSettings
+    internal MongoClientSettings ClientSettings => new()
     {
-        get => new()
-        {
-            Credential = MongoCredential.CreateCredential(AuthDatabase, UserName, Password),
-            Servers = Servers
-        };
-    }
+        Credential = MongoCredential.CreateCredential(AuthDatabase, UserName, Password),
+        Servers = Servers
+    };
 }

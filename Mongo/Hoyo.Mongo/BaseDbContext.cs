@@ -20,16 +20,16 @@ public class BaseDbContext
     ///  使用链接字符串创建客户端,并提供字符串中的数据库
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    /// <param name="connstr">链接字符串</param>
+    /// <param name="connStr">链接字符串</param>
     /// <param name="db">数据库名称</param>
     /// <returns></returns>
-    internal static T CreateInstance<T>(string connstr, string db = HoyoStatic.HoyoDbName) where T : BaseDbContext
+    internal static T CreateInstance<T>(string connStr, string db = HoyoStatic.HoyoDbName) where T : BaseDbContext
     {
         var t = Activator.CreateInstance<T>();
-        var mongoUrl = new MongoUrl(connstr);
+        var mongoUrl = new MongoUrl(connStr);
         t.Client = new MongoClient(mongoUrl);
-        var dbname = !string.IsNullOrWhiteSpace(mongoUrl.DatabaseName) ? mongoUrl.DatabaseName : db;
-        t.Database = t.Client.GetDatabase(dbname);
+        var dbName = !string.IsNullOrWhiteSpace(mongoUrl.DatabaseName) ? mongoUrl.DatabaseName : db;
+        t.Database = t.Client.GetDatabase(dbName);
         return t;
     }
 
@@ -38,8 +38,8 @@ public class BaseDbContext
         var t = Activator.CreateInstance<T>();
         if (!settings.Servers.Any()) throw new("服务器地址或者数据库名为空");
         t.Client = new MongoClient(settings.ClientSettings);
-        var dbname = !string.IsNullOrWhiteSpace(settings.DatabaseName) ? settings.DatabaseName : HoyoStatic.HoyoDbName;
-        t.Database = t.Client.GetDatabase(dbname);
+        var dbName = !string.IsNullOrWhiteSpace(settings.DatabaseName) ? settings.DatabaseName : HoyoStatic.HoyoDbName;
+        t.Database = t.Client.GetDatabase(dbName);
         return t;
     }
 
@@ -49,11 +49,11 @@ public class BaseDbContext
         {
             ConventionRegistry.Register(item.Key, item.Value, _ => true);
         }
-        if (!options.DefalutConventionRegistry)
+        if (!options.DefaultConventionRegistry)
         {
             ConventionRegistry.Remove(HoyoStatic.HoyoPack);
         }
-        ConventionRegistry.Register($"hoyoidpack-{Guid.NewGuid()}", new ConventionPack
+        ConventionRegistry.Register($"hoyo-id-pack-{Guid.NewGuid()}", new ConventionPack
         {
             new StringObjectIdIdGeneratorConvention()//ObjectId → String mapping ObjectId
         }, x => options.ObjectIdToStringTypes.Contains(x) == false);

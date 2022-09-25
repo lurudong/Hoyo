@@ -52,7 +52,7 @@ public class StartupModuleRunner : ModuleApplicationBase, IStartupModuleRunner
         }
     }
 
-    public override void Dispose()
+    public new void Dispose()
     {
         base.Dispose();
         if (ServiceProvider is IDisposable disposableServiceProvider)

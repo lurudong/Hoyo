@@ -14,7 +14,7 @@ public class HoyoGridFSOptions
     /// <summary>
     /// 默认数据库
     /// </summary>
-    public bool DefalutDB { get; set; } = true;
+    public bool DefaultDB { get; set; } = true;
     /// <summary>
     /// 文件信息表名称,默认为[item.info]
     /// </summary>

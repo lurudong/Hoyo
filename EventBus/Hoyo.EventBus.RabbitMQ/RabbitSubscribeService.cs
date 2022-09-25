@@ -6,11 +6,11 @@ namespace Hoyo.EventBus.RabbitMQ;
 /// <summary>
 /// 后台任务进行事件订阅
 /// </summary>
-internal class RabbitMQSubscribeService : BackgroundService
+internal class RabbitSubscribeService : BackgroundService
 {
     private readonly IServiceProvider _rootServiceProvider;
 
-    public RabbitMQSubscribeService(IServiceProvider serviceProvider)
+    public RabbitSubscribeService(IServiceProvider serviceProvider)
     {
         _rootServiceProvider = serviceProvider;
     }

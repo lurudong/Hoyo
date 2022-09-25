@@ -13,20 +13,20 @@ public static class GridFSExtensions
     /// </summary>
     /// <param name="services"></param>
     /// <param name="db">IMongoDatabase,为空情况下使用默认数据库hoyofs</param>
-    /// <param name="fsoptions"></param>
+    /// <param name="fsOptions"></param>
     /// <returns></returns>
-    public static IServiceCollection AddHoyoGridFS(this IServiceCollection services, IMongoDatabase? db = null, Action<HoyoGridFSOptions>? fsoptions = null)
+    public static IServiceCollection AddHoyoGridFS(this IServiceCollection services, IMongoDatabase? db = null, Action<HoyoGridFSOptions>? fsOptions = null)
     {
         var client = services.BuildServiceProvider().GetService<IMongoClient>();
         var options = new HoyoGridFSOptions();
-        fsoptions?.Invoke(options);
+        fsOptions?.Invoke(options);
         if (db is null)
         {
-            options.DefalutDB = true;
+            options.DefaultDB = true;
             if (client is null) throw new("无法从容器中获取IMongoClient的服务依赖,请考虑是否使用Hoyo.Mongo包添加Mongodb服务或显示传入db参数.");
         }
         BusinessApp = options.BusinessApp;
-        var hoyodb = options.DefalutDB ? client!.GetDatabase("hoyofs") : db;
+        var hoyodb = options.DefaultDB ? client!.GetDatabase("hoyofs") : db;
         _ = services.Configure<FormOptions>(c =>
         {
             c.MultipartBodyLengthLimit = long.MaxValue;

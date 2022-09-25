@@ -7,7 +7,7 @@ public class HoyoEventBusRabbitMQModule : AppModule
 {
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        context.Services.AddEventBusRabbitMQ(c =>
+        context.Services.AddEventBusRabbit(c =>
         {
             c.Host = "117.190.71.69";
             c.Port = 5672;

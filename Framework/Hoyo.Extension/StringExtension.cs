@@ -130,12 +130,9 @@ public static class StringExtension
             delegate (Match m)
             {
                 var str = m.ToString();
-                if (char.IsLower(str[0]))
-                {
-                    var header = lower ? char.ToLower(str[0], CultureInfo.CurrentCulture) : char.ToUpper(str[0], CultureInfo.CurrentCulture);
-                    return $"{header}{str[1..]}";
-                }
-                return str;
+                if (!char.IsLower(str[0])) return str;
+                var header = lower ? char.ToLower(str[0], CultureInfo.CurrentCulture) : char.ToUpper(str[0], CultureInfo.CurrentCulture);
+                return $"{header}{str[1..]}";
             });
     }
     #endregion
@@ -167,7 +164,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="value">需转换的字符串</param>
     /// <returns>字节流</returns>
-    public static MemoryStream ToStream(this string value) => ToStream(value, Encoding.Default);
+    public static MemoryStream ToStream(this string value) => ToStream(value, Encoding.UTF8);
     /// <summary>
     /// 将字符串拆分为数组
     /// </summary>
@@ -195,13 +192,13 @@ public static class StringExtension
     /// </summary>
     /// <param name="value">字符串</param>
     /// <returns></returns>
-    public static string ToBase64(this string value) => Convert.ToBase64String(Encoding.Default.GetBytes(value));
+    public static string ToBase64(this string value) => Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
     /// <summary>
     /// 将Base64字符转成String
     /// </summary>
     /// <param name="value">Base64字符串</param>
     /// <returns></returns>
-    public static string Base64ToString(this string value) => Encoding.Default.GetString(Convert.FromBase64String(value));
+    public static string Base64ToString(this string value) => Encoding.UTF8.GetString(Convert.FromBase64String(value));
     #endregion
 
     #region 字符串插入指定分隔符
@@ -230,7 +227,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="input">需要转换的字符串</param>
     /// <returns>转换为全角的字符串</returns>
-    public static string ToSBC(this string input)
+    public static string ToSbc(this string input)
     {
         //半角转全角：
         var c = input.ToCharArray();
@@ -243,7 +240,7 @@ public static class StringExtension
             }
             if (c[i] < 127) c[i] = (char)(c[i] + 65248);
         }
-        return new string(c);
+        return new(c);
     }
 
     /// <summary>
@@ -251,7 +248,7 @@ public static class StringExtension
     /// </summary>
     /// <param name="input">需要转换的字符串</param>
     /// <returns>转换为半角的字符串</returns>
-    public static string ToDBC(this string input)
+    public static string ToDbc(this string input)
     {
         var c = input.ToCharArray();
         for (var i = 0; i < c.Length; i++)
@@ -266,7 +263,7 @@ public static class StringExtension
                 c[i] = (char)(c[i] - 65248);
             }
         }
-        return new string(c);
+        return new(c);
     }
     #endregion
 
@@ -338,7 +335,7 @@ public static class StringExtension
     {
         var arr = value.ToCharArray();
         Array.Reverse(arr);
-        return new string(arr);
+        return new(arr);
     }
     #endregion
 }

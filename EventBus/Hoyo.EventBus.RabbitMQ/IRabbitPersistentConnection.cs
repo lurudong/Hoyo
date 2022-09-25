@@ -2,7 +2,7 @@
 
 namespace Hoyo.EventBus.RabbitMQ;
 
-public interface IRabbitMQPersistentConnection : IDisposable
+public interface IRabbitPersistentConnection : IDisposable
 {
     bool IsConnected { get; }
     bool TryConnect();

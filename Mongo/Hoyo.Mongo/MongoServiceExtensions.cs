@@ -31,8 +31,8 @@ public static class MongoServiceExtensions
     /// <returns></returns>
     public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, IConfiguration configuration, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
-        var connstr = ConnectionString(configuration);
-        _ = services.AddMongoDbContext<T>(connstr, options);
+        var connStr = ConnectionString(configuration);
+        _ = services.AddMongoDbContext<T>(connStr, options);
         return services;
     }
 
@@ -46,9 +46,9 @@ public static class MongoServiceExtensions
     /// <returns></returns>
     public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, string connstr, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
-        var dboptions = new HoyoMongoOptions();
-        options?.Invoke(dboptions);
-        BaseDbContext.RegistryConventionPack(dboptions);
+        var dbOptions = new HoyoMongoOptions();
+        options?.Invoke(dbOptions);
+        BaseDbContext.RegistryConventionPack(dbOptions);
         var db = BaseDbContext.CreateInstance<T>(connstr);
         _ = services.AddSingleton(db).AddSingleton(db.Database).AddSingleton(db.Client);
         return services;
@@ -64,11 +64,11 @@ public static class MongoServiceExtensions
     /// <returns></returns>
     public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, Action<HoyoMongoSettings> settings, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
-        var dboptions = new HoyoMongoOptions();
+        var dbOptions = new HoyoMongoOptions();
         var setting = new HoyoMongoSettings();
-        options?.Invoke(dboptions);
+        options?.Invoke(dbOptions);
         settings.Invoke(setting);
-        BaseDbContext.RegistryConventionPack(dboptions);
+        BaseDbContext.RegistryConventionPack(dbOptions);
         var db = BaseDbContext.CreateInstance<T>(setting);
         _ = services.AddSingleton(db).AddSingleton(db.Database).AddSingleton(db.Client);
         return services;

@@ -1,4 +1,5 @@
 ﻿namespace Hoyo.Universal;
+
 public class KVItem
 {
     public KVItem() { }
@@ -7,8 +8,7 @@ public class KVItem
     public string V { get; set; } = string.Empty;
     public override string ToString() => V;
     public bool IsIntegrated() => !string.IsNullOrEmpty(K) && !string.IsNullOrEmpty(V);
-    public override bool Equals(object? obj) => obj is KVItem objKV && objKV.K == K && objKV.V == V;
-    public override int GetHashCode() => base.GetHashCode();
+    protected bool Equals(KVItem other) => K == other.K && V == other.V;
 }
 public class KVItem<T>
 {

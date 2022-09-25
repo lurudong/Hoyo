@@ -14,5 +14,5 @@ public class OperationInfo
     /// <summary>
     /// 是否完成
     /// </summary>
-    public bool Done { get; set; } = false;
+    public bool Done { get; set; }
 }

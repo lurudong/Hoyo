@@ -3,7 +3,7 @@
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 public class DependsOnAttribute : Attribute, IDependedTypesProvider
 {
-    public DependsOnAttribute(params Type[] dependedTypes) => DependedTypes = dependedTypes ?? Array.Empty<Type>();
+    public DependsOnAttribute(params Type[] dependedTypes) => DependedTypes = dependedTypes;
 
     /// <summary>
     /// 依赖类型集合

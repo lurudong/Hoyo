@@ -7,15 +7,15 @@ public static class GridFSVirtualPathExtension
 {
     public static IApplicationBuilder UseHoyoGridFSVirtualPath(this IApplicationBuilder app, IConfiguration config)
     {
-        var hoyofile = config.GetSection(HoyoStaticFileSettings.Position).Get<HoyoStaticFileSettings>();
-        if (!Directory.Exists(hoyofile.PhysicalPath))
+        var hoyoFile = config.GetSection(HoyoStaticFileSettings.Position).Get<HoyoStaticFileSettings>();
+        if (!Directory.Exists(hoyoFile.PhysicalPath))
         {
-            _ = Directory.CreateDirectory(hoyofile.PhysicalPath);
+            _ = Directory.CreateDirectory(hoyoFile.PhysicalPath);
         }
         _ = app.UseStaticFiles(new StaticFileOptions
         {
-            FileProvider = new PhysicalFileProvider(hoyofile.PhysicalPath),
-            RequestPath = hoyofile.VirtualPath
+            FileProvider = new PhysicalFileProvider(hoyoFile.PhysicalPath),
+            RequestPath = hoyoFile.VirtualPath
         });
         return app;
     }

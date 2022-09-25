@@ -30,10 +30,10 @@ public class HoyoMongoModule : AppModule
                     }
                 }
             });
-            op.DefalutConventionRegistry = true;
+            op.DefaultConventionRegistry = true;
         }).AddMongoDbContext<DbContext2>("mongodb://bl:a123456@altzyxy.com:27010/test2?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
         {
-            op.DefalutConventionRegistry = true;
+            op.DefaultConventionRegistry = true;
             op.AppendConventionRegistry(new()
             {
                 {

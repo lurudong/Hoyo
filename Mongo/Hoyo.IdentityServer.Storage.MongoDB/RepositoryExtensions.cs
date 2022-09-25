@@ -7,15 +7,15 @@ namespace Hoyo.IdentityServer.Storage.MongoDB;
 
 public static class RepositoryExtensions
 {
-    public static IIdentityServerBuilder AddMongoRepository(this IIdentityServerBuilder builder, string? dbname = null)
+    public static IIdentityServerBuilder AddMongoRepository(this IIdentityServerBuilder builder, string? dbName = null)
     {
         var db = builder.Services.BuildServiceProvider().GetService<IMongoDatabase>() ?? throw new NullReferenceException("mongo database not found!");
-        if (dbname is not null)
+        if (dbName is not null)
         {
             var client = builder.Services.BuildServiceProvider().GetService<IMongoClient>() ?? throw new NullReferenceException("mongo client not found!");
-            db = client.GetDatabase(dbname);
+            db = client.GetDatabase(dbName);
         }
-        _ = builder.Services.AddTransient<IRepository, MongoRepository>(s => new MongoRepository(db));
+        _ = builder.Services.AddTransient<IRepository, MongoRepository>(_ => new(db));
         return builder;
     }
 
