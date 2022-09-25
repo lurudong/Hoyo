@@ -5,8 +5,8 @@ using Hoyo.EventBus.RabbitMQ.Enums;
 
 namespace example.net7.api.EventHandlers;
 
-[RabbitMQ(exchange: "delayedtest", exchangeType: EExchange.Delayed, routingKey: "delay", queue: "testdelay")]
-[RabbitMQArg("x-delayed-type", "topic")]
+[Rabbit(exchange: "delayedtest", exchangeType: EExchange.Delayed, routingKey: "delay", queue: "testdelay")]
+[RabbitArg("x-delayed-type", "topic")]
 public class DelayedMessageEvent : IntegrationEvent
 {
     public string Message { get; set; } = default!;

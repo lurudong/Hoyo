@@ -31,7 +31,7 @@ public class ExtensionController : GridFSController
         var buffer = new byte[1024 * 1024];
         while (true)
         {
-            var readCount = mongoStream.Read(buffer, 0, buffer.Length);
+            var readCount = await mongoStream.ReadAsync(buffer, 0, buffer.Length);
             fsWrite.Write(buffer, 0, readCount);
             if (readCount < buffer.Length) break;
         }
@@ -64,15 +64,15 @@ public class ExtensionController : GridFSController
     /// 重命名文件
     /// </summary>
     /// <param name="id">文件ID</param>
-    /// <param name="newname">新名称</param>
+    /// <param name="newName">新名称</param>
     /// <returns></returns>
     [HttpPut("{id}/Rename/{newname}")]
-    public override Task Rename(string id, string newname)
+    public override Task Rename(string id, string newName)
     {
         var filename = Coll.Find(c => c.FileId == id).Project(c => c.FileName).SingleOrDefaultAsync().Result;
         var path = $"{FileSetting.PhysicalPath}{Path.DirectorySeparatorChar}{filename}";
         if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
-        _ = base.Rename(id, newname);
+        _ = base.Rename(id, newName);
         return Task.CompletedTask;
     }
 
@@ -84,17 +84,16 @@ public class ExtensionController : GridFSController
     [HttpDelete]
     public override async Task<IEnumerable<string>> Delete(params string[] ids)
     {
-        var files = await base.Delete(ids);
+        var files = (await base.Delete(ids)).ToList();
         Task DeleteSingleFile()
         {
-            foreach (var item in files)
+            foreach (var path in files.Select(item => $"{FileSetting.PhysicalPath}{Path.DirectorySeparatorChar}{item}").Where(System.IO.File.Exists))
             {
-                var path = $"{FileSetting.PhysicalPath}{Path.DirectorySeparatorChar}{item}";
-                if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+                System.IO.File.Delete(path);
             }
             return Task.CompletedTask;
         }
-        _ = files.Count() > 6 ? Task.Run(DeleteSingleFile) : DeleteSingleFile();
+        _ = files.Count > 6 ? Task.Run(DeleteSingleFile) : DeleteSingleFile();
         return files;
     }
 }

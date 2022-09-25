@@ -13,9 +13,7 @@ public class AppModule : IAppModule
 
     protected internal ConfigureServicesContext ConfigureServicesContext
     {
-        get => _configureServicesContext is null
-                ? throw new($"{nameof(ConfigureServicesContext)}仅适用于{nameof(ConfigureServices)}方法。")
-                : _configureServicesContext;
+        get => _configureServicesContext ?? throw new($"{nameof(ConfigureServicesContext)}仅适用于{nameof(ConfigureServices)}方法。");
         internal set => _configureServicesContext = value;
     }
 

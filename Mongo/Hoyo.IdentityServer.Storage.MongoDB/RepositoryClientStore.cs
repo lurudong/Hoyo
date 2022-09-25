@@ -4,8 +4,8 @@ using Duende.IdentityServer.Stores;
 namespace Hoyo.IdentityServer.Storage.MongoDB;
 internal class RepositoryClientStore : IClientStore
 {
-    protected IRepository _repository;
+    protected IRepository Repository;
 
-    public RepositoryClientStore(IRepository repository) => _repository = repository;
-    public Task<Client> FindClientByIdAsync(string clientId) => Task.FromResult(_repository.Single<Client>(c => c.ClientId == clientId));
+    public RepositoryClientStore(IRepository repository) => Repository = repository;
+    public Task<Client> FindClientByIdAsync(string clientId) => Task.FromResult(Repository.Single<Client>(c => c.ClientId == clientId));
 }

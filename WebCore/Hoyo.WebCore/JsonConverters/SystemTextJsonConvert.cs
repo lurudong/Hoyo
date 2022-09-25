@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Hoyo.WebCore;
@@ -11,7 +12,7 @@ public class SystemTextJsonConvert
     public class DecimalConverter : JsonConverter<decimal>
     {
         public override decimal Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => reader.TokenType == JsonTokenType.Number ? reader.GetDecimal() : decimal.Parse(reader.GetString()!);
-        public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
+        public override void Write(Utf8JsonWriter writer, decimal value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(CultureInfo.CurrentCulture));
     }
 
     public class DecimalNullConverter : JsonConverter<decimal?>
@@ -64,7 +65,7 @@ public class SystemTextJsonConvert
                 ? bool.Parse(reader.GetString()!)
                 : reader.TokenType == JsonTokenType.Number
                 ? reader.GetDouble() > 0
-                : throw new NotImplementedException($"un processed tokentype {reader.TokenType}");
+                : throw new NotImplementedException($"un processed token type {reader.TokenType}");
         }
 
         public override void Write(Utf8JsonWriter writer, bool value, JsonSerializerOptions options) => writer.WriteBooleanValue(value);
@@ -82,7 +83,7 @@ public class SystemTextJsonConvert
                 ? bool.Parse(reader.GetString()!)
                 : reader.TokenType == JsonTokenType.Number
                 ? reader.GetDouble() > 0
-                : throw new NotImplementedException($"un processed tokentype {reader.TokenType}");
+                : throw new NotImplementedException($"un processed token type {reader.TokenType}");
         }
 
         public override void Write(Utf8JsonWriter writer, bool? value, JsonSerializerOptions options)

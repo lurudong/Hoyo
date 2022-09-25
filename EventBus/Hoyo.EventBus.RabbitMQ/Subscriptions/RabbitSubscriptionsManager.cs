@@ -2,7 +2,7 @@
 
 namespace Hoyo.EventBus.RabbitMQ;
 
-public class RabbitMQSubscriptionsManager : ISubscriptionsManager
+public class RabbitSubscriptionsManager : ISubscriptionsManager
 {
     private readonly ConcurrentDictionary<string, List<Type>> _handlers = new();
 
@@ -20,8 +20,7 @@ public class RabbitMQSubscriptionsManager : ISubscriptionsManager
 
     private void DoAddSubscription(Type handlerType, string eventName)
     {
-
-        if (!HasSubscriptionsForEvent(eventName)) _ = _handlers.TryAdd(eventName, new List<Type>());
+        if (!HasSubscriptionsForEvent(eventName)) _ = _handlers.TryAdd(eventName, new());
         if (_handlers[eventName].Any(o => o == handlerType)) throw new ArgumentException($"类型:{handlerType.Name} 已注册 '{eventName}'", nameof(handlerType));
         _handlers[eventName].Add(handlerType);
     }
@@ -47,15 +46,13 @@ public class RabbitMQSubscriptionsManager : ISubscriptionsManager
         if (!HasSubscriptionsForEvent<T>()) return;
         var eventName = GetEventKey<T>();
         _ = _handlers[eventName].Remove(typeof(TH));
-        if (!_handlers[eventName].Any())
+        if (_handlers[eventName].Any()) return;
+        //_handlers.Remove(eventName);
+        EventRemovedEventArgs args = new()
         {
-            //_handlers.Remove(eventName);
-            EventRemovedEventArgs args = new()
-            {
-                EventType = typeof(T)
-            };
-            OnEventRemoved?.Invoke(this, args);
-        }
+            EventType = typeof(T)
+        };
+        OnEventRemoved?.Invoke(this, args);
     }
 
     public event EventHandler<EventRemovedEventArgs>? OnEventRemoved;

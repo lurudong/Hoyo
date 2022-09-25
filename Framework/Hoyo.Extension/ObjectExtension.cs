@@ -25,7 +25,7 @@ public static class ObjectExtension
     /// <param name="message">异常消息</param>
     public static void Required<T>(this T value, Func<T, bool> assertionFunc, string message)
     {
-        if (assertionFunc == null) throw new ArgumentNullException(nameof(assertionFunc));
+        if (assertionFunc is null) throw new ArgumentNullException(nameof(assertionFunc));
         Require<Exception>(assertionFunc(value), message);
     }
 
@@ -39,7 +39,7 @@ public static class ObjectExtension
     /// <param name="message">异常消息</param>
     public static void Required<T, TException>(this T value, Func<T, bool> assertionFunc, string message) where TException : Exception
     {
-        if (assertionFunc == null) throw new ArgumentNullException(nameof(assertionFunc));
+        if (assertionFunc is null) throw new ArgumentNullException(nameof(assertionFunc));
         Require<TException>(assertionFunc(value), message);
     }
 
@@ -49,7 +49,7 @@ public static class ObjectExtension
     /// <param name="value"></param>
     /// <param name="paramName">参数名称</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public static void NotNull<T>(this T value, string paramName) => Require<ArgumentNullException>(value != null, $"参数“{paramName}”不能为空引用。");
+    public static void NotNull<T>(this T value, string paramName) => Require<ArgumentNullException>(value is not null, $"参数“{paramName}”不能为空引用。");
 
     /// <summary>
     /// 检查字符串不能为空引用或空字符串，否则抛出<see cref="ArgumentNullException"/>异常或<see cref="ArgumentException"/>异常。
@@ -76,70 +76,7 @@ public static class ObjectExtension
     /// <param name="paramName">参数名称。</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public static void NotNullOrEmpty<T>(this IEnumerable<T> collection, string paramName)
-    {
-        NotNull(collection, paramName);
-        Require<ArgumentException>(collection.Any(), $"参数“{paramName}”不能为空引用或空集合。");
-    }
-
-    /// <summary>
-    ///  检查集合不能为空委托，否则抛出<see cref="ArgumentNullException"/>异常或<see cref="ArgumentException"/>异常。
-    /// </summary>
-    /// <typeparam name="TSource">委托类型</typeparam>
-    /// <typeparam name="TResult">委托类型</typeparam>
-    /// <param name="func">委托</param>
-    /// <param name="paramName">参数名称。</param>
-    public static void NotNull<TSource, TResult>(this Func<TSource, TResult> func, string paramName)
-    {
-        NotNull(func, paramName);
-        Require<ArgumentException>(func.IsNotNull(), $"参数“{paramName}”不能为空委托。");
-    }
-
-    /// <summary>
-    /// 把对象类型转换为指定类型
-    /// </summary>
-    /// <param name="value">要转换的值</param>
-    /// <param name="type">要转换的类型</param>
-    /// <returns></returns>
-    public static object? AsTo(this object value, Type type)
-    {
-        if (value is null or DBNull) return null;
-        //如果是Nullable类型
-        if (type.IsNullableType()) type = type.GetUnNullableType();
-        //枚举类型
-        if (type.IsEnum) return Enum.Parse(type, value.ToString()!);
-        if (type == typeof(Guid))
-        {
-            _ = Guid.TryParse(value.ToString(), out var newGuid);
-            return newGuid;
-        }
-        return value?.GetType() == typeof(Guid) ? value.ToString() : Convert.ChangeType(value, type);
-    }
-
-    /// <summary>
-    /// 把对象类型转换为指定类型
-    /// </summary>
-    /// <typeparam name="T">动态类型</typeparam>
-    /// <param name="value">要转换对象</param>
-    /// <returns>转化后的指定类型的对象</returns>
-    public static T? AsTo<T>(this object value) => (T)AsTo(value, typeof(T))!;
-
-    /// <summary>
-    /// 类型转换
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="obj"></param>
-    /// <returns></returns>
-    public static T As<T>(this object obj) where T : class => (T)obj;
-
-    /// <summary>
-    /// 是否为Null
-    /// </summary>
-    /// <param name="value">判断的值</param>
-    /// <returns>true为null,false不为null</returns>
-    public static bool IsNull(this object value) => value is null;
-
-    public static bool IsNotNull(this object value) => !value.IsNull();
+    public static void NotNullOrEmpty<T>(this IEnumerable<T> collection, string paramName) => Require<ArgumentException>(collection.Any(), $"参数“{paramName}”不能为空引用或空集合。");
 
     /// <summary>
     /// 判断特性相应是否存在

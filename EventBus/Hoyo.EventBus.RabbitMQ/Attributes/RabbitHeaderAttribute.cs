@@ -4,7 +4,7 @@
 /// 添加RabbitMQ,Headers参数特性
 /// </summary>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-public class RabbitMQHeaderAttribute : RabbitDictionaryAttribute
+public class RabbitHeaderAttribute : RabbitDictionaryAttribute
 {
-    public RabbitMQHeaderAttribute(string key, object value) : base(key, value) { }
+    public RabbitHeaderAttribute(string key, object value) : base(key, value) { }
 }
