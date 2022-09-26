@@ -88,7 +88,7 @@ public class SystemTextJsonConvert
 
         public override void Write(Utf8JsonWriter writer, bool? value, JsonSerializerOptions options)
         {
-            if (value != null) writer.WriteBooleanValue(value.Value);
+            if (value is not null) writer.WriteBooleanValue(value.Value);
             else writer.WriteNullValue();
         }
     }
@@ -104,12 +104,6 @@ public class SystemTextJsonConvert
         public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => string.IsNullOrEmpty(reader.GetString()) ? null : Convert.ToDateTime(reader.GetString());
 
         public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options) => writer.WriteStringValue(value?.ToString(DateTimeFormat));
-    }
-    public class TimeSpanJsonConverter : JsonConverter<TimeSpan>
-    {
-        public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) => TimeSpan.Parse(reader.GetString()!);
-
-        public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString(TimeFormat));
     }
 
 #if !NETSTANDARD
