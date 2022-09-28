@@ -7,9 +7,9 @@ public interface IMapClassOnly<out T>
 {
     T GetMapClass();
 }
-public interface IFromMapClass<in Tfrom, out Tto>
+public interface IFromMapClass<in TFrom, out Tto>
 {
-    Tto FromMapClass(Tfrom tfrom);
+    Tto FromMapClass(TFrom tFrom);
 }
 public interface IMapClassFrom<T>
 {

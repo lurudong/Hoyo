@@ -7,7 +7,7 @@ public class DbContext : BaseDbContext
     /// <summary>
     /// 作息时间管理
     /// </summary>
-    public IMongoCollection<MongoTest> Test => Database!.GetCollection<MongoTest>("mongo.test");
+    public IMongoCollection<MongoTest> Test => Database.GetCollection<MongoTest>("mongo.test");
 }
 
 public class DbContext2 : BaseDbContext
@@ -15,7 +15,7 @@ public class DbContext2 : BaseDbContext
     /// <summary>
     /// 作息时间管理
     /// </summary>
-    public IMongoCollection<MongoTest> Test => Database!.GetCollection<MongoTest>("mongo.test2");
+    public IMongoCollection<MongoTest> Test => Database.GetCollection<MongoTest>("mongo.test2");
 }
 public class MongoTest
 {

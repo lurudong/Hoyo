@@ -6,10 +6,10 @@ public class RabbitSubscriptionsManager : ISubscriptionsManager
 {
     private readonly ConcurrentDictionary<string, List<Type>> _handlers = new();
 
-    public void AddSubscription<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
+    public void AddSubscription<T, THandler>() where T : IntegrationEvent where THandler : IIntegrationEventHandler<T>
     {
         var eventKey = GetEventKey<T>();
-        DoAddSubscription(typeof(TH), eventKey);
+        DoAddSubscription(typeof(THandler), eventKey);
     }
 
     public void AddSubscription(Type eventType, Type handlerType)
@@ -41,11 +41,11 @@ public class RabbitSubscriptionsManager : ISubscriptionsManager
         return HasSubscriptionsForEvent(eventKey);
     }
 
-    public void RemoveSubscription<T, TH>() where T : IntegrationEvent where TH : IIntegrationEventHandler<T>
+    public void RemoveSubscription<T, THandler>() where T : IntegrationEvent where THandler : IIntegrationEventHandler<T>
     {
         if (!HasSubscriptionsForEvent<T>()) return;
         var eventName = GetEventKey<T>();
-        _ = _handlers[eventName].Remove(typeof(TH));
+        _ = _handlers[eventName].Remove(typeof(THandler));
         if (_handlers[eventName].Any()) return;
         //_handlers.Remove(eventName);
         EventRemovedEventArgs args = new()

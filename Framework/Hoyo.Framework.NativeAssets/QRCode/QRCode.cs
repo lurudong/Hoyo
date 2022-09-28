@@ -49,8 +49,8 @@ public static class QrCode
         #region --绘制二维码(同时获取真实的二维码区域起绘点和结束点的坐标)--
         using var sKCanvas = new SKCanvas(sKBitmap);
         var sKColorBlack = SKColor.Parse("000000");
-        var sKColorWihte = SKColor.Parse("FFFFFF");
-        sKCanvas.Clear(sKColorWihte);
+        var sKColorWhite = SKColor.Parse("FFFFFF");
+        sKCanvas.Clear(sKColorWhite);
         var blackStartPointIsNotWriteDown = true;
         for (var y = 0; y < h; y++)
         {
@@ -70,36 +70,36 @@ public static class QrCode
             }
         }
         #endregion
-        var qrcodeRealWidth = blackEndPointX - blackStartPointX;
-        var qrcodeRealHeight = blackEndPointY - blackStartPointY;
+        var qrCodeRealWidth = blackEndPointX - blackStartPointX;
+        var qrCodeRealHeight = blackEndPointY - blackStartPointY;
         #region -- 处理白边 --
         if (keepWhiteBorderPixelVal > -1)//指定了边框宽度
         {
-            var borderMaxWidth = (int)Math.Floor((double)qrcodeRealWidth / 10);
+            var borderMaxWidth = (int)Math.Floor((double)qrCodeRealWidth / 10);
             if (keepWhiteBorderPixelVal > borderMaxWidth)
             {
                 keepWhiteBorderPixelVal = borderMaxWidth;
             }
-            var nQrcodeRealWidth = width - keepWhiteBorderPixelVal - keepWhiteBorderPixelVal;
-            var nQrcodeRealHeight = height - keepWhiteBorderPixelVal - keepWhiteBorderPixelVal;
+            var nQrCodeRealWidth = width - keepWhiteBorderPixelVal - keepWhiteBorderPixelVal;
+            var nQrCodeRealHeight = height - keepWhiteBorderPixelVal - keepWhiteBorderPixelVal;
             using var sKBitmap2 = new SKBitmap(width, height);
             using var sKCanvas2 = new SKCanvas(sKBitmap2);
-            sKCanvas2.Clear(sKColorWihte);
+            sKCanvas2.Clear(sKColorWhite);
             //二维码绘制到临时画布上时无需抗锯齿等处理(避免文件增大)
             sKCanvas2.DrawBitmap(sKBitmap, new SKRect
             {
                 Location = new() { X = blackStartPointX, Y = blackStartPointY },
-                Size = new() { Height = qrcodeRealHeight, Width = qrcodeRealWidth }
+                Size = new() { Height = qrCodeRealHeight, Width = qrCodeRealWidth }
             },
             new SKRect
             {
                 Location = new() { X = keepWhiteBorderPixelVal, Y = keepWhiteBorderPixelVal },
-                Size = new() { Width = nQrcodeRealWidth, Height = nQrcodeRealHeight }
+                Size = new() { Width = nQrCodeRealWidth, Height = nQrCodeRealHeight }
             });
             blackStartPointX = keepWhiteBorderPixelVal;
             blackStartPointY = keepWhiteBorderPixelVal;
-            qrcodeRealWidth = nQrcodeRealWidth;
-            qrcodeRealHeight = nQrcodeRealHeight;
+            qrCodeRealWidth = nQrCodeRealWidth;
+            qrCodeRealHeight = nQrCodeRealHeight;
             sKBitmap.Dispose();
             sKBitmap = sKBitmap2;
         }
@@ -110,10 +110,10 @@ public static class QrCode
             using var sKBitmapLogo = SKBitmap.Decode(logoImgae);
             if (!sKBitmapLogo.IsEmpty)
             {
-                var logoTargetMaxWidth = (int)Math.Floor((double)qrcodeRealWidth / 6);
-                var logoTargetMaxHeight = (int)Math.Floor((double)qrcodeRealHeight / 6);
-                var qrcodeCenterX = (int)Math.Floor((double)qrcodeRealWidth / 2);
-                var qrcodeCenterY = (int)Math.Floor((double)qrcodeRealHeight / 2);
+                var logoTargetMaxWidth = (int)Math.Floor((double)qrCodeRealWidth / 6);
+                var logoTargetMaxHeight = (int)Math.Floor((double)qrCodeRealHeight / 6);
+                var qrCodeCenterX = (int)Math.Floor((double)qrCodeRealWidth / 2);
+                var qrCodeCenterY = (int)Math.Floor((double)qrCodeRealHeight / 2);
                 var logoResultWidth = sKBitmapLogo.Width;
                 var logoResultHeight = sKBitmapLogo.Height;
                 if (logoResultWidth > logoTargetMaxWidth)
@@ -128,8 +128,8 @@ public static class QrCode
                     logoResultHeight = logoTargetMaxHeight;
                     logoResultWidth = (int)Math.Floor(logoResultWidth * r);
                 }
-                var pointX = qrcodeCenterX - (int)Math.Floor((double)logoResultWidth / 2) + blackStartPointX;
-                var pointY = qrcodeCenterY - (int)Math.Floor((double)logoResultHeight / 2) + blackStartPointY;
+                var pointX = qrCodeCenterX - (int)Math.Floor((double)logoResultWidth / 2) + blackStartPointX;
+                var pointY = qrCodeCenterY - (int)Math.Floor((double)logoResultHeight / 2) + blackStartPointY;
                 using var sKCanvas3 = new SKCanvas(sKBitmap);
                 using var sKPaint = new SKPaint
                 {
@@ -152,8 +152,7 @@ public static class QrCode
         using var sKImage = SKImage.FromBitmap(sKBitmap);
         sKBitmap.Dispose();
         using var data = sKImage.Encode(SKEncodedImageFormat.Png, 75);
-        var reval = data.ToArray();
-        return reval;
+        return data.ToArray();
     }
     /// <summary>
     /// 从Base64解析二维码
@@ -184,8 +183,8 @@ public static class QrCode
             }
         }
         var rGbLuminanceSource = new RGBLuminanceSource(bytes, w, h);
-        var hybridBinarizer = new HybridBinarizer(rGbLuminanceSource);
-        var binaryBitmap = new BinaryBitmap(hybridBinarizer);
+        var hybrid = new HybridBinarizer(rGbLuminanceSource);
+        var binaryBitmap = new BinaryBitmap(hybrid);
         var hints = new Dictionary<DecodeHintType, object>
         {
             { DecodeHintType.CHARACTER_SET, "utf-8" }

@@ -1,6 +1,6 @@
 ﻿namespace Hoyo.Universal;
 
-public class IdNameItem : IGetReferenceItem
+public class IdNameItem : IReferenceItem
 {
     public IdNameItem() { }
     public IdNameItem(string id, string name) { Id = id; Name = name; }

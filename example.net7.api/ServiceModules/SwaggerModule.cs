@@ -28,13 +28,13 @@ public class SwaggerModule : AppModule
                 Version = Version
             });
             //var files = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "*.xml"));
-            //foreach (var fiel in files)
+            //foreach (var file in files)
             //{
-            //    c.IncludeXmlComments(fiel, true);
+            //    c.IncludeXmlComments(file, true);
             //}
             // 一定要返回true！
-            c.DocInclusionPredicate((docName, description) => true);
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            c.DocInclusionPredicate((_, _) => true);
+            c.AddSecurityDefinition("Bearer", new()
             {
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                 Name = "Authorization",
@@ -67,21 +67,11 @@ public class SwaggerOperationFilter : IOperationFilter
         {
             {
                 // Put here you own security scheme, this one is an example
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    },
-                    Scheme = "oauth2",
-                    Name = "Bearer",
-                    In = ParameterLocation.Header,
-                },
+                new() { Reference = new() { Type = ReferenceType.SecurityScheme, Id = "Bearer" }, Scheme = "oauth2", Name = "Bearer", In = ParameterLocation.Header },
                 new List<string>()
             }
         };
         operation.Security = new List<OpenApiSecurityRequirement> { securityRequirement };
-        operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+        operation.Responses.Add("401", new() { Description = "Unauthorized" });
     }
 }
