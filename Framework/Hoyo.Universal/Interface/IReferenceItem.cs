@@ -1,5 +1,5 @@
 ﻿namespace Hoyo.Universal;
-public interface IGetReferenceItem
+public interface IReferenceItem
 {
     ReferenceItem GetReferenceItem();
 }

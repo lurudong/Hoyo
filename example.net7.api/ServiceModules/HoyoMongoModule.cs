@@ -1,5 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Modules;
+﻿using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
 using Hoyo.Mongo.Extension;
 using MongoDB.Bson;
@@ -16,8 +15,6 @@ public class HoyoMongoModule : AppModule
     }
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var config = context.Services.GetConfiguration();
-
         context.Services.AddMongoDbContext<DbContext>("mongodb://bl:a123456@altzyxy.com:27010/test1?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
         {
             op.AppendConventionRegistry(new()

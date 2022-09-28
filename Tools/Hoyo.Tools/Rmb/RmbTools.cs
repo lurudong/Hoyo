@@ -32,7 +32,7 @@ public static class RmbTools
     /// <summary> 
     /// 转换人民币大小金额 .
     /// </summary> 
-    /// <param name="numstr">金额</param> 
+    /// <param name="numStr">金额</param> 
     /// <returns>返回大写形式</returns>
-    public static string ToRMB(this string numstr) => ToRMB(Convert.ToDecimal(numstr));
+    public static string ToRMB(this string numStr) => ToRMB(Convert.ToDecimal(numStr));
 }

@@ -1,6 +1,6 @@
 ﻿namespace Hoyo.Universal;
 
-public class IdRidNameItem : IGetReferenceItem
+public class IdRidNameItem : IReferenceItem
 {
     public string Id { get; set; } = string.Empty;
     public string Rid { get; set; } = string.Empty;

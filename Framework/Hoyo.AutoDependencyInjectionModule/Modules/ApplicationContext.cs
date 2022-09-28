@@ -12,6 +12,5 @@ public class ApplicationContext : IServiceProviderAccessor
         serviceProvider.NotNull(nameof(serviceProvider));
         ServiceProvider = serviceProvider;
     }
-
     public IServiceProvider ServiceProvider { get; set; }
 }

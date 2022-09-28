@@ -14,11 +14,11 @@ public static class MongoServiceExtensions
     /// </summary>
     private static string ConnectionString(IConfiguration configuration)
     {
-        var connstr = configuration["CONNECTIONSTRINGS_MONGO"];
-        if (string.IsNullOrWhiteSpace(connstr)) connstr = configuration.GetConnectionString("Mongo");
-        return string.IsNullOrWhiteSpace(connstr)
+        var connStr = configuration["CONNECTIONSTRINGS_MONGO"];
+        if (string.IsNullOrWhiteSpace(connStr)) connStr = configuration.GetConnectionString("Mongo");
+        return string.IsNullOrWhiteSpace(connStr)
             ? throw new("💔:无 [CONNECTIONSTRINGS_MONGO] 系统环境变量或appsettings.json中不存在ConnectionStrings::Mongo配置")
-            : connstr;
+            : connStr;
     }
 
     /// <summary>
@@ -41,15 +41,15 @@ public static class MongoServiceExtensions
     /// </summary>
     /// <typeparam name="T">Hoyo.Mongo.DbContext</typeparam>
     /// <param name="services">IServiceCollection</param>
-    /// <param name="connstr">链接字符串</param>
+    /// <param name="connStr">链接字符串</param>
     /// <param name="options">DbContextOptions</param>
     /// <returns></returns>
-    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, string connstr, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
+    public static IServiceCollection AddMongoDbContext<T>(this IServiceCollection services, string connStr, Action<HoyoMongoOptions>? options = null) where T : BaseDbContext
     {
         var dbOptions = new HoyoMongoOptions();
         options?.Invoke(dbOptions);
         BaseDbContext.RegistryConventionPack(dbOptions);
-        var db = BaseDbContext.CreateInstance<T>(connstr);
+        var db = BaseDbContext.CreateInstance<T>(connStr);
         _ = services.AddSingleton(db).AddSingleton(db.Database).AddSingleton(db.Client);
         return services;
     }

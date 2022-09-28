@@ -40,5 +40,5 @@ public class GridFSItemInfo
     /// <summary>
     /// 创建时间
     /// </summary>
-    public DateTime CreatTime { get; set; }
+    public DateTime CreateTime { get; set; }
 }

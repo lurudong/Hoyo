@@ -1,14 +1,18 @@
 ﻿namespace Hoyo.Universal;
 
-public class YMNumber : IFill
+public class YmNumber : IFill
 {
-    public YMNumber() { }
-    public YMNumber(int y, int m) { Y = y; M = m; }
+    public YmNumber() { }
+    public YmNumber(int y, int m)
+    {
+        Y = y;
+        M = m;
+    }
     public int? Y { get; set; }
     public int? M { get; set; }
     public string Str { get; set; } = string.Empty;
     public string? Format { get; set; }
-    public string? FormatStr => Y != null ? Y.ToString() + (Format ?? "/") + (M == null ? null : M < 10 ? "0" + M.ToString() : M.ToString()) : null;
+    public string? FormatStr => Y is not null ? Y + (Format ?? "/") + (M is null ? null : M < 10 ? "0" + M : M.ToString()) : null;
     public override string? ToString() => M is null ? Convert.ToString(Y) : Y is null ? Convert.ToString(M) : ((Y * 100) + M).ToString();
     public string? Fill(object sourceValue)
     {
@@ -16,13 +20,13 @@ public class YMNumber : IFill
         return FillByStr();
     }
 
-    public static YMNumber? Parse(string value, string? format = null)
+    public static YmNumber? Parse(string value, string? format = null)
     {
         if (string.IsNullOrWhiteSpace(value)) return null;
         switch (value.Length)
         {
             case 6 when int.TryParse(value, out var date):
-                YMNumber ym = new()
+                YmNumber ym = new()
                 {
                     Y = date / 100,
                     M = date % 100,

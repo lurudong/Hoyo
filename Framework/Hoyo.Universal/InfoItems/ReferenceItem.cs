@@ -1,6 +1,6 @@
 ﻿namespace Hoyo.Universal;
 
-public class ReferenceItem : IGetReferenceItem
+public class ReferenceItem : IReferenceItem
 {
     public ReferenceItem() { }
     public ReferenceItem(string rid) { Rid = rid; }

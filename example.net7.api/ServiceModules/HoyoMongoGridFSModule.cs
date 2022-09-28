@@ -24,7 +24,7 @@ public class HoyoMongoGridFSModule : AppModule
                 BucketName = "hoyo",
                 ChunkSizeBytes = 1024,
                 DisableMD5 = true,
-                ReadConcern = new() { },
+                ReadConcern = new(),
                 ReadPreference = ReadPreference.Primary,
                 WriteConcern = WriteConcern.Unacknowledged
             };
