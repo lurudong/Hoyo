@@ -6,7 +6,7 @@
 public class Operator : ReferenceItem
 {
     /// <summary>
-    /// 操作人实体
+    /// 构造函数
     /// </summary>
     /// <param name="rid">相关ID</param>
     /// <param name="name">名称</param>

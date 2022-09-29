@@ -32,7 +32,12 @@ public class BaseDbContext
         t.Database = t.Client.GetDatabase(dbName);
         return t;
     }
-
+    /// <summary>
+    /// 使用ClientSettings配置服务
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="settings"></param>
+    /// <returns></returns>
     internal static T CreateInstance<T>(HoyoMongoSettings settings) where T : BaseDbContext
     {
         var t = Activator.CreateInstance<T>();
@@ -42,7 +47,10 @@ public class BaseDbContext
         t.Database = t.Client.GetDatabase(dbName);
         return t;
     }
-
+    /// <summary>
+    /// 注册转换Pack
+    /// </summary>
+    /// <param name="options"></param>
     internal static void RegistryConventionPack(HoyoMongoOptions options)
     {
         foreach (var item in options.ConventionRegistry)

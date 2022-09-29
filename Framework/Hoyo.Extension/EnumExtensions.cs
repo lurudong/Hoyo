@@ -1,5 +1,8 @@
 ﻿namespace Hoyo.Extensions;
 
+/// <summary>
+/// 扩展枚举
+/// </summary>
 public static class EnumExtensions
 {
     /// <summary>

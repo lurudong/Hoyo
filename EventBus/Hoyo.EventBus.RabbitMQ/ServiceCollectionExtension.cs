@@ -3,14 +3,21 @@ using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 
 namespace Hoyo.EventBus.RabbitMQ;
-
+/// <summary>
+/// ServiceCollection扩展
+/// </summary>
 public static class ServiceCollectionExtension
 {
+    /// <summary>
+    /// 添加消息总线RabbitMQ服务
+    /// </summary>
+    /// <param name="service"></param>
+    /// <param name="action"></param>
     public static void AddEventBusRabbit(this IServiceCollection service, Action<RabbitConfig>? action = null)
     {
         RabbitConfig config = new();
         action?.Invoke(config);
-        _ = service.AddRabbitPersistentConnection(config)
+        _ = service.RabbitPersistentConnection(config)
             .AddSingleton<IIntegrationEventBus, IntegrationEventBusRabbit>(sp =>
             {
                 var rabbitConn = sp.GetRequiredService<IRabbitPersistentConnection>();
@@ -23,8 +30,13 @@ public static class ServiceCollectionExtension
             .AddSingleton<ISubscriptionsManager, RabbitSubscriptionsManager>()
             .AddHostedService<RabbitSubscribeService>();
     }
-
-    private static IServiceCollection AddRabbitPersistentConnection(this IServiceCollection service, RabbitConfig config)
+    /// <summary>
+    /// RabbitMQ持久化链接
+    /// </summary>
+    /// <param name="service"></param>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    private static IServiceCollection RabbitPersistentConnection(this IServiceCollection service, RabbitConfig config)
     {
         _ = service.AddSingleton<IRabbitPersistentConnection>(sp =>
         {

@@ -15,6 +15,9 @@ using System.Text.Json;
 
 namespace Hoyo.EventBus.RabbitMQ;
 
+/// <summary>
+/// RabbitMQ集成事件总线
+/// </summary>
 public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
 {
     private readonly IRabbitPersistentConnection _persistentConnection;
@@ -24,6 +27,14 @@ public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
     private readonly IServiceProvider _serviceProvider;
     private const string HandleName = nameof(IIntegrationEventHandler<IIntegrationEvent>.HandleAsync);
     private bool _isDisposed;
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="persistentConnection"></param>
+    /// <param name="logger"></param>
+    /// <param name="retryCount"></param>
+    /// <param name="subsManager"></param>
+    /// <param name="serviceProvider"></param>
     public IntegrationEventBusRabbit(IRabbitPersistentConnection persistentConnection, ILogger<IntegrationEventBusRabbit> logger, int retryCount, ISubscriptionsManager subsManager, IServiceProvider serviceProvider)
     {
         _persistentConnection = persistentConnection;
@@ -75,10 +86,7 @@ public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions
-            {
-                WriteIndented = true
-            }));
+            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions { WriteIndented = true }));
         });
     }
 
@@ -129,11 +137,7 @@ public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
         {
             properties.DeliveryMode = 2;
             _logger.LogTrace("向RabbitMQ发布事件: {EventId}", @event.EventId);
-            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey,
-                true, properties,
-                JsonSerializer.SerializeToUtf8Bytes(@event,
-                    @event.GetType(),
-                    new JsonSerializerOptions {WriteIndented = true}));
+            channel.BasicPublish(rabbitAttr.Exchange, rabbitAttr.RoutingKey, true, properties, JsonSerializer.SerializeToUtf8Bytes(@event, @event.GetType(), new JsonSerializerOptions { WriteIndented = true }));
         });
     }
 
@@ -196,8 +200,7 @@ public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
     private void DoInternalSubscription(string eventName, RabbitAttribute rabbitMqAttribute, IModel consumerChannel)
     {
         var containsKey = _subsManager.HasSubscriptionsForEvent(eventName);
-        if (containsKey)
-            return;
+        if (containsKey) return;
         if (!_persistentConnection.IsConnected) _ = _persistentConnection.TryConnect();
         consumerChannel.QueueBind(rabbitMqAttribute.Queue, rabbitMqAttribute.Exchange, rabbitMqAttribute.RoutingKey);
     }

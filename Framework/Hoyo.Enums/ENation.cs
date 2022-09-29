@@ -1,4 +1,8 @@
-﻿namespace Hoyo.Enums;
+﻿#pragma warning disable CS1591
+namespace Hoyo.Enums;
+/// <summary>
+/// 中国民族枚举
+/// </summary>
 public enum ENation
 {
     汉族 = 1,

@@ -2,6 +2,9 @@
 
 namespace Hoyo.Extensions;
 
+/// <summary>
+/// Object扩展,适用于大多数类型的扩展.
+/// </summary>
 public static class ObjectExtension
 {
     /// <summary>

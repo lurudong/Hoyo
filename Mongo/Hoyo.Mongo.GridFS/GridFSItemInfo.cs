@@ -1,4 +1,8 @@
 ﻿namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 用来记录文件信息的实体.
+/// </summary>
 public class GridFSItemInfo
 {
     /// <summary>
@@ -40,5 +44,5 @@ public class GridFSItemInfo
     /// <summary>
     /// 创建时间
     /// </summary>
-    public DateTime CreatTime { get; set; }
+    public DateTime CreateTime { get; set; }
 }

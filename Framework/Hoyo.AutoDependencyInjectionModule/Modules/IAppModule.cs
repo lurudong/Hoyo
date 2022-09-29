@@ -5,6 +5,10 @@
 /// </summary>
 public interface IAppModule : IApplicationInitialization
 {
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context"></param>
     void ConfigureServices(ConfigureServicesContext context);
     /// <summary>
     /// 服务依赖集合
@@ -12,5 +16,8 @@ public interface IAppModule : IApplicationInitialization
     /// <param name="moduleType"></param>
     /// <returns></returns>
     Type[] GetDependedTypes(Type? moduleType = null);
+    /// <summary>
+    /// 是否启用
+    /// </summary>
     bool Enable { get; set; }
 }

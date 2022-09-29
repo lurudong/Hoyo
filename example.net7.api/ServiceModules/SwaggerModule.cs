@@ -1,11 +1,16 @@
 ﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
 using Hoyo.AutoDependencyInjectionModule.Modules;
-using Microsoft.AspNetCore.Authorization;
+using Hoyo.Extensions;
+using Hoyo.WebCore.Attributes;
+using Hoyo.WebCore.SwaggerFilters;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 
 namespace example.net7.api;
 
+/// <summary>
+/// Swagger文档的配置
+/// </summary>
 public class SwaggerModule : AppModule
 {
     /**
@@ -14,6 +19,10 @@ public class SwaggerModule : AppModule
     private string Title { get; set; } = string.Empty;
     private string Version { get; set; } = string.Empty;
 
+    /// <summary>
+    /// 配置和注册服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var config = context.Services.GetConfiguration();
@@ -22,19 +31,41 @@ public class SwaggerModule : AppModule
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         _ = context.Services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc(Version, new OpenApiInfo
+            c.SwaggerDoc(Title, new()
             {
                 Title = Title,
-                Version = Version
+                Version = Version,
+                Description = "Console.WriteLine(\"🐂🍺\")"
             });
-            //var files = Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "*.xml"));
-            //foreach (var fiel in files)
-            //{
-            //    c.IncludeXmlComments(fiel, true);
-            //}
-            // 一定要返回true！
-            c.DocInclusionPredicate((docName, description) => true);
-            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            var controllers = AssemblyHelper.FindTypesByAttribute<ApiGroupAttribute>();
+            foreach (var ctrl in controllers)
+            {
+                var attr = ctrl.GetCustomAttribute<ApiGroupAttribute>();
+                if (attr is null) continue;
+                c.SwaggerDoc(attr.Title, new()
+                {
+                    Title = attr.Title,
+                    Version = attr.Version,
+                    Description = attr.Description
+                });
+            }
+            var files = Directory.GetFiles(AppContext.BaseDirectory, "*.xml");
+            foreach (var file in files)
+            {
+                c.IncludeXmlComments(file, true);
+            }
+            c.DocInclusionPredicate((docName, apiDescription) =>
+            {
+                //反射拿到值
+                var actionList = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is ApiGroupAttribute).ToList();
+                if (actionList.Any()) {
+                    return actionList.FirstOrDefault() is ApiGroupAttribute attr && attr.Title == docName;
+                }
+                var not = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is not ApiGroupAttribute).ToList();
+                return not.Any() && docName == Title;
+                //判断是否包含这个分组
+            });
+            c.AddSecurityDefinition("Bearer", new()
             {
                 Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
                 Name = "Authorization",
@@ -43,45 +74,28 @@ public class SwaggerModule : AppModule
                 Scheme = "Bearer",
             });
             // 这里使用预定义的过滤器,避免给所有接口均加锁.
-            c.OperationFilter<SwaggerOperationFilter>();
+            c.OperationFilter<SwaggerAuthorizeFilter>();
+            c.DocumentFilter<SwaggerHiddenApiFilter>();
         });
     }
 
+    /// <summary>
+    /// 注册中间件
+    /// </summary>
+    /// <param name="context"></param>
     public override void ApplicationInitialization(ApplicationContext context)
     {
         var app = context.GetApplicationBuilder();
-        _ = app.UseSwagger().UseSwaggerUI(c => c.SwaggerEndpoint($"/swagger/{Version}/swagger.json", $"{Title} {Version}"));
-    }
-}
-
-public class SwaggerOperationFilter : IOperationFilter
-{
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
-    {
-        var authAttributes = context.MethodInfo.DeclaringType?.GetCustomAttributes(true)
-            .Union(context.MethodInfo.GetCustomAttributes(true))
-            .OfType<AuthorizeAttribute>();
-
-        if (!authAttributes!.Any()) return;
-        var securityRequirement = new OpenApiSecurityRequirement()
+        _ = app.UseSwagger().UseSwaggerUI(c =>
         {
+            c.SwaggerEndpoint($"/swagger/{Title}/swagger.json", $"{Title} {Version}");
+            var controllers = AssemblyHelper.FindTypesByAttribute<ApiGroupAttribute>();
+            foreach (var ctrl in controllers)
             {
-                // Put here you own security scheme, this one is an example
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    },
-                    Scheme = "oauth2",
-                    Name = "Bearer",
-                    In = ParameterLocation.Header,
-                },
-                new List<string>()
+                var attr = ctrl.GetCustomAttribute<ApiGroupAttribute>();
+                if (attr is null) continue;
+                c.SwaggerEndpoint($"/swagger/{attr.Title}/swagger.json", $"{attr.Title} {attr.Version}");
             }
-        };
-        operation.Security = new List<OpenApiSecurityRequirement> { securityRequirement };
-        operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
+        });
     }
 }

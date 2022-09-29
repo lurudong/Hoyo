@@ -6,14 +6,30 @@ using MongoDB.Driver.GridFS;
 using System.Text;
 
 namespace Hoyo.Mongo.GridFS;
-[ApiController]
-[Route("[controller]")]
+
+/// <summary>
+/// GridFS控制器
+/// </summary>
+[ApiController, Route("[controller]")]
 public class GridFSController : ControllerBase
 {
+    /// <summary>
+    /// GridFSBucket
+    /// </summary>
     protected readonly GridFSBucket Bucket;
+    /// <summary>
+    /// IMongoCollection
+    /// </summary>
     protected readonly IMongoCollection<GridFSItemInfo> Coll;
+    /// <summary>
+    /// 查询过滤器
+    /// </summary>
     protected readonly FilterDefinitionBuilder<GridFSItemInfo> _bf = Builders<GridFSItemInfo>.Filter;
-
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="bucket"></param>
+    /// <param name="collection"></param>
     public GridFSController(GridFSBucket bucket, IMongoCollection<GridFSItemInfo> collection)
     {
         Bucket = bucket;
@@ -34,8 +50,8 @@ public class GridFSController : ControllerBase
         if (!string.IsNullOrWhiteSpace(info.UserId)) f &= _bf.Where(c => c.UserId.Contains(info.UserId));
         if (!string.IsNullOrWhiteSpace(info.App)) f &= _bf.Where(c => c.App.Contains(info.App));
         if (!string.IsNullOrWhiteSpace(info.BusinessType)) f &= _bf.Where(c => c.BusinessType.Contains(info.BusinessType));
-        if (info.Start is not null) f &= _bf.Gte(c => c.CreatTime, info.Start);
-        if (info.End is not null) f &= _bf.Lte(c => c.CreatTime, info.End);
+        if (info.Start is not null) f &= _bf.Gte(c => c.CreateTime, info.Start);
+        if (info.End is not null) f &= _bf.Lte(c => c.CreateTime, info.End);
         if (!string.IsNullOrWhiteSpace(info.Key)) f &= _bf.Or(_bf.Where(c => c.FileName.Contains(info.Key)),
             _bf.Where(c => c.UserName.Contains(info.Key)),
             _bf.Where(c => c.UserId.Contains(info.Key)),
@@ -44,7 +60,7 @@ public class GridFSController : ControllerBase
         var total = await Coll.CountDocumentsAsync(f);
         var list = await Coll.FindAsync(f, new()
         {
-            Sort = Builders<GridFSItemInfo>.Sort.Descending(c => c.CreatTime),
+            Sort = Builders<GridFSItemInfo>.Sort.Descending(c => c.CreateTime),
             Limit = info.PageSize,
             Skip = (info.Current - 1) * info.PageSize
         }).Result.ToListAsync();
@@ -93,7 +109,7 @@ public class GridFSController : ControllerBase
                 App = fs.App,
                 BusinessType = fs.BusinessType,
                 CategoryId = fs.CategoryId,
-                CreatTime = DateTime.Now
+                CreateTime = DateTime.Now
             });
         }
         _ = Coll.InsertManyAsync(infos);
@@ -131,7 +147,7 @@ public class GridFSController : ControllerBase
             App = fs.App,
             BusinessType = fs.BusinessType,
             CategoryId = fs.CategoryId,
-            CreatTime = DateTime.Now
+            CreateTime = DateTime.Now
         });
         return new()
         {

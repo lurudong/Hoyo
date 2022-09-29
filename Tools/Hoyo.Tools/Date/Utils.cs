@@ -1,6 +1,9 @@
 ﻿using Hoyo.Enums;
 
 namespace Hoyo.Tools;
+/// <summary>
+/// 工具类
+/// </summary>
 public static class Utils
 {
     /// <summary>
@@ -90,15 +93,15 @@ public static class Utils
     /// <returns>ETimeOverlap</returns>
     public static ETimeOverlap TimeOverlap(Tuple<DateTime, DateTime> sub, Tuple<DateTime, DateTime> validate)
     {
-        var (substart, subend) = sub;
-        var (validatestart, validateend) = validate;
-        return substart >= subend | validatestart >= validateend
+        var (subStart, subEnd) = sub;
+        var (validateStart, validateEnd) = validate;
+        return subStart >= subEnd | validateStart >= validateEnd
             ? throw new("时间段不合法")
-            : substart >= validatestart && substart < validateend && subend <= validateend && subend > validatestart
+            : subStart >= validateStart && subStart < validateEnd && subEnd <= validateEnd && subEnd > validateStart
             ? ETimeOverlap.包含或等于
-            : substart < validatestart && subend >= validatestart && subend < validateend
+            : subStart < validateStart && subEnd >= validateStart && subEnd < validateEnd
             ? ETimeOverlap.后段包含于
-            : substart > validatestart && substart >= validateend && subend > validateend ? ETimeOverlap.前段包含于 : ETimeOverlap.不在范围内;
+            : subStart > validateStart && subStart >= validateEnd && subEnd > validateEnd ? ETimeOverlap.前段包含于 : ETimeOverlap.不在范围内;
     }
 
     /// <summary>
@@ -114,7 +117,6 @@ public static class Utils
         var dayDiff = point.DayOfWeek == DayOfWeek.Sunday ? 6 : (int)point.DayOfWeek - 1;
         var first_monday = point.AddDays(-dayDiff);
         var daysCount = (date.Value - first_monday).TotalDays;
-        var weekno = (int)(daysCount / 7) + (daysCount % 7 == 0 ? 0 : 1);
-        return weekno;
+        return (int)(daysCount / 7) + (daysCount % 7 == 0 ? 0 : 1);
     }
 }

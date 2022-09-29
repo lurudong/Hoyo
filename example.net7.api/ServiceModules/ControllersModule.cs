@@ -4,8 +4,15 @@ using System.Text.Json.Serialization;
 
 namespace example.net7.api;
 
+/// <summary>
+/// 注册一些控制器的基本内容
+/// </summary>
 public class ControllersModule : AppModule
 {
+    /// <summary>
+    /// 注册和配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         _ = context.Services.AddControllers(x =>

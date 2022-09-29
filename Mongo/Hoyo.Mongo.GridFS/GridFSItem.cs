@@ -1,4 +1,8 @@
 ﻿namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 文件信息的实体
+/// </summary>
 public class GridFSItem
 {
     /// <summary>

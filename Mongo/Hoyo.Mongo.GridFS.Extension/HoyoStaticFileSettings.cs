@@ -1,4 +1,8 @@
 ﻿namespace Hoyo.Mongo.GridFS.Extension;
+
+/// <summary>
+/// 虚拟文件路径的一些参数配置
+/// </summary>
 public class HoyoStaticFileSettings
 {
     /// <summary>

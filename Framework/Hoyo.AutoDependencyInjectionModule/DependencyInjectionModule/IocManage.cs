@@ -23,7 +23,9 @@ public class IocManage
     /// 创建懒加载Ioc管理实例
     /// </summary>
     private static readonly Lazy<IocManage> InstanceLazy = new(() => new IocManage());
-
+    /// <summary>
+    /// IocManage实例
+    /// </summary>
     public static IocManage Instance => InstanceLazy.Value;
 
     /// <summary>

@@ -2,7 +2,10 @@
 using MongoDB.Bson.Serialization.Conventions;
 
 namespace Hoyo.Mongo;
-public class HoyoMongoOptions
+/// <summary>
+/// Mongodb配置选项
+/// </summary>
+public sealed class HoyoMongoOptions
 {
     /// <summary>
     /// ObjectId到String转换的类型[该列表中的对象,不会将Id,ID字段转化为ObjectId类型.在数据库中存为字符串格式]

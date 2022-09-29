@@ -58,15 +58,15 @@ public static class PyTools
     /// 取中文文本的拼音首字母
     /// </summary>
     /// <param name="text">编码为UTF8的文本</param>
-    /// <param name="defaultstr">转换失败时返回的预设字符</param>
+    /// <param name="defaultStr">转换失败时返回的预设字符</param>
     /// <returns>返回中文对应的拼音首字母</returns>
-    public static string GetInitials(string text, string defaultstr)
+    public static string GetInitials(string text, string defaultStr)
     {
         text = text.Trim();
         var sb = new StringBuilder();
-        foreach (var py in text.Select(t => GetPinYin(t, defaultstr)))
+        foreach (var py in text.Select(t => GetPinYin(t, defaultStr)))
         {
-            _ = string.IsNullOrWhiteSpace(py) ? sb.Append(defaultstr) : sb.Append(py[0].ToString().ToUpper());
+            _ = string.IsNullOrWhiteSpace(py) ? sb.Append(defaultStr) : sb.Append(py[0].ToString().ToUpper());
         }
         return sb.ToString().ToUpper();
     }
@@ -83,10 +83,10 @@ public static class PyTools
     /// 取中文文本的拼音首字母
     /// </summary>
     /// <param name="text">文本</param>
-    /// <param name="defaultstr">转换失败后返回的预设字符</param>
+    /// <param name="defaultStr">转换失败后返回的预设字符</param>
     /// <param name="encoding">源文本的编码</param>
     /// <returns>返回Encoding编码类型中文对应的拼音首字母</returns>
-    public static string GetInitials(string text, string defaultstr, Encoding encoding) => ConvertEncoding(GetInitials(ConvertEncoding(text, encoding, Encoding.UTF8), defaultstr), Encoding.UTF8, encoding);
+    public static string GetInitials(string text, string defaultStr, Encoding encoding) => ConvertEncoding(GetInitials(ConvertEncoding(text, encoding, Encoding.UTF8), defaultStr), Encoding.UTF8, encoding);
 
     /// <summary>
     /// 取中文文本的拼音
@@ -107,14 +107,14 @@ public static class PyTools
     /// 取中文文本的拼音
     /// </summary>
     /// <param name="text">编码为UTF8的文本</param>
-    /// <param name="defaultstr">当获取拼音失败时返回预设字符</param>
+    /// <param name="defaultStr">当获取拼音失败时返回预设字符</param>
     /// <returns>返回中文文本的拼音</returns>
-    public static string GetPinYin(string text, string defaultstr)
+    public static string GetPinYin(string text, string defaultStr)
     {
         var sb = new StringBuilder();
-        foreach (var py in text.Select(t => GetPinYin(t, defaultstr)))
+        foreach (var py in text.Select(t => GetPinYin(t, defaultStr)))
         {
-            _ = string.IsNullOrWhiteSpace(py) ? sb.Append(defaultstr) : sb.Append(py);
+            _ = string.IsNullOrWhiteSpace(py) ? sb.Append(defaultStr) : sb.Append(py);
         }
         return sb.ToString().Trim();
     }
@@ -141,9 +141,9 @@ public static class PyTools
     /// 返回单个字符的汉字拼音
     /// </summary>
     /// <param name="ch">编码为UTF8的中文字符</param>
-    /// <param name="defaultstr">转换失败后返回字符串</param>
+    /// <param name="defaultStr">转换失败后返回字符串</param>
     /// <returns>ch对应的拼音</returns>
-    public static string GetPinYin(char ch, string defaultstr)
+    public static string GetPinYin(char ch, string defaultStr)
     {
         //是否是标点符号,控制符,10进制数字,空格,小写字母,大写字母,特殊符号,分隔符
         if (char.IsPunctuation(ch) | char.IsControl(ch) | char.IsDigit(ch) | char.IsWhiteSpace(ch) | char.IsLower(ch) | char.IsUpper(ch) | char.IsSymbol(ch) | char.IsSeparator(ch)) return ch.ToString();
@@ -153,7 +153,7 @@ public static class PyTools
             var pos = PyCode.Codes[index].IndexOf(ch, 7);
             if (pos != -1) return $"{PyCode.Codes[index][..6].Trim()} ";
         }
-        return defaultstr;
+        return defaultStr;
     }
 
     /// <summary>
@@ -168,10 +168,10 @@ public static class PyTools
     /// 取中文文本的拼音
     /// </summary>
     /// <param name="text">编码为UTF8的文本</param>
-    /// <param name="defaultstr">转换失败后返回的字符</param>
+    /// <param name="defaultStr">转换失败后返回的字符</param>
     /// <param name="encoding">源文本的编码</param>
     /// <returns>返回Encoding编码类型的中文文本的拼音</returns>
-    public static string GetPinYin(string text, string defaultstr, Encoding encoding) => ConvertEncoding(GetPinYin(ConvertEncoding(text.Trim(), encoding, Encoding.UTF8), defaultstr), Encoding.UTF8, encoding);
+    public static string GetPinYin(string text, string defaultStr, Encoding encoding) => ConvertEncoding(GetPinYin(ConvertEncoding(text.Trim(), encoding, Encoding.UTF8), defaultStr), Encoding.UTF8, encoding);
 
     /// <summary>
     /// 返回单个字符的汉字拼音
@@ -188,14 +188,14 @@ public static class PyTools
     /// <summary>
     /// 返回单个字符的汉字拼音
     /// </summary>
-    /// <param name="defaultstr">当转换失败后返回的字符</param>
+    /// <param name="defaultStr">当转换失败后返回的字符</param>
     /// <param name="ch">编码为Encoding的中文字符</param>
     /// <param name="encoding">源字符编码</param>
     /// <returns>编码为Encoding的ch对应的拼音</returns>
-    public static string GetPinYin(char ch, string defaultstr, Encoding encoding)
+    public static string GetPinYin(char ch, string defaultStr, Encoding encoding)
     {
         ch = ConvertEncoding(ch.ToString(), encoding, Encoding.UTF8)[0];
-        return ConvertEncoding(GetPinYin(ch, defaultstr), Encoding.UTF8, encoding);
+        return ConvertEncoding(GetPinYin(ch, defaultStr), Encoding.UTF8, encoding);
     }
 
     /// <summary>

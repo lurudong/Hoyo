@@ -1,5 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Modules;
+﻿using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Mongo;
 using Hoyo.Mongo.Extension;
 using MongoDB.Bson;
@@ -7,18 +6,25 @@ using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Bson.Serialization.Serializers;
 
 namespace example.net7.api;
-
+/// <summary>
+/// MongoDB驱动模块
+/// </summary>
 public class HoyoMongoModule : AppModule
 {
+    /// <summary>
+    /// 构造函数
+    /// </summary>
     public HoyoMongoModule()
     {
-        Enable = !false;
+        Enable = false;
     }
+    /// <summary>
+    /// 配置和注册服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var config = context.Services.GetConfiguration();
-
-        context.Services.AddMongoDbContext<DbContext>("mongodb://bl:a123456@altzyxy.com:27010/test1?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
+        context.Services.AddMongoDbContext<DbContext>("mongodb://", options: op =>
         {
             op.AppendConventionRegistry(new()
             {
@@ -31,7 +37,7 @@ public class HoyoMongoModule : AppModule
                 }
             });
             op.DefaultConventionRegistry = true;
-        }).AddMongoDbContext<DbContext2>("mongodb://bl:a123456@altzyxy.com:27010/test2?authSource=admin&serverSelectionTimeoutMS=1000", options: op =>
+        }).AddMongoDbContext<DbContext2>("mongodb://", options: op =>
         {
             op.DefaultConventionRegistry = true;
             op.AppendConventionRegistry(new()

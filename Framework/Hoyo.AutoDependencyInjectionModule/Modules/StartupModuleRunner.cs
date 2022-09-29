@@ -2,7 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Hoyo.AutoDependencyInjectionModule.Modules;
-
+/// <summary>
+/// 启动模块运行器
+/// </summary>
 public class StartupModuleRunner : ModuleApplicationBase, IStartupModuleRunner
 {
     /// <summary>
@@ -11,7 +13,10 @@ public class StartupModuleRunner : ModuleApplicationBase, IStartupModuleRunner
     /// <param name="startupModuleType"></param>
     /// <param name="services"></param>
     public StartupModuleRunner(Type startupModuleType, IServiceCollection services) : base(startupModuleType, services) => services.AddSingleton<IStartupModuleRunner>(this);
-
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
         IocManage.Instance.SetServiceCollection(services);
@@ -38,7 +43,10 @@ public class StartupModuleRunner : ModuleApplicationBase, IStartupModuleRunner
             }
         }
     }
-
+    /// <summary>
+    /// 初始化
+    /// </summary>
+    /// <param name="service"></param>
     public void Initialize(IServiceProvider service)
     {
         IocManage.Instance.SetApplicationServiceProvider(service);
@@ -51,7 +59,9 @@ public class StartupModuleRunner : ModuleApplicationBase, IStartupModuleRunner
             cfg.ApplicationInitialization(ctx);
         }
     }
-
+    /// <summary>
+    /// Dispose
+    /// </summary>
     public new void Dispose()
     {
         base.Dispose();

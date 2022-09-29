@@ -6,6 +6,9 @@ using System.Runtime.Loader;
 
 namespace Hoyo.Extensions;
 
+/// <summary>
+/// 程序集帮助类
+/// </summary>
 public static class AssemblyHelper
 {
 #if !NETSTANDARD
@@ -56,6 +59,9 @@ public static class AssemblyHelper
             return _allTypes!;
         }
     }
+    /// <summary>
+    /// 初始化
+    /// </summary>
     public static void Init()
     {
         _allAssemblies = DependencyContext.Default?.GetDefaultAssemblyNames().Where(o => o.Name != null && !Filters.Any(o.Name.StartsWith)).Select(Assembly.Load).ToArray();
@@ -66,9 +72,17 @@ public static class AssemblyHelper
     /// 查找指定条件的类型
     /// </summary>
     public static Type[] FindTypes(Func<Type, bool> predicate) => AllTypes.Where(predicate).ToArray();
-
-    public static Type[] FindTypesByAttribute<TAttribute>() => FindTypesByAttribute(typeof(TAttribute));
-
+    /// <summary>
+    /// 查找所有指定特性标记的类型
+    /// </summary>
+    /// <typeparam name="TAttribute"></typeparam>
+    /// <returns></returns>
+    public static Type[] FindTypesByAttribute<TAttribute>() where TAttribute : Attribute => FindTypesByAttribute(typeof(TAttribute));
+    /// <summary>
+    /// 查找所有指定特性标记的类型
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     public static Type[] FindTypesByAttribute(Type type) => AllTypes.Where(a => a.IsDefined(type, true)).Distinct().ToArray();
     /// <summary>
     /// 查找指定条件的类型
