@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Reflection;
 
 namespace Hoyo.Extensions;
-
+/// <summary>
+/// Type扩展.
+/// </summary>
 public static class TypeExtension
 {
     /// <summary>
@@ -20,7 +22,7 @@ public static class TypeExtension
     /// <param name="type"></param>
     /// <param name="canAbstract"></param>
     /// <returns></returns>
-    public static bool IsDeriveClassFrom<TBaseType>(this Type type, bool canAbstract = false) => IsDeriveClassFrom(type, typeof(TBaseType), canAbstract);
+    public static bool IsDeriveClassFrom<TBaseType>(this Type type, bool canAbstract = false) => type.IsDeriveClassFrom(typeof(TBaseType), canAbstract);
 
     /// <summary>
     /// 判断当前类型是否可由指定类型派生
@@ -92,8 +94,6 @@ public static class TypeExtension
     /// <returns></returns>
     public static bool IsValueTuple(this Type type) => type.IsValueType && type.FullName?.StartsWith("System.ValueTuple`", StringComparison.Ordinal) == true;
 
-
-
     /// <summary>
     /// 判断是否基元类型，如果是可空类型会先获取里面的类型，如 int? 也是基元类型
     /// The primitive types are Boolean, Byte, SByte, Int16, UInt16, Int32, UInt32, Int64, UInt64, IntPtr, UIntPtr, Char, Double, and Single.
@@ -126,7 +126,11 @@ public static class TypeExtension
         member.GetCustomAttribute<TAttribute>() is AttributeBase attributeBase
             ? attributeBase.Description()
             : member.Name;
-
+    /// <summary>
+    /// 获取描述或者名称
+    /// </summary>
+    /// <param name="member"></param>
+    /// <returns></returns>
     public static string ToDescription(this MemberInfo member)
     {
         var desc = member.GetCustomAttribute<DescriptionAttribute>();
@@ -138,7 +142,12 @@ public static class TypeExtension
         var display = member.GetCustomAttribute<DisplayNameAttribute>();
         return display is not null ? display.DisplayName : member.Name;
     }
-
+    /// <summary>
+    /// 具有相匹配的通用类型
+    /// </summary>
+    /// <param name="interfaceType">接口类型</param>
+    /// <param name="typeInfo">对象类型</param>
+    /// <returns></returns>
     public static bool HasMatchingGenericArity(this Type interfaceType, TypeInfo typeInfo)
     {
         if (!typeInfo.IsGenericType) return true;
@@ -148,7 +157,12 @@ public static class TypeExtension
         var parameterCount = typeInfo.GenericTypeParameters.Length;
         return argumentCount == parameterCount;
     }
-
+    /// <summary>
+    /// 获取注册类型
+    /// </summary>
+    /// <param name="interfaceType">接口类型.</param>
+    /// <param name="typeInfo">对象类型</param>
+    /// <returns></returns>
     public static Type GetRegistrationType(this Type interfaceType, TypeInfo typeInfo)
     {
         if (!typeInfo.IsGenericTypeDefinition) return interfaceType;

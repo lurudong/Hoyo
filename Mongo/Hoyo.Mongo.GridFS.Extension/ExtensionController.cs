@@ -5,11 +5,19 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 
 namespace Hoyo.Mongo.GridFS.Extension;
-[ApiController]
-[Route("[controller]")]
+/// <summary>
+/// GriFS扩展控制器
+/// </summary>
+[ApiController, Route("[controller]")]
 public class ExtensionController : GridFSController
 {
     private readonly HoyoStaticFileSettings FileSetting;
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="bucket"></param>
+    /// <param name="collection"></param>
+    /// <param name="config"></param>
     public ExtensionController(GridFSBucket bucket, IMongoCollection<GridFSItemInfo> collection, IConfiguration config) : base(bucket, collection)
     {
         FileSetting = config.GetSection(HoyoStaticFileSettings.Position).Get<HoyoStaticFileSettings>();

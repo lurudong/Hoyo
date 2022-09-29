@@ -1,7 +1,10 @@
 ﻿using MongoDB.Driver;
 
 namespace Hoyo.Mongo;
-public class HoyoMongoSettings
+/// <summary>
+/// MongoDb链接信息
+/// </summary>
+public sealed class HoyoMongoSettings
 {
     /// <summary>
     /// 验证数据库

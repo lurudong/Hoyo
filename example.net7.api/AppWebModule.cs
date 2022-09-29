@@ -19,12 +19,19 @@ namespace example.net7.api;
 )]
 public class AppWebModule : AppModule
 {
+    /// <summary>
+    /// 注册和配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         base.ConfigureServices(context);
         _ = context.Services.AddHttpContextAccessor();
     }
-
+    /// <summary>
+    /// 注册中间件
+    /// </summary>
+    /// <param name="context"></param>
     public override void ApplicationInitialization(ApplicationContext context)
     {
         base.ApplicationInitialization(context);

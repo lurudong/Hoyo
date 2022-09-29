@@ -4,7 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Hoyo.AutoDependencyInjectionModule.Extensions;
-
+/// <summary>
+/// IServiceCollection扩展
+/// </summary>
 public static class ServiceCollectionExtension
 {
     /// <summary>
@@ -181,7 +183,11 @@ public static class ServiceCollectionExtension
         _ = services.AddSingleton(serviceType);
         return serviceType;
     }
-
+    /// <summary>
+    /// 获取IServiceCollection服务
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static IConfiguration GetConfiguration(this IServiceCollection services) => services.GetBuildService<IConfiguration>() ?? throw new("未找到IConfiguration服务");
 
     /// <summary>
@@ -189,12 +195,18 @@ public static class ServiceCollectionExtension
     /// </summary>
     public static T? GetSingletonInstanceOrNull<T>(this IServiceCollection services)
     {
-        ServiceDescriptor? descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(T) && d.Lifetime == ServiceLifetime.Singleton);
+        var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(T) && d.Lifetime == ServiceLifetime.Singleton);
         return descriptor?.ImplementationInstance is not null
             ? (T)descriptor.ImplementationInstance
             : descriptor?.ImplementationFactory is not null ? (T)descriptor.ImplementationFactory.Invoke(null!) : default;
     }
-
+    /// <summary>
+    /// 获取单列实例
+    /// </summary>
+    /// <typeparam name="T">服务类型</typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidOperationException"></exception>
     public static T GetSingletonInstance<T>(this IServiceCollection services)
     {
         var service = services.GetSingletonInstanceOrNull<T>();
@@ -202,15 +214,37 @@ public static class ServiceCollectionExtension
     }
 
     #region New Module
-
+    /// <summary>
+    /// 试着添加对象适配器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static ObjectAccessor<T> TryAddObjectAccessor<T>(this IServiceCollection services) => services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>))
             ? services.GetSingletonInstance<ObjectAccessor<T>>()
             : services.AddObjectAccessor<T>();
-
+    /// <summary>
+    /// 添加对象适配器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services) => services.AddObjectAccessor(new ObjectAccessor<T>());
-
+    /// <summary>
+    /// 添加对象适配器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="obj"></param>
+    /// <returns></returns>
     public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, T obj) => services.AddObjectAccessor(new ObjectAccessor<T>(obj));
-
+    /// <summary>
+    /// 添加对象适配器
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <param name="accessor"></param>
+    /// <returns></returns>
     public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, ObjectAccessor<T> accessor)
     {
         if (services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>)))
@@ -222,11 +256,25 @@ public static class ServiceCollectionExtension
         services.Insert(0, ServiceDescriptor.Singleton(typeof(IObjectAccessor<T>), accessor));
         return accessor;
     }
-
+    /// <summary>
+    /// 获取对象或者Null
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static T? GetObjectOrNull<T>(this IServiceCollection services) where T : class => services.GetSingletonInstanceOrNull<IObjectAccessor<T>>()?.Value;
-
+    /// <summary>
+    /// 获取对象
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static T GetObject<T>(this IServiceCollection services) where T : class => services.GetObjectOrNull<T>() ?? throw new($"找不到的对象 {typeof(T).AssemblyQualifiedName} 服务。请确保您以前使用过AddObjectAccessor！");
-
+    /// <summary>
+    /// 从工厂创建服务适配器
+    /// </summary>
+    /// <param name="services"></param>
+    /// <returns></returns>
     public static IServiceProvider BuildServiceProviderFromFactory(this IServiceCollection services)
     {
         foreach (var service in services)

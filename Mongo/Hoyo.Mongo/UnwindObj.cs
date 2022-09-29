@@ -1,6 +1,11 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace Hoyo.Mongo;
+
+/// <summary>
+/// Unwind 操作符使用的类型
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class UnwindObj<T>
 {
     /// <summary>

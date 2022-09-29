@@ -3,6 +3,9 @@ using System.Text;
 
 namespace Hoyo.Extensions;
 
+/// <summary>
+/// 集合扩展
+/// </summary>
 public static class CollectionExtension
 {
     /// <summary>

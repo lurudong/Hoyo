@@ -2,6 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 上传文件的基本信息
+/// </summary>
 public class UploadGridFSInfo
 {
     /// <summary>
@@ -26,6 +30,9 @@ public class UploadGridFSInfo
     public string? CategoryId { get; set; }
 }
 
+/// <summary>
+/// 多文件上传的扩展信息
+/// </summary>
 public class UploadGridFSMulti : UploadGridFSInfo
 {
     /// <summary>
@@ -38,7 +45,9 @@ public class UploadGridFSMulti : UploadGridFSInfo
     [Required]
     public IFormFileCollection? File { get; set; }
 }
-
+/// <summary>
+/// 单文件上传的扩展信息
+/// </summary>
 public class UploadGridFSSingle : UploadGridFSInfo
 {
     /// <summary>

@@ -9,6 +9,14 @@ namespace Hoyo.EventBus.RabbitMQ.Attributes;
 [AttributeUsage(AttributeTargets.Class)]
 public class RabbitAttribute : Attribute
 {
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="exchange">交换机</param>
+    /// <param name="exchangeType">交换机类型</param>
+    /// <param name="routingKey">路由键</param>
+    /// <param name="queue">队列名</param>
+    /// <param name="enable">是否启用</param>
     public RabbitAttribute(string exchange, EExchange exchangeType, string routingKey, string? queue = null, bool enable = true)
     {
         Exchange = exchange;

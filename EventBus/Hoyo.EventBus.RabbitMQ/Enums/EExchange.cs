@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
 
 namespace Hoyo.EventBus.RabbitMQ.Enums;
+/// <summary>
+/// 交换机类型
+/// </summary>
 public enum EExchange
 {
     /// <summary>

@@ -1,4 +1,7 @@
 ﻿namespace Hoyo.Universal;
+/// <summary>
+/// 分页数据返回
+/// </summary>
 public class PageResult
 {
     /// <summary>
@@ -17,14 +20,28 @@ public class PageResult
     /// <returns></returns>
     public static PageResult<dynamic> WrapDynamic(long? total, IEnumerable<dynamic> list) => new(total, list);
 }
-
+/// <summary>
+/// 分页数据返回
+/// </summary>
+/// <typeparam name="T"></typeparam>
 public class PageResult<T>
 {
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="total"></param>
+    /// <param name="list"></param>
     public PageResult(long? total, IEnumerable<T> list)
     {
         Total = total ?? 0;
         List = list;
     }
+    /// <summary>
+    /// 数据量总数
+    /// </summary>
     public long Total { get; set; }
+    /// <summary>
+    /// 数据列表
+    /// </summary>
     public IEnumerable<T> List { get; set; }
 }

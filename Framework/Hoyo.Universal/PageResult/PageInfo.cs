@@ -1,4 +1,7 @@
 ﻿namespace Hoyo.Universal;
+/// <summary>
+/// 分页信息
+/// </summary>
 public class PageInfo
 {
     /// <summary>
@@ -10,7 +13,9 @@ public class PageInfo
     /// </summary>
     public int PageSize { get; set; }
 }
-
+/// <summary>
+/// 关键字查询分页
+/// </summary>
 public class KeywordPageInfo : PageInfo
 {
     /// <summary>
@@ -18,7 +23,9 @@ public class KeywordPageInfo : PageInfo
     /// </summary>
     public string? Key { get; set; }
 }
-
+/// <summary>
+/// 根据数据状态查询
+/// </summary>
 public class KeywordIsEnablePageInfo : KeywordPageInfo
 {
     /// <summary>

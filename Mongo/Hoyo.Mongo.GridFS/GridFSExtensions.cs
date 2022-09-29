@@ -5,6 +5,10 @@ using MongoDB.Driver;
 using MongoDB.Driver.GridFS;
 
 namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 服务注册于配置扩展
+/// </summary>
 public static class GridFSExtensions
 {
     internal static string BusinessApp { get; set; } = string.Empty;
