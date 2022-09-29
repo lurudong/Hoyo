@@ -1,6 +1,10 @@
 ﻿using Hoyo.Universal;
 
 namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 文件信息查询实体
+/// </summary>
 public class InfoSearch : KeywordPageInfo
 {
     /// <summary>

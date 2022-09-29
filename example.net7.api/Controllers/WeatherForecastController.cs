@@ -1,20 +1,31 @@
-using Hoyo.Framework.NativeAssets;
+using Hoyo.WebCore.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 
 namespace example.net7.api.Controllers;
 
-[ApiController, Route("[controller]")]
+/// <summary>
+/// 测试mongodb的一些功能
+/// </summary>
+[ApiController, Route("api/[controller]")]
+[ ApiGroup("WeatherForecast","2022-09-28", "WeatherForecast")]
 public class WeatherForecastController : ControllerBase
 {
     private readonly DbContext db;
     private readonly FilterDefinitionBuilder<MongoTest> bf = Builders<MongoTest>.Filter;
-
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="dbContext"></param>
     public WeatherForecastController(DbContext dbContext)
     {
         db = dbContext;
     }
 
+    /// <summary>
+    /// 向MongoDB中插入.Net6+新增类型,测试自动转换是否生效
+    /// </summary>
+    /// <returns></returns>
     [HttpPost("MongoPost")]
     public Task MongoPost()
     {
@@ -28,40 +39,10 @@ public class WeatherForecastController : ControllerBase
         _ = db.Test.InsertOneAsync(o);
         return Task.CompletedTask;
     }
+    /// <summary>
+    /// 测试从MongoDB中取出插入的数据,再返回到Swagger查看数据JSON转换是否正常
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("MongoGet")]
     public async Task<IEnumerable<MongoTest>> MongoGet() => await db.Test.Find(bf.Empty).ToListAsync();
-
-    [HttpGet("QRCode")]
-    public object GetQRCode(string text) => QrCode.GetBase64(text, width: 320, height: 320);
-
-    [HttpGet("QRDecoder")]
-    public object QRDecoder(string base64) => QrCode.QrDecoder(base64);
-
-    [HttpGet("NewType")]
-    public object GetNewType() => new
-    {
-        Time = new TimeOnly(11, 30, 48),
-        Date = new DateOnly(2021, 11, 11)
-    };
-
-    [HttpPost("NewType")]
-    public object PostNewType(NewType @new) => new
-    {
-        Date = DateOnly.Parse(@new.Date!).AddDays(1),
-        Time = TimeOnly.Parse(@new.Time!).AddHours(-1),
-        DateTime = DateTime.Parse(@new.DateTime).AddYears(1)
-    };
-
-    [HttpGet("Error")]
-    public void Error() => throw new("Get an error");
-
-    [HttpGet("Null")]
-    public object? Null() => null;
-}
-
-public class NewType
-{
-    public string? Time { get; set; }
-    public string? Date { get; set; }
-    public string DateTime { get; set; } = "1994-05-08";
 }

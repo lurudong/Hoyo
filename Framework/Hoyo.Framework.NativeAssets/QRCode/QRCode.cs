@@ -6,6 +6,9 @@ using ZXing.QrCode.Internal;
 
 namespace Hoyo.Framework.NativeAssets;
 
+/// <summary>
+/// QRCode工具类.
+/// </summary>
 public static class QrCode
 {
     /// <summary>

@@ -1,4 +1,8 @@
 ﻿namespace Hoyo.Mongo;
+
+/// <summary>
+/// MongoDb的一些静态默认参数
+/// </summary>
 internal static class HoyoStatic
 {
     /// <summary>

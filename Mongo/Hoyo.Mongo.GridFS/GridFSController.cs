@@ -6,14 +6,30 @@ using MongoDB.Driver.GridFS;
 using System.Text;
 
 namespace Hoyo.Mongo.GridFS;
-[ApiController]
-[Route("[controller]")]
+
+/// <summary>
+/// GridFS控制器
+/// </summary>
+[ApiController, Route("[controller]")]
 public class GridFSController : ControllerBase
 {
+    /// <summary>
+    /// GridFSBucket
+    /// </summary>
     protected readonly GridFSBucket Bucket;
+    /// <summary>
+    /// IMongoCollection
+    /// </summary>
     protected readonly IMongoCollection<GridFSItemInfo> Coll;
+    /// <summary>
+    /// 查询过滤器
+    /// </summary>
     protected readonly FilterDefinitionBuilder<GridFSItemInfo> _bf = Builders<GridFSItemInfo>.Filter;
-
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="bucket"></param>
+    /// <param name="collection"></param>
     public GridFSController(GridFSBucket bucket, IMongoCollection<GridFSItemInfo> collection)
     {
         Bucket = bucket;

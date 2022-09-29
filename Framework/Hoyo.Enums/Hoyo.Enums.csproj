@@ -5,13 +5,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
 		<Description>Hoyo枚举库</Description>
 		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include=".\README.md" Pack="true" PackagePath="" />

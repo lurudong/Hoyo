@@ -1,6 +1,10 @@
 ﻿using MongoDB.Driver.GridFS;
 
 namespace Hoyo.Mongo.GridFS;
+
+/// <summary>
+/// 服务的一些参数
+/// </summary>
 public class HoyoGridFSOptions
 {
     /// <summary>

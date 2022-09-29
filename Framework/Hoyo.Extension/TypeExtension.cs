@@ -20,7 +20,7 @@ public static class TypeExtension
     /// <param name="type"></param>
     /// <param name="canAbstract"></param>
     /// <returns></returns>
-    public static bool IsDeriveClassFrom<TBaseType>(this Type type, bool canAbstract = false) => IsDeriveClassFrom(type, typeof(TBaseType), canAbstract);
+    public static bool IsDeriveClassFrom<TBaseType>(this Type type, bool canAbstract = false) => type.IsDeriveClassFrom(typeof(TBaseType), canAbstract);
 
     /// <summary>
     /// 判断当前类型是否可由指定类型派生
