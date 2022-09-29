@@ -1,6 +1,9 @@
 ﻿using Hoyo.Enums;
 
 namespace Hoyo.Tools;
+/// <summary>
+/// 工具类
+/// </summary>
 public static class Utils
 {
     /// <summary>

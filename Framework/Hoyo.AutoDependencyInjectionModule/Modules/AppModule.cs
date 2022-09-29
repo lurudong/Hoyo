@@ -1,16 +1,30 @@
 ﻿using System.Reflection;
 
 namespace Hoyo.AutoDependencyInjectionModule.Modules;
-
+/// <summary>
+/// AppModule
+/// </summary>
 public class AppModule : IAppModule
 {
+    /// <summary>
+    /// 是否启用,默认为true
+    /// </summary>
     public bool Enable { get; set; } = true;
 
     private ConfigureServicesContext? _configureServicesContext;
+    /// <summary>
+    /// 应用程序初始化
+    /// </summary>
+    /// <param name="context"></param>
     public virtual void ApplicationInitialization(ApplicationContext context) { }
-
+    /// <summary>
+    /// 配置服务
+    /// </summary>
+    /// <param name="context"></param>
     public virtual void ConfigureServices(ConfigureServicesContext context) { }
-
+    /// <summary>
+    /// 配置服务上下文
+    /// </summary>
     protected internal ConfigureServicesContext ConfigureServicesContext
     {
         get => _configureServicesContext ?? throw new($"{nameof(ConfigureServicesContext)}仅适用于{nameof(ConfigureServices)}方法。");
@@ -33,7 +47,7 @@ public class AppModule : IAppModule
             var dependeds = dependedType.GetDependedTypes();
             if (dependeds.Length == 0) continue;
             dependList.AddRange(dependeds);
-            foreach (Type type in dependeds)
+            foreach (var type in dependeds)
             {
                 dependList.AddRange(GetDependedTypes(type));
             }

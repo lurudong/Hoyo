@@ -15,6 +15,9 @@ using System.Text.Json;
 
 namespace Hoyo.EventBus.RabbitMQ;
 
+/// <summary>
+/// RabbitMQ集成事件总线
+/// </summary>
 public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
 {
     private readonly IRabbitPersistentConnection _persistentConnection;
@@ -24,6 +27,14 @@ public class IntegrationEventBusRabbit : IIntegrationEventBus, IDisposable
     private readonly IServiceProvider _serviceProvider;
     private const string HandleName = nameof(IIntegrationEventHandler<IIntegrationEvent>.HandleAsync);
     private bool _isDisposed;
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="persistentConnection"></param>
+    /// <param name="logger"></param>
+    /// <param name="retryCount"></param>
+    /// <param name="subsManager"></param>
+    /// <param name="serviceProvider"></param>
     public IntegrationEventBusRabbit(IRabbitPersistentConnection persistentConnection, ILogger<IntegrationEventBusRabbit> logger, int retryCount, ISubscriptionsManager subsManager, IServiceProvider serviceProvider)
     {
         _persistentConnection = persistentConnection;

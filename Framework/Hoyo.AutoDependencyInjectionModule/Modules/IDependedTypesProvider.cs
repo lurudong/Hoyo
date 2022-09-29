@@ -1,5 +1,8 @@
 ﻿namespace Hoyo.AutoDependencyInjectionModule.Modules;
 
+/// <summary>
+/// 被依赖的类型提供方
+/// </summary>
 public interface IDependedTypesProvider
 {
     /// <summary>
