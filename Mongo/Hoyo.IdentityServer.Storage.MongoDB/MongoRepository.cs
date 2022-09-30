@@ -5,8 +5,8 @@ namespace Hoyo.IdentityServer.Storage.MongoDB;
 /// <summary>
 /// Mongo仓储实现
 /// </summary>
-public class MongoRepository : IRepository
-{
+public class MongoRepository : IRepository {
+    private const string prefix = "hoyo.";
     private readonly IMongoDatabase _database;
     /// <summary>
     /// 构造函数
@@ -18,7 +18,7 @@ public class MongoRepository : IRepository
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public IQueryable<T> All<T>() where T : class, new() => _database.GetCollection<T>(typeof(T).Name).AsQueryable();
+    public IQueryable<T> All<T>() where T : class, new() => _database.GetCollection<T>($"{prefix}{typeof(T).Name.ToLower()}").AsQueryable();
     /// <summary>
     /// Where查询表达式
     /// </summary>
@@ -31,7 +31,7 @@ public class MongoRepository : IRepository
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="expression"></param>
-    public void Delete<T>(Expression<Func<T, bool>> expression) where T : class, new() => _database.GetCollection<T>(typeof(T).Name).DeleteMany(expression);
+    public void Delete<T>(Expression<Func<T, bool>> expression) where T : class, new() => _database.GetCollection<T>($"{prefix}{typeof(T).Name.ToLower()}").DeleteMany(expression);
     /// <summary>
     /// 获取单条数据
     /// </summary>
@@ -44,11 +44,11 @@ public class MongoRepository : IRepository
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="item"></param>
-    public void Add<T>(T item) where T : class, new() => _database.GetCollection<T>(typeof(T).Name).InsertOne(item);
+    public void Add<T>(T item) where T : class, new() => _database.GetCollection<T>($"{prefix}{typeof(T).Name.ToLower()}").InsertOne(item);
     /// <summary>
     /// 批量添加
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="items"></param>
-    public void Add<T>(IEnumerable<T> items) where T : class, new() => _database.GetCollection<T>(typeof(T).Name).InsertMany(items);
+    public void Add<T>(IEnumerable<T> items) where T : class, new() => _database.GetCollection<T>($"{prefix}{typeof(T).Name.ToLower()}").InsertMany(items);
 }
