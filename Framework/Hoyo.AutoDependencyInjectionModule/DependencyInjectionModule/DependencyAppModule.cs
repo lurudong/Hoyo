@@ -10,12 +10,19 @@ namespace Hoyo.AutoDependencyInjectionModule.DependencyInjectionModule;
 /// </summary>
 public class DependencyAppModule : AppModule
 {
+    /// <summary>
+    /// 注册服务
+    /// </summary>
+    /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
         var services = context.Services;
         AddAutoInjection(services);
     }
-
+    /// <summary>
+    /// 添加自动注入
+    /// </summary>
+    /// <param name="services"></param>
     private static void AddAutoInjection(IServiceCollection services)
     {
         var baseTypes = new[] { typeof(IScopedDependency), typeof(ITransientDependency), typeof(ISingletonDependency) };
@@ -45,7 +52,11 @@ public class DependencyAppModule : AppModule
             }
         }
     }
-
+    /// <summary>
+    /// 获取服务生命周期
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     private static ServiceLifetime? GetServiceLifetime(Type type)
     {
         var attr = type.GetCustomAttribute<DependencyInjectionAttribute>();
@@ -55,6 +66,9 @@ public class DependencyAppModule : AppModule
                 ? ServiceLifetime.Transient
                 : typeof(ISingletonDependency).IsAssignableFrom(type) ? ServiceLifetime.Singleton : null);
     }
-
+    /// <summary>
+    /// 应用初始化,通常用来注册中间件.
+    /// </summary>
+    /// <param name="context"></param>
     public override void ApplicationInitialization(ApplicationContext context) => context.GetApplicationBuilder();
 }

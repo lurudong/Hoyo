@@ -2,6 +2,9 @@
 using Hoyo.Extensions;
 
 namespace Hoyo.Tools;
+/// <summary>
+/// 身份证校验
+/// </summary>
 public static class IDCardCalculate
 {
     /// <summary>
@@ -18,8 +21,8 @@ public static class IDCardCalculate
     /// <summary>
     /// 根据身份证号码计算生日日期
     /// </summary>
-    /// <param name="no">身份证号码</param>
-    /// <returns></returns>
+    /// <param name="no">身份证号</param>
+    /// <param name="birthday">生日(DateOnly)</param>
     public static void CalculateBirthday(this string no,out DateOnly birthday)
     {
         no.ValidateIDCard();
