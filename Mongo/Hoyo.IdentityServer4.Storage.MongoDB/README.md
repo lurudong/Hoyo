@@ -1,10 +1,10 @@
-﻿#### IdentityServer 6.x Data Persistence for MongoDB
+﻿#### IdentityServer4 Data Persistence for MongoDB
 
 ###### How to use
 
 1. Install Package
 ```shell
-Install-Package Hoyo.IdentityServer.Storage.MongoDB
+Install-Package Hoyo.IdentityServer4.Storage.MongoDB
 ```
 2. Add the following code to the Program.cs file in the root of the project
 ```csharp
