@@ -1,11 +1,12 @@
 ﻿using MongoDB.Driver;
 using System.Linq.Expressions;
 
-namespace Hoyo.IdentityServer.Storage.MongoDB;
+namespace Hoyo.IdentityServer4.Storage.MongoDB;
 /// <summary>
 /// Mongo仓储实现
 /// </summary>
-public class MongoRepository : IRepository {
+public class MongoRepository : IRepository
+{
     private const string prefix = "hoyo.";
     private readonly IMongoDatabase _database;
     /// <summary>

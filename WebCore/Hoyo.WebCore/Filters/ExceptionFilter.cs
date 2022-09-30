@@ -9,8 +9,8 @@ namespace Hoyo.WebCore;
 /// </summary>
 public class ExceptionFilter : ExceptionFilterAttribute
 {
-    private readonly ILogger _logger;
-    public ExceptionFilter(ILogger logger) => _logger = logger;
+    private readonly ILogger<ExceptionFilter> _logger;
+    public ExceptionFilter(ILogger<ExceptionFilter> logger) => _logger = logger;
     public override Task OnExceptionAsync(ExceptionContext context)
     {
         _logger.LogError("{stacktrace}", context.Exception.ToString());
