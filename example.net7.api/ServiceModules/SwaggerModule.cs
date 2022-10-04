@@ -1,5 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Modules;
+﻿using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Extensions;
 using Hoyo.WebCore.Attributes;
 using Hoyo.WebCore.SwaggerFilters;
@@ -16,8 +15,8 @@ public class SwaggerModule : AppModule
     /**
      * https://github.com/domaindrivendev/Swashbuckle.AspNetCore
      */
-    private string Title { get; set; } = string.Empty;
-    private string Version { get; set; } = string.Empty;
+    private const string Title = "example.net7.api";
+    private const string Version = "v1";
 
     /// <summary>
     /// 配置和注册服务
@@ -25,9 +24,6 @@ public class SwaggerModule : AppModule
     /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var config = context.Services.GetConfiguration();
-        Title = config["Swagger:Title"] ?? "Hoyo.Swagger";
-        Version = config["Swagger:Version"] ?? "v1.0";
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         _ = context.Services.AddSwaggerGen(c =>
         {

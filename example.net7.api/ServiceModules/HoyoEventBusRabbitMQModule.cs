@@ -13,7 +13,7 @@ public class HoyoEventBusRabbitMQModule : AppModule
     /// </summary>
     public HoyoEventBusRabbitMQModule()
     {
-        Enable = false;
+        Enable = !false;
     }
     /// <summary>
     /// 配置和注册服务
@@ -23,11 +23,10 @@ public class HoyoEventBusRabbitMQModule : AppModule
     {
         context.Services.AddEventBusRabbit(c =>
         {
-            c.Host = "117.190.71.69";
-            c.Port = 5672;
-            c.VirtualHost = "/joe";
-            c.UserName = "joe";
-            c.PassWord = "dqsf2987";
+            c.Host = "101.34.26.221";
+            c.Port = 40003;
+            c.UserName = "admin";
+            c.PassWord = "&oneblogs789";
         });
     }
 }
