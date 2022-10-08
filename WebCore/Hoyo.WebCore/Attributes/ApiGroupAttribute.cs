@@ -11,7 +11,12 @@ public sealed class ApiGroupAttribute : Attribute
         Title = title;
         Version = version;
         Description = description;
+        Name = $"{title}-{version}";
     }
+    /// <summary>
+    /// Doc名称,$"{Title}-{Version}"格式
+    /// </summary>
+    public string Name { get; }
     /// <summary>
     /// 标题
     /// </summary>
