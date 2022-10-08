@@ -13,7 +13,7 @@ public class HoyoEventBusRabbitMQModule : AppModule
     /// </summary>
     public HoyoEventBusRabbitMQModule()
     {
-        Enable = !false;
+        Enable = false;
     }
     /// <summary>
     /// 配置和注册服务
