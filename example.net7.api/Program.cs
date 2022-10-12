@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 //    //_ = listenOptions.UseHttps();
 //}));
 
-//Ìí¼ÓSeriLogÅäÖÃ
+//Ìí¼ÓSerilogÅäÖÃ
 _ = builder.Host.UseSerilog((hbc, lc) =>
 {
     _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Warning).MinimumLevel.Override("System", LogEventLevel.Warning).Enrich.FromLogContext();

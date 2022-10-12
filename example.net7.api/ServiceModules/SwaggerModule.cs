@@ -1,5 +1,4 @@
-﻿using Hoyo.AutoDependencyInjectionModule.Extensions;
-using Hoyo.AutoDependencyInjectionModule.Modules;
+﻿using Hoyo.AutoDependencyInjectionModule.Modules;
 using Hoyo.Extensions;
 using Hoyo.WebCore.Attributes;
 using Hoyo.WebCore.SwaggerFilters;
@@ -16,8 +15,11 @@ public class SwaggerModule : AppModule
     /**
      * https://github.com/domaindrivendev/Swashbuckle.AspNetCore
      */
-    private string Title { get; set; } = string.Empty;
-    private string Version { get; set; } = string.Empty;
+    private const string Name = $"{Title}-{Version}";
+    private const string Title = "example.net7.api";
+    private const string Version = "v1";
+    private static readonly Dictionary<string, string> docsDic = new();
+    private static readonly Dictionary<string, string> endPointDic = new();
 
     /// <summary>
     /// 配置和注册服务
@@ -25,13 +27,10 @@ public class SwaggerModule : AppModule
     /// <param name="context"></param>
     public override void ConfigureServices(ConfigureServicesContext context)
     {
-        var config = context.Services.GetConfiguration();
-        Title = config["Swagger:Title"] ?? "Hoyo.Swagger";
-        Version = config["Swagger:Version"] ?? "v1.0";
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         _ = context.Services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc(Title, new()
+            c.SwaggerDoc(Name, new()
             {
                 Title = Title,
                 Version = Version,
@@ -42,7 +41,9 @@ public class SwaggerModule : AppModule
             {
                 var attr = ctrl.GetCustomAttribute<ApiGroupAttribute>();
                 if (attr is null) continue;
-                c.SwaggerDoc(attr.Title, new()
+                if (docsDic.ContainsKey(attr.Name)) continue;
+                _ = docsDic.TryAdd(attr.Name, attr.Description);
+                c.SwaggerDoc(attr.Name, new()
                 {
                     Title = attr.Title,
                     Version = attr.Version,
@@ -59,10 +60,10 @@ public class SwaggerModule : AppModule
                 //反射拿到值
                 var actionList = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is ApiGroupAttribute).ToList();
                 if (actionList.Any()) {
-                    return actionList.FirstOrDefault() is ApiGroupAttribute attr && attr.Title == docName;
+                    return actionList.FirstOrDefault() is ApiGroupAttribute attr && attr.Name == docName;
                 }
                 var not = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is not ApiGroupAttribute).ToList();
-                return not.Any() && docName == Title;
+                return not.Any() && docName == Name;
                 //判断是否包含这个分组
             });
             c.AddSecurityDefinition("Bearer", new()
@@ -88,13 +89,15 @@ public class SwaggerModule : AppModule
         var app = context.GetApplicationBuilder();
         _ = app.UseSwagger().UseSwaggerUI(c =>
         {
-            c.SwaggerEndpoint($"/swagger/{Title}/swagger.json", $"{Title} {Version}");
+            c.SwaggerEndpoint($"/swagger/{Name}/swagger.json", $"{Title} {Version}");
             var controllers = AssemblyHelper.FindTypesByAttribute<ApiGroupAttribute>();
             foreach (var ctrl in controllers)
             {
                 var attr = ctrl.GetCustomAttribute<ApiGroupAttribute>();
                 if (attr is null) continue;
-                c.SwaggerEndpoint($"/swagger/{attr.Title}/swagger.json", $"{attr.Title} {attr.Version}");
+                if (endPointDic.ContainsKey(attr.Name)) continue;
+                _ = endPointDic.TryAdd(attr.Name, attr.Description);
+                c.SwaggerEndpoint($"/swagger/{attr.Name}/swagger.json", $"{attr.Title} {attr.Version}");
             }
         });
     }

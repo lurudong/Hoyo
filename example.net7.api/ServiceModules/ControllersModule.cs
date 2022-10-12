@@ -21,11 +21,18 @@ public class ControllersModule : AppModule
             _ = x.Filters.Add<ExceptionFilter>();
         }).AddJsonOptions(c =>
         {
-            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyJsonConverter());
-            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyJsonConverter());
-            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyNullJsonConverter());
-            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyNullJsonConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DecimalConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DecimalNullConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.IntConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.IntNullConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.BoolConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.BoolNullConverter());
             c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateTimeConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateTimeNullConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyJsonConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.TimeOnlyNullJsonConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyJsonConverter());
+            c.JsonSerializerOptions.Converters.Add(new SystemTextJsonConvert.DateOnlyNullJsonConverter());
             c.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
         _ = context.Services.AddEndpointsApiExplorer();

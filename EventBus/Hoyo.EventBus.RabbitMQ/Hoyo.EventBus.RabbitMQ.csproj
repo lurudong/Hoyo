@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<Version>2.0.1</Version>
+		<Version>2.1.1</Version>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.EventBus.RabbitMQ</PackageProjectUrl>
@@ -33,8 +33,8 @@
 	</ItemGroup>
 
 	<ItemGroup Condition=" '$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0-rc.1.22426.10" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-rc.1.22426.10" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0-rc.2.22472.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.0-rc.2.22472.3" />
 	</ItemGroup>
 
 	<ItemGroup>
