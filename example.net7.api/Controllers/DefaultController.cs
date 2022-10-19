@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace example.net7.api.Controllers;
 
@@ -44,6 +45,29 @@ public class DefaultController : ControllerBase
     /// <returns></returns>
     [HttpGet("Null")]
     public object? Null() => null;
+
+    /// <summary>
+    /// 测试默认值
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    [HttpPost("DefaultValueTest")]
+    public object Post(DefaultValueTest dto) => dto;
+}
+/// <summary>
+/// 
+/// </summary>
+public class DefaultValueTest {
+    /// <summary>
+    /// 测试
+    /// </summary>
+    [DefaultValue("测试")]
+    public string? Test { get; set; }
+    /// <summary>
+    /// 测试默认值
+    /// </summary>
+    
+    public string? Name { get; set; } = "张三";
 }
 
 /// <summary>

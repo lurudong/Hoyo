@@ -59,7 +59,8 @@ public class SwaggerModule : AppModule
             {
                 //反射拿到值
                 var actionList = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is ApiGroupAttribute).ToList();
-                if (actionList.Any()) {
+                if (actionList.Any())
+                {
                     return actionList.FirstOrDefault() is ApiGroupAttribute attr && attr.Name == docName;
                 }
                 var not = apiDescription.ActionDescriptor.EndpointMetadata.Where(x => x is not ApiGroupAttribute).ToList();
@@ -77,6 +78,7 @@ public class SwaggerModule : AppModule
             // 这里使用预定义的过滤器,避免给所有接口均加锁.
             c.OperationFilter<SwaggerAuthorizeFilter>();
             c.DocumentFilter<SwaggerHiddenApiFilter>();
+            c.SchemaFilter<SwaggerSchemaFilter>();
         });
     }
 
