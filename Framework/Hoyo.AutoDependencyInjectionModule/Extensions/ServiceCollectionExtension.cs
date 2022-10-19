@@ -51,7 +51,7 @@ public static class ServiceCollectionExtension
     /// <param name="serviceLifetime">service lifetime</param>
     /// <param name="assemblies">assemblies</param>
     /// <returns>services</returns>
-    public static IServiceCollection RegisterAssemblyTypes(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
+    private static IServiceCollection RegisterAssemblyTypes(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
     {
         if (assemblies.Length == 0)
         {
@@ -106,7 +106,7 @@ public static class ServiceCollectionExtension
     /// <param name="serviceLifetime">service lifetime</param>
     /// <param name="assemblies">assemblies</param>
     /// <returns>services</returns>
-    public static IServiceCollection RegisterAssemblyTypesAsImplementedInterfaces(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
+    private static IServiceCollection RegisterAssemblyTypesAsImplementedInterfaces(this IServiceCollection services, Func<Type, bool>? typesFilter, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
     {
         if (assemblies.Length == 0)
         {
@@ -149,7 +149,7 @@ public static class ServiceCollectionExtension
     /// <typeparam name="TType"></typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static TType? GetBuildService<TType>(this IServiceCollection services)
+    private static TType? GetBuildService<TType>(this IServiceCollection services)
     {
         var provider = services.BuildServiceProvider();
         return provider.GetService<TType>();
@@ -193,7 +193,7 @@ public static class ServiceCollectionExtension
     /// <summary>
     /// 获取单例注册服务对象
     /// </summary>
-    public static T? GetSingletonInstanceOrNull<T>(this IServiceCollection services)
+    private static T? GetSingletonInstanceOrNull<T>(this IServiceCollection services)
     {
         var descriptor = services.FirstOrDefault(d => d.ServiceType == typeof(T) && d.Lifetime == ServiceLifetime.Singleton);
         return descriptor?.ImplementationInstance is not null
@@ -207,7 +207,7 @@ public static class ServiceCollectionExtension
     /// <param name="services"></param>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static T GetSingletonInstance<T>(this IServiceCollection services)
+    private static T GetSingletonInstance<T>(this IServiceCollection services)
     {
         var service = services.GetSingletonInstanceOrNull<T>();
         return service is null ? throw new InvalidOperationException($"找不到singleton服务: {typeof(T).AssemblyQualifiedName}") : service;
@@ -229,7 +229,7 @@ public static class ServiceCollectionExtension
     /// <typeparam name="T"></typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services) => services.AddObjectAccessor(new ObjectAccessor<T>());
+    private static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services) => services.AddObjectAccessor(new ObjectAccessor<T>());
     /// <summary>
     /// 添加对象适配器
     /// </summary>
@@ -245,7 +245,7 @@ public static class ServiceCollectionExtension
     /// <param name="services"></param>
     /// <param name="accessor"></param>
     /// <returns></returns>
-    public static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, ObjectAccessor<T> accessor)
+    private static ObjectAccessor<T> AddObjectAccessor<T>(this IServiceCollection services, ObjectAccessor<T> accessor)
     {
         if (services.Any(s => s.ServiceType == typeof(ObjectAccessor<T>)))
         {
@@ -262,7 +262,7 @@ public static class ServiceCollectionExtension
     /// <typeparam name="T"></typeparam>
     /// <param name="services"></param>
     /// <returns></returns>
-    public static T? GetObjectOrNull<T>(this IServiceCollection services) where T : class => services.GetSingletonInstanceOrNull<IObjectAccessor<T>>()?.Value;
+    private static T? GetObjectOrNull<T>(this IServiceCollection services) where T : class => services.GetSingletonInstanceOrNull<IObjectAccessor<T>>()?.Value;
     /// <summary>
     /// 获取对象
     /// </summary>

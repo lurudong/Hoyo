@@ -5,16 +5,16 @@ using MongoDB.Driver;
 namespace example.net7.api.Controllers;
 
 /// <summary>
-/// ²âÊÔmongodbµÄÒ»Ğ©¹¦ÄÜ
+/// æµ‹è¯•mongodbçš„ä¸€äº›åŠŸèƒ½
 /// </summary>
 [ApiController, Route("api/[controller]")]
-[ ApiGroup("WeatherForecast","2022-09-28", "WeatherForecast")]
+[ApiGroup("WeatherForecast", "2022-09-28", "WeatherForecast")]
 public class WeatherForecastController : ControllerBase
 {
     private readonly DbContext db;
     private readonly FilterDefinitionBuilder<MongoTest> bf = Builders<MongoTest>.Filter;
     /// <summary>
-    /// ¹¹Ôìº¯Êı
+    /// æ„é€ å‡½æ•°
     /// </summary>
     /// <param name="dbContext"></param>
     public WeatherForecastController(DbContext dbContext)
@@ -23,7 +23,7 @@ public class WeatherForecastController : ControllerBase
     }
 
     /// <summary>
-    /// ÏòMongoDBÖĞ²åÈë.Net6+ĞÂÔöÀàĞÍ,²âÊÔ×Ô¶¯×ª»»ÊÇ·ñÉúĞ§
+    /// å‘MongoDBä¸­æ’å…¥.Net6+æ–°å¢ç±»å‹,æµ‹è¯•è‡ªåŠ¨è½¬æ¢æ˜¯å¦ç”Ÿæ•ˆ
     /// </summary>
     /// <returns></returns>
     [HttpPost("MongoPost")]
@@ -40,7 +40,7 @@ public class WeatherForecastController : ControllerBase
         return Task.CompletedTask;
     }
     /// <summary>
-    /// ²âÊÔ´ÓMongoDBÖĞÈ¡³ö²åÈëµÄÊı¾İ,ÔÙ·µ»Øµ½Swagger²é¿´Êı¾İJSON×ª»»ÊÇ·ñÕı³£
+    /// æµ‹è¯•ä»MongoDBä¸­å–å‡ºæ’å…¥çš„æ•°æ®,å†è¿”å›åˆ°SwaggeræŸ¥çœ‹æ•°æ®JSONè½¬æ¢æ˜¯å¦æ­£å¸¸
     /// </summary>
     /// <returns></returns>
     [HttpGet("MongoGet")]

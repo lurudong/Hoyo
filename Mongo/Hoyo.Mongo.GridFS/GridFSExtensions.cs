@@ -11,7 +11,7 @@ namespace Hoyo.Mongo.GridFS;
 /// </summary>
 public static class GridFSExtensions
 {
-    internal static string BusinessApp { get; set; } = string.Empty;
+    internal static string BusinessApp { get; private set; } = string.Empty;
     /// <summary>
     /// 注册GridFS服务
     /// </summary>

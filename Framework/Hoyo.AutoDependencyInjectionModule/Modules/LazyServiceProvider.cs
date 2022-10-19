@@ -11,11 +11,11 @@ public class LazyServiceProvider : ILazyServiceProvider, ITransientDependency
     /// <summary>
     /// 缓存服务
     /// </summary>
-    protected Dictionary<Type, object> CacheServices { get; set; } = new();
+    private Dictionary<Type, object> CacheServices { get; set; } = new();
     /// <summary>
     /// IServiceProvider
     /// </summary>
-    protected IServiceProvider ServiceProvider { get; set; }
+    private IServiceProvider ServiceProvider { get; set; }
     /// <summary>
     /// 构造函数
     /// </summary>

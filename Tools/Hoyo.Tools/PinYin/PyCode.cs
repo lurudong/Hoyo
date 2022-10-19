@@ -1,5 +1,5 @@
 ﻿namespace Hoyo.Tools;
-internal class PyCode
+internal static class PyCode
 {
     internal static string[] Codes { get; } =
     {
