@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
-		<Version>1.2.1</Version>
+		<Version>1.2.2</Version>
 		<Authors>joesdu</Authors>
 		<RepositoryUrl>https://github.com/joesdu/Hoyo</RepositoryUrl>
 		<PackageProjectUrl>https://www.nuget.org/packages/Hoyo.IdentityServer.Storage.MongoDB</PackageProjectUrl>
@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Duende.IdentityServer" Version="6.1.7" />
+		<PackageReference Include="Duende.IdentityServer" Version="6.2.0-preview.1" />
 		<PackageReference Include="MongoDB.Driver" Version="2.18.0" />
 	</ItemGroup>
 
