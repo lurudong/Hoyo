@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Hoyo.WebCore.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
@@ -45,4 +46,49 @@ public class WeatherForecastController : ControllerBase
     /// <returns></returns>
     [HttpGet("MongoGet")]
     public async Task<IEnumerable<MongoTest>> MongoGet() => await db.Test.Find(bf.Empty).ToListAsync();
+    /// <summary>
+    /// 初始化Test2
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("InitTest2")]
+    public async Task InitTest2()
+    {
+        var os = new List<MongoTest2>();
+        for (var i = 0; i < 30; i++)
+        {
+            var date = DateOnly.FromDateTime(DateTime.Now.AddDays(i));
+            os.Add(new() { Date = date, Index = i });
+        }
+        await db.Test2.InsertManyAsync(os);
+    }
+    /// <summary>
+    /// 查询测试
+    /// </summary>
+    /// <returns></returns>
+    [HttpPost("Search")]
+    public async Task<dynamic> Search(Search search)
+    {
+        var result = await db.Test2.Find(c => c.Date >= search.Start && c.Date <= search.End).ToListAsync();
+        return result;
+    }
+}
+/// <summary>
+/// 查询测试
+/// </summary>
+public class Search {
+    /// <summary>
+    /// 开始日期
+    /// </summary>
+    [DefaultValue(typeof(DateOnly),"2022-11-02")] //对象类型设置默认值没啥用.就当是给开发人员看吧.
+    public DateOnly Start { get; set; }
+    /// <summary>
+    /// 结束日期
+    /// </summary>
+    [DefaultValue("2022-11-05")]
+    public DateOnly End { get; set; }
+    /// <summary>
+    /// 测试数值类型的参数设置默认值
+    /// </summary>
+    [DefaultValue(30)]
+    public int Index { get; set; }
 }
