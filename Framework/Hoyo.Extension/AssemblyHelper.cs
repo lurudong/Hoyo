@@ -18,11 +18,8 @@ public static class AssemblyHelper
     /// <param name="assemblyNames"></param>
     /// <returns></returns>
 
-    public static IEnumerable<Assembly> GetAssembliesByName(params string[] assemblyNames)
-    {
-        var basePath = Microsoft.DotNet.PlatformAbstractions.ApplicationEnvironment.ApplicationBasePath; //获取项目路径
-        return assemblyNames.Select(o => AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(basePath, $"{o}.dll")));
-    }
+    public static IEnumerable<Assembly> GetAssembliesByName(params string[] assemblyNames) => 
+        assemblyNames.Select(o => AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.Combine(AppContext.BaseDirectory, $"{o}.dll")));
 #endif
 
     private static readonly string[] Filters = { "dotnet-", "Microsoft.", "mscorlib", "netstandard", "System", "Windows" };
