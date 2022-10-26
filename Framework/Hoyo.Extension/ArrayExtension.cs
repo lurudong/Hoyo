@@ -36,7 +36,7 @@ public static class ArrayExtension
     /// <param name="array">被添加数组对象</param>
     /// <param name="obj">新元素</param>
     /// <returns>新增元素后的新数组</returns>
-    public static T[] Push<T>(this T[] array, T obj)
+    public static T[] Push<T>(this IEnumerable<T> array, T obj)
     {
         if (obj is null) throw new("obj must be not null");
         var lt = array.ToList();
@@ -51,7 +51,7 @@ public static class ArrayExtension
     /// <param name="array">被添加数组对象</param>
     /// <param name="obj">新元素数组</param>
     /// <returns>新增元素后的新数组</returns>
-    public static T[] PushRange<T>(this T[] array, T[] obj)
+    public static T[] PushRange<T>(this IEnumerable<T> array, T[] obj)
     {
         if (obj is null) throw new("obj must be not null");
         var lt = array.ToList();
@@ -65,12 +65,12 @@ public static class ArrayExtension
     /// <typeparam name="T">数组对象类型</typeparam>
     /// <param name="array">被操作数组</param>
     /// <returns>被删除对象,和删除元素后的数组</returns>
-    public static Tuple<T, T[]> Pop<T>(this T[] array)
+    public static Tuple<T, T[]> Pop<T>(this IEnumerable<T> array)
     {
         var lt = array.ToList();
         var t = lt.Last();
         _ = lt.Remove(t);
         var temp = lt.ToArray();
-        return new Tuple<T, T[]>(t, temp);
+        return new(t, temp);
     }
 }

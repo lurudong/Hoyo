@@ -10,7 +10,7 @@ public class RepositoryPersistedGrantStore : IPersistedGrantStore
     /// <summary>
     /// 仓储
     /// </summary>
-    protected IRepository Repository;
+    private readonly IRepository Repository;
     /// <summary>
     /// 构造函数
     /// </summary>

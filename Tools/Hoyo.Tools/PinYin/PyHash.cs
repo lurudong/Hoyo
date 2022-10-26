@@ -1,5 +1,9 @@
 ﻿namespace Hoyo.Tools;
-class PyHash
+
+/// <summary>
+/// PyHash
+/// </summary>
+internal static class PyHash
 {
     internal static short[][] Hashes { get; } =
     {

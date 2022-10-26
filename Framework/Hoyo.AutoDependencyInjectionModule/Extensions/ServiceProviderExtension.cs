@@ -46,7 +46,7 @@ public static class ServiceProviderExtension
     /// <param name="provider"></param>
     /// <param name="type"></param>
     /// <returns></returns>
-    public static object GetServiceOrCreateInstance(this IServiceProvider provider, Type type) => ActivatorUtilities.GetServiceOrCreateInstance(provider, type);
+    private static object GetServiceOrCreateInstance(this IServiceProvider provider, Type type) => ActivatorUtilities.GetServiceOrCreateInstance(provider, type);
     /// <summary>
     /// 创建实例
     /// </summary>

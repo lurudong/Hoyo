@@ -24,7 +24,7 @@ public class GridFSController : ControllerBase
     /// <summary>
     /// 查询过滤器
     /// </summary>
-    protected readonly FilterDefinitionBuilder<GridFSItemInfo> _bf = Builders<GridFSItemInfo>.Filter;
+    private readonly FilterDefinitionBuilder<GridFSItemInfo> _bf = Builders<GridFSItemInfo>.Filter;
     /// <summary>
     /// 构造函数
     /// </summary>

@@ -8,9 +8,14 @@ namespace example.net7.api;
 public class DbContext : BaseDbContext
 {
     /// <summary>
-    /// 作息时间管理
+    /// MongoTest
     /// </summary>
     public IMongoCollection<MongoTest> Test => Database.GetCollection<MongoTest>("mongo.test");
+
+    /// <summary>
+    /// MongoTest2
+    /// </summary>
+    public IMongoCollection<MongoTest2> Test2 => Database.GetCollection<MongoTest2>("mongo.test2");
 }
 /// <summary>
 /// DBContext2
@@ -18,10 +23,28 @@ public class DbContext : BaseDbContext
 public class DbContext2 : BaseDbContext
 {
     /// <summary>
-    /// 作息时间管理
+    /// MongoTest
     /// </summary>
     public IMongoCollection<MongoTest> Test => Database.GetCollection<MongoTest>("mongo.test2");
 }
+/// <summary>
+/// Test2
+/// </summary>
+public class MongoTest2 {
+    /// <summary>
+    /// Id
+    /// </summary>
+    public string Id { get; set; } = string.Empty;
+    /// <summary>
+    /// Date
+    /// </summary>
+    public DateOnly Date { get; set; }
+    /// <summary>
+    /// 序号
+    /// </summary>
+    public int Index { get; set; }
+}
+
 /// <summary>
 /// Mongo测试数据类型
 /// </summary>

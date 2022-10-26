@@ -2,27 +2,27 @@ using example.net7.api;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Serilog;
 using Serilog.Events;
-// ½«Êä³öÈÕÖ¾¸ñÊ½»¯ÎªESĞèÒªµÄ¸ñÊ½.
+// å°†è¾“å‡ºæ—¥å¿—æ ¼å¼åŒ–ä¸ºESéœ€è¦çš„æ ¼å¼.
 //using Serilog.Formatting.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ÅäÖÃÖ§³ÖHTTP1/2/3
+// é…ç½®æ”¯æŒHTTP1/2/3
 //builder.WebHost.ConfigureKestrel((context, options) => options.ListenAnyIP(80, listenOptions =>
 //{
 //    listenOptions.Protocols = HttpProtocols.Http1AndHttp2AndHttp3;
 //    //_ = listenOptions.UseHttps();
 //}));
 
-//Ìí¼ÓSerilogÅäÖÃ
+//æ·»åŠ Serilogé…ç½®
 _ = builder.Host.UseSerilog((hbc, lc) =>
 {
     _ = lc.ReadFrom.Configuration(hbc.Configuration).MinimumLevel.Override("Microsoft", LogEventLevel.Warning).MinimumLevel.Override("System", LogEventLevel.Warning).Enrich.FromLogContext();
     _ = lc.WriteTo.Async(wt => wt.Console(/*new ElasticsearchJsonFormatter()*/));
     _ = lc.WriteTo.Debug();
     //_ = lc.WriteTo.MongoDB(hbc.Configuration["Logging:DataBase:Mongo"]);
-    // ²»½¨Òé½«ÈÕÖ¾Ğ´ÈëÎÄ¼ş,»áÔì³ÉÈÕÖ¾ÎÄ¼şÔ½À´Ô½´ó,·şÎñÆ÷¿ÉÄÜÒò´Ëå´»ú.
-    // ÈôÊÇĞèÒª·ÖÎÄ¼şĞ´ÈëĞèÒªÒıÈë°ü Serilog.Sinks.Map
+    // ä¸å»ºè®®å°†æ—¥å¿—å†™å…¥æ–‡ä»¶,ä¼šé€ æˆæ—¥å¿—æ–‡ä»¶è¶Šæ¥è¶Šå¤§,æœåŠ¡å™¨å¯èƒ½å› æ­¤å®•æœº.
+    // è‹¥æ˜¯éœ€è¦åˆ†æ–‡ä»¶å†™å…¥éœ€è¦å¼•å…¥åŒ… Serilog.Sinks.Map
     //_ = lc.WriteTo.Map(le =>
     //{
     //    static (DateTime time, LogEventLevel level) MapData(LogEvent @event) => (@event.Timestamp.LocalDateTime, @event.Level);
@@ -34,7 +34,7 @@ _ = builder.Host.UseSerilog((hbc, lc) =>
 });
 
 // Add services to the container.
-// ×Ô¶¯×¢Èë·şÎñÄ£¿é
+// è‡ªåŠ¨æ³¨å…¥æœåŠ¡æ¨¡å—
 builder.Services.AddApplication<AppWebModule>();
 
 var app = builder.Build();
@@ -42,7 +42,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) _ = app.UseDeveloperExceptionPage();
 
-// Ìí¼Ó×Ô¶¯»¯×¢ÈëµÄÒ»Ğ©ÖĞ¼ä¼ş.
+// æ·»åŠ è‡ªåŠ¨åŒ–æ³¨å…¥çš„ä¸€äº›ä¸­é—´ä»¶.
 app.InitializeApplication();
 app.MapControllers();
 

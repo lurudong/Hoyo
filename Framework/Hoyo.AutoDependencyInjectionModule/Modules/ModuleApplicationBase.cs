@@ -34,7 +34,7 @@ public class ModuleApplicationBase : IModuleApplication
     /// </summary>
     /// <param name="startupModuleType"></param>
     /// <param name="services"></param>
-    public ModuleApplicationBase(Type startupModuleType, IServiceCollection services)
+    protected ModuleApplicationBase(Type startupModuleType, IServiceCollection services)
     {
         ServiceProvider = null;
         StartupModuleType = startupModuleType;
@@ -68,7 +68,7 @@ public class ModuleApplicationBase : IModuleApplication
     /// 获取所有需要加载的模块
     /// </summary>
     /// <returns></returns>
-    protected IReadOnlyList<IAppModule> LoadModules()
+    private IReadOnlyList<IAppModule> LoadModules()
     {
         List<IAppModule> modules = new();
         var module = Source.FirstOrDefault(o => o.GetType() == StartupModuleType);
