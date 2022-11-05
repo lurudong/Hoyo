@@ -14,6 +14,7 @@ public class ExceptionFilter : ExceptionFilterAttribute
     public override Task OnExceptionAsync(ExceptionContext context)
     {
         _logger.LogError("{stacktrace}", context.Exception.ToString());
+
         context.Result = new ObjectResult(new
         {
             StatusCode = HttpStatusCode.InternalServerError,
@@ -24,3 +25,4 @@ public class ExceptionFilter : ExceptionFilterAttribute
         return base.OnExceptionAsync(context);
     }
 }
+
