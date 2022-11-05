@@ -1,7 +1,9 @@
 using example.net7.api;
+using FluentValidation;
 using Hoyo.AutoDependencyInjectionModule.Modules;
 using Serilog;
 using Serilog.Events;
+using System.Reflection;
 // 将输出日志格式化为ES需要的格式.
 //using Serilog.Formatting.Elasticsearch;
 
@@ -37,6 +39,8 @@ _ = builder.Host.UseSerilog((hbc, lc) =>
 // 自动注入服务模块
 builder.Services.AddApplication<AppWebModule>();
 
+//FluentValidation.DependencyInjectionExtensions 
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
